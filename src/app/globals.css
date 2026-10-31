@@ -1,0 +1,186 @@
+@import "tailwindcss";
+@import "../styles/tokens.css";
+
+/* ------------------------------------------------------------------ */
+/*  Base                                                               */
+/* ------------------------------------------------------------------ */
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+    scroll-padding-top: calc(var(--header-h) + 16px);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
+
+  body {
+    background: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-feature-settings: "ss01", "cv11";
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  ::selection {
+    background: var(--color-ink);
+    color: var(--color-paper);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+
+  [data-tone="dark"] :focus-visible {
+    outline-color: #ffffff;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    text-wrap: balance;
+    overflow-wrap: break-word;
+  }
+
+  summary {
+    list-style: none;
+  }
+  summary::-webkit-details-marker {
+    display: none;
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/*  Reveal-on-scroll (progressive enhancement, see components/ui/reveal) */
+/* ------------------------------------------------------------------ */
+
+@layer components {
+  .js [data-reveal] {
+    opacity: 0;
+    transform: translate3d(0, 18px, 0);
+    transition:
+      opacity 600ms var(--ease-out-soft),
+      transform 600ms var(--ease-out-soft);
+    transition-delay: var(--reveal-delay, 0ms);
+    will-change: opacity, transform;
+  }
+
+  .js [data-reveal][data-visible="true"] {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* Entrance animation for above-the-fold content: pure CSS, no JS needed. */
+  .enter {
+    animation: enter 700ms var(--ease-out-soft) both;
+    animation-delay: var(--enter-delay, 0ms);
+  }
+
+  /* Transform-only entrance: keeps the hero headline paintable (and
+     counted for LCP) from the very first frame. */
+  .enter-rise {
+    animation: enter-rise 800ms var(--ease-out-soft) both;
+    animation-delay: var(--enter-delay, 0ms);
+  }
+
+  @keyframes enter-rise {
+    from {
+      transform: translate3d(0, 14px, 0);
+    }
+    to {
+      transform: none;
+    }
+  }
+
+  .enter-fade {
+    animation: enter-fade 900ms var(--ease-out-soft) both;
+    animation-delay: var(--enter-delay, 0ms);
+  }
+
+  @keyframes enter {
+    from {
+      opacity: 0;
+      transform: translate3d(0, 20px, 0);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @keyframes enter-fade {
+    from {
+      opacity: 0;
+      transform: scale(1.02);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  .hairline-grid {
+    background-image:
+      linear-gradient(to right, var(--color-line) 1px, transparent 1px);
+    background-size: calc(100% / 12) 100%;
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/*  View transitions (course filter re-flow)                           */
+/* ------------------------------------------------------------------ */
+
+::view-transition-group(*) {
+  animation-duration: 420ms;
+  animation-timing-function: var(--ease-out-soft);
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+}
+
+/* Cards entering / leaving the grid */
+::view-transition-new(*):only-child {
+  animation: vt-in 380ms var(--ease-out-soft) both;
+}
+::view-transition-old(*):only-child {
+  animation: vt-out 200ms ease-in both;
+}
+
+@keyframes vt-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.98);
+  }
+}
+@keyframes vt-out {
+  to {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .js [data-reveal] {
+    opacity: 1;
+    transform: none;
+  }
+}

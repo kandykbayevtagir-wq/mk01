@@ -1,0 +1,77 @@
+/*
+ * Design tokens — single source of truth for colour, type and motion.
+ * Tailwind v4 exposes every --color-* / --font-* / --ease-* token below
+ * as a utility (bg-paper, text-ink, border-line, ease-out-soft, …).
+ */
+
+@theme {
+  /* Colour */
+  --color-paper: #ffffff; /* primary background */
+  --color-mist: #f5f5f5; /* secondary background */
+  --color-ink: #171717; /* primary typography */
+  --color-graphite: #252525; /* dark surfaces */
+  --color-graphite-2: #2e2e2e; /* raised dark surface */
+  --color-muted: #666666; /* secondary typography */
+  --color-muted-dark: #a3a3a3; /* secondary typography on graphite */
+  --color-line: #e7e7e7; /* borders */
+  --color-line-dark: #3a3a3a; /* borders on graphite */
+  --color-accent: #b3262d; /* strategic red */
+  --color-accent-strong: #951e24; /* red hover / pressed */
+  --color-accent-soft: #f8eaeb; /* red tint for selected states */
+  --color-success: #2f6b45;
+  --color-danger: #b3262d;
+
+  /* Type */
+  --font-sans: var(--font-manrope), ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", Roboto, Arial, sans-serif;
+
+  --text-display: clamp(1.875rem, 0.4rem + 7.4vw, 3.75rem);
+  --text-display--line-height: 1.02;
+  --text-display--letter-spacing: -0.035em;
+
+  --text-h1: clamp(1.875rem, 1.2rem + 3.4vw, 4.25rem);
+  --text-h1--line-height: 1.04;
+  --text-h1--letter-spacing: -0.03em;
+
+  --text-h2: clamp(1.875rem, 1.35rem + 2.2vw, 3.25rem);
+  --text-h2--line-height: 1.08;
+  --text-h2--letter-spacing: -0.025em;
+
+  --text-h3: clamp(1.25rem, 1.1rem + 0.6vw, 1.625rem);
+  --text-h3--line-height: 1.2;
+  --text-h3--letter-spacing: -0.015em;
+
+  --text-lead: clamp(1.0625rem, 1rem + 0.35vw, 1.3125rem);
+  --text-lead--line-height: 1.55;
+
+  --text-eyebrow: 0.75rem;
+  --text-eyebrow--line-height: 1;
+  --text-eyebrow--letter-spacing: 0.14em;
+
+  /* Radius */
+  --radius-card: 20px;
+  --radius-panel: 28px;
+
+  /* Motion */
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out-soft: cubic-bezier(0.65, 0, 0.35, 1);
+
+  /* Shadows */
+  --shadow-card: 0 1px 2px rgb(23 23 23 / 0.04), 0 8px 24px -12px rgb(23 23 23 / 0.08);
+  --shadow-lift: 0 2px 4px rgb(23 23 23 / 0.04), 0 24px 48px -20px rgb(23 23 23 / 0.22);
+  --shadow-float: 0 12px 40px -12px rgb(23 23 23 / 0.28);
+
+  /* Breakpoints (mobile-first) */
+  --breakpoint-xs: 23.4375rem; /* 375px */
+  --breakpoint-3xl: 120rem; /* 1920px */
+}
+
+:root {
+  --header-h: 64px;
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --header-h: 76px;
+  }
+}
