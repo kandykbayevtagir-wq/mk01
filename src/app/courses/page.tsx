@@ -52,7 +52,7 @@ export default function CoursesPage() {
               </div>
             </Reveal>
             <Reveal className="lg:col-span-6 lg:col-start-7" delay={80}>
-              <div className="rounded-panel bg-paper p-5 shadow-card sm:p-8 lg:p-10">
+              <div className="rounded-panel bg-card p-5 shadow-card sm:p-8 lg:p-10">
                 <LeadForm type="course" fields={courseEnrollFields()} tone="mist" />
               </div>
             </Reveal>

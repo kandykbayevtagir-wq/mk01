@@ -4,13 +4,15 @@ import { ButtonLink } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { SectionHeader } from "@/components/ui/typography";
 import { Reveal } from "@/components/ui/reveal";
+import { SectionDecor } from "@/components/ui/section-decor";
 import { CourseCatalog } from "@/components/course/course-catalog";
 
 export function ProgramsSection() {
   const courses = getCourses();
   return (
-    <section id="programmy" aria-labelledby="programs-title" className="border-t border-line bg-paper py-20 lg:py-32">
-      <Container>
+    <section id="programmy" aria-labelledby="programs-title" className="relative overflow-hidden bg-mist py-20 lg:py-32">
+      <SectionDecor variant={["dots-corner", "arches-left"]} />
+      <Container className="relative">
         <Reveal>
           <SectionHeader
             eyebrow="Обучение"

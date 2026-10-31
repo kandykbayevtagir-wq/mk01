@@ -14,6 +14,8 @@ export function ProductCategoryGrid({ headingLevel = "h3" }: { headingLevel?: "h
             <Visual
               image={null}
               seed={30 + i}
+              tone="sand"
+              art={(["insole", "pressure", "contour"] as const)[i % 3]}
               className="aspect-[5/4]"
               imgClassName="transition-transform duration-700 ease-out-soft group-hover:scale-[1.05]"
               marker={i === 0}

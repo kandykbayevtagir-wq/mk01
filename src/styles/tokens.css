@@ -5,19 +5,23 @@
  */
 
 @theme {
-  /* Colour */
-  --color-paper: #ffffff; /* primary background */
-  --color-mist: #f5f5f5; /* secondary background */
-  --color-ink: #171717; /* primary typography */
-  --color-graphite: #252525; /* dark surfaces */
-  --color-graphite-2: #2e2e2e; /* raised dark surface */
-  --color-muted: #666666; /* secondary typography */
-  --color-muted-dark: #a3a3a3; /* secondary typography on graphite */
-  --color-line: #e7e7e7; /* borders */
-  --color-line-dark: #3a3a3a; /* borders on graphite */
+  /* Colour — warm editorial palette */
+  --color-paper: #fbf7f1; /* ivory — primary background */
+  --color-card: #fffdf9; /* raised card surface */
+  --color-mist: #f3eadf; /* sand — secondary background */
+  --color-sand: #e9dccb; /* deeper sand */
+  --color-clay: #c99472; /* decorative clay */
+  --color-clay-soft: #eedfcd; /* clay tint */
+  --color-ink: #1e1a17; /* primary typography (warm black) */
+  --color-graphite: #2b2521; /* dark surfaces */
+  --color-graphite-2: #3a332e; /* raised dark surface */
+  --color-muted: #6a6058; /* secondary typography */
+  --color-muted-dark: #b5aa9f; /* secondary typography on graphite */
+  --color-line: #e3d6c5; /* borders */
+  --color-line-dark: #4a413a; /* borders on graphite */
   --color-accent: #b3262d; /* strategic red */
   --color-accent-strong: #951e24; /* red hover / pressed */
-  --color-accent-soft: #f8eaeb; /* red tint for selected states */
+  --color-accent-soft: #f6e3df; /* red tint for selected states */
   --color-success: #2f6b45;
   --color-danger: #b3262d;
 
@@ -57,9 +61,9 @@
   --ease-in-out-soft: cubic-bezier(0.65, 0, 0.35, 1);
 
   /* Shadows */
-  --shadow-card: 0 1px 2px rgb(23 23 23 / 0.04), 0 8px 24px -12px rgb(23 23 23 / 0.08);
-  --shadow-lift: 0 2px 4px rgb(23 23 23 / 0.04), 0 24px 48px -20px rgb(23 23 23 / 0.22);
-  --shadow-float: 0 12px 40px -12px rgb(23 23 23 / 0.28);
+  --shadow-card: 0 1px 2px rgb(60 40 25 / 0.05), 0 10px 30px -14px rgb(60 40 25 / 0.16);
+  --shadow-lift: 0 2px 4px rgb(60 40 25 / 0.05), 0 28px 56px -22px rgb(60 40 25 / 0.32);
+  --shadow-float: 0 14px 44px -12px rgb(60 40 25 / 0.35);
 
   /* Breakpoints (mobile-first) */
   --breakpoint-xs: 23.4375rem; /* 375px */

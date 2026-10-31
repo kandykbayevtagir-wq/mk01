@@ -2,6 +2,7 @@ import { partnerContent } from "@/data/content";
 import { ButtonLink } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { ContourArt } from "@/components/ui/contour-art";
+import { Footprints } from "@/components/ui/podo-art";
 import { Eyebrow } from "@/components/ui/typography";
 import { Reveal } from "@/components/ui/reveal";
 
@@ -14,12 +15,15 @@ export function PartnersTeaser() {
             data-tone="dark"
             className="relative isolate overflow-hidden rounded-panel bg-graphite px-6 py-14 text-white sm:px-10 lg:px-16 lg:py-24"
           >
+            <div aria-hidden className="pattern-dots-dark absolute inset-0 -z-10 [mask-image:linear-gradient(to_left,black,transparent_70%)]" />
             <ContourArt
               seed={4}
               tone="dark"
               marker={false}
-              className="absolute -right-24 -top-10 -z-10 h-[140%] w-[70%] opacity-70 max-lg:hidden"
+              className="absolute -right-24 -top-10 -z-10 h-[140%] w-[70%] opacity-60 max-lg:hidden"
             />
+            <Footprints tone="dark" steps={5} className="absolute -bottom-4 left-[44%] -z-10 h-[300px] w-auto rotate-[28deg] max-lg:hidden" />
+            <div aria-hidden className="absolute -left-20 -top-20 -z-10 size-64 rounded-full bg-clay/20 blur-3xl" />
             <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-6">
               <div className="lg:col-span-6">
                 <Eyebrow tone="dark">Партнёрство</Eyebrow>

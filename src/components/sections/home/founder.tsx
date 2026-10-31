@@ -4,24 +4,27 @@ import { ButtonLink } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { Eyebrow } from "@/components/ui/typography";
 import { Reveal } from "@/components/ui/reveal";
+import { SectionDecor } from "@/components/ui/section-decor";
 import { Visual } from "@/components/ui/visual";
 
 export function FounderSection() {
   return (
-    <section aria-labelledby="founder-title" className="bg-mist py-20 lg:py-32">
-      <Container>
+    <section aria-labelledby="founder-title" className="relative overflow-hidden bg-paper py-20 lg:py-32">
+      <SectionDecor variant={["arches-right"]} />
+      <Container className="relative">
         <div className="grid grid-cols-1 gap-10 lg:grid-cols-12 lg:gap-6">
           <Reveal className="lg:col-span-5">
             <div className="lg:sticky lg:top-[calc(var(--header-h)+32px)]">
               <Visual
                 image={founder.portrait}
-                tone="paper"
+                tone="light"
+                art="insole"
                 seed={11}
                 className="aspect-[4/5] rounded-panel"
                 sizes="(min-width: 1024px) 40vw, 100vw"
               />
               {founder.yearsOfExperience && (
-                <div className="mt-4 flex items-baseline gap-3 rounded-card bg-paper p-5">
+                <div className="mt-4 flex items-baseline gap-3 rounded-card bg-card p-5">
                   <span className="text-4xl font-semibold tracking-tight">{founder.yearsOfExperience}</span>
                   <span className="text-sm text-muted">
                     {plural(founder.yearsOfExperience, ["год", "года", "лет"])} профессионального опыта
@@ -55,7 +58,7 @@ export function FounderSection() {
                 <h3 className="text-sm font-semibold text-muted">Специализация</h3>
                 <ul className="mt-4 flex flex-wrap gap-2">
                   {founder.specializations.map((s) => (
-                    <li key={s} className="rounded-full border border-line bg-paper px-4 py-2 text-sm">
+                    <li key={s} className="rounded-full border border-line bg-card px-4 py-2 text-sm">
                       {s}
                     </li>
                   ))}

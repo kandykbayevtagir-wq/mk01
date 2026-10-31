@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ButtonLink } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { Reveal } from "@/components/ui/reveal";
+import { ArchLines, PressureFeet } from "@/components/ui/podo-art";
 
 export function FinalCta({
   title = "Выберите следующий шаг в профессиональном развитии",
@@ -13,10 +14,14 @@ export function FinalCta({
   showLinks?: boolean;
 }) {
   return (
-    <section aria-labelledby="final-cta-title" className="relative overflow-hidden border-t border-line py-24 lg:py-36">
-      <div aria-hidden className="hairline-grid pointer-events-none absolute inset-0 opacity-50 [mask-image:linear-gradient(to_bottom,transparent,black_30%,black_70%,transparent)]" />
-      <Container className="relative">
-        <Reveal className="max-w-4xl">
+    <section aria-labelledby="final-cta-title" className="py-6 lg:py-10">
+      <Container>
+        <Reveal className="relative isolate overflow-hidden rounded-panel bg-sand px-6 py-16 sm:px-10 lg:px-16 lg:py-24">
+          <div aria-hidden className="pattern-dots absolute inset-0 -z-10 opacity-90 [mask-image:linear-gradient(to_left,black,transparent_75%)]" />
+          <div aria-hidden className="absolute -right-16 -top-16 -z-10 size-80 rounded-full bg-clay-soft" />
+          <PressureFeet className="absolute bottom-[-8%] right-[4%] -z-10 h-[115%] opacity-90 max-lg:hidden" />
+          <ArchLines className="absolute -bottom-1 -left-24 -z-10 h-48 w-[460px]" />
+          <div className="max-w-3xl">
           <h2 id="final-cta-title" className="text-h1 font-semibold">
             {title}
             <span className="text-accent">.</span>
@@ -33,6 +38,7 @@ export function FinalCta({
                 </Link>
               </p>
             )}
+          </div>
           </div>
         </Reveal>
       </Container>

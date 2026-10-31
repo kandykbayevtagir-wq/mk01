@@ -4,18 +4,22 @@ import { Container } from "@/components/ui/container";
 import { Eyebrow } from "@/components/ui/typography";
 import { Parallax } from "@/components/ui/parallax";
 import { Reveal } from "@/components/ui/reveal";
+import { SectionDecor } from "@/components/ui/section-decor";
 import { Visual } from "@/components/ui/visual";
 
 export function CenterTeaser() {
   return (
-    <section aria-labelledby="center-title" className="py-20 lg:py-32">
-      <Container>
+    <section aria-labelledby="center-title" className="relative overflow-hidden bg-mist py-20 lg:py-32">
+      <SectionDecor variant={["dots-corner", "footprints"]} />
+      <Container className="relative">
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-6">
           <Reveal className="order-2 lg:order-1 lg:col-span-6">
-            <Parallax className="aspect-[4/3] rounded-panel bg-mist lg:aspect-[5/6]" distance={30}>
+            <Parallax className="aspect-[4/3] rounded-panel bg-sand shadow-card lg:aspect-[5/6]" distance={30}>
               <Visual
                 image={center.gallery[0]}
                 seed={21}
+                tone="sand"
+                art="pressure"
                 className="h-full w-full"
                 sizes="(min-width: 1024px) 50vw, 100vw"
               />

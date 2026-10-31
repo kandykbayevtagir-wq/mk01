@@ -27,7 +27,7 @@ export type FieldDef = {
 type Status = "idle" | "submitting" | "success" | "error";
 
 const fieldBase =
-  "peer w-full rounded-2xl border bg-paper px-4 text-base text-ink placeholder:text-muted/70 " +
+  "peer w-full rounded-2xl border bg-card px-4 text-base text-ink placeholder:text-muted/70 " +
   "transition-[border-color,box-shadow] duration-200 outline-none " +
   "focus:border-ink focus:shadow-[0_0_0_4px_rgb(23_23_23/0.06)]";
 

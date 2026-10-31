@@ -63,7 +63,7 @@ export default function ProductsPage() {
             <Container>
               <div className="grid grid-cols-1 gap-10 lg:grid-cols-12 lg:gap-6">
                 <Reveal className={idx % 2 ? "lg:order-2 lg:col-span-6 lg:col-start-7" : "lg:col-span-6"}>
-                  <Visual image={null} seed={30 + idx} marker={idx === 0} className="aspect-[4/3] rounded-panel" />
+                  <Visual image={null} seed={30 + idx} tone="sand" art={(["insole", "pressure", "contour"] as const)[idx % 3]} marker={idx === 0} className="aspect-[4/3] rounded-panel shadow-card" />
                 </Reveal>
                 <Reveal
                   delay={80}

@@ -23,6 +23,7 @@ import { Container } from "@/components/ui/container";
 import { Eyebrow } from "@/components/ui/typography";
 import { Reveal } from "@/components/ui/reveal";
 import { Visual } from "@/components/ui/visual";
+import { SectionDecor } from "@/components/ui/section-decor";
 import { Breadcrumbs } from "@/components/sections/page-hero";
 import { Faq } from "@/components/sections/faq";
 import { CourseCard } from "@/components/course/course-card";
@@ -111,8 +112,9 @@ export default async function CoursePage({ params }: Props) {
       <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(courseLd(course))} />
 
       {/* Hero */}
-      <section id="course-hero" className="border-b border-line">
-        <Container className="pb-12 pt-6 sm:pt-8 lg:pb-20 lg:pt-10">
+      <section id="course-hero" className="relative overflow-hidden bg-mist">
+        <SectionDecor variant={["dots-corner", "arches-left"]} />
+        <Container className="relative pb-12 pt-6 sm:pt-8 lg:pb-20 lg:pt-10">
           <Breadcrumbs
             className="enter"
             items={[
@@ -143,7 +145,7 @@ export default async function CoursePage({ params }: Props) {
                 style={{ "--enter-delay": "210ms" } as React.CSSProperties}
               >
                 {facts.map((f) => (
-                  <div key={f.label} className="bg-paper p-4 sm:p-5">
+                  <div key={f.label} className="bg-card p-4 sm:p-5">
                     <dt className="text-xs text-muted">{f.label}</dt>
                     <dd className={f.value ? "mt-1.5 text-[0.9375rem] font-semibold" : "mt-1.5 text-[0.9375rem] text-muted"}>
                       {f.value ?? "Уточняется"}
@@ -162,7 +164,8 @@ export default async function CoursePage({ params }: Props) {
                 image={course.image}
                 seed={course.order + 3}
                 priority
-                className="aspect-[4/3] rounded-panel lg:aspect-[4/4.2]"
+                tone="sand"
+                className="aspect-[4/3] rounded-panel shadow-card lg:aspect-[4/4.2]"
                 sizes="(min-width: 1024px) 40vw, 100vw"
               />
             </div>
@@ -338,7 +341,7 @@ export default async function CoursePage({ params }: Props) {
 
           {/* Sticky enrolment panel (desktop) */}
           <aside aria-label="Запись на курс" className="hidden lg:col-span-4 lg:col-start-9 lg:block">
-            <div className="sticky top-[calc(var(--header-h)+24px)] rounded-panel border border-line bg-paper p-8 shadow-card">
+            <div className="sticky top-[calc(var(--header-h)+24px)] rounded-panel border border-line bg-card p-8 shadow-card">
               <p className="text-xs text-muted">Стоимость</p>
               <p className="mt-1.5 text-[1.75rem] font-semibold tracking-tight">{priceLabel}</p>
               {course.priceNote && <p className="mt-1 text-sm text-muted">{course.priceNote}</p>}
@@ -395,7 +398,7 @@ export default async function CoursePage({ params }: Props) {
               </dl>
             </Reveal>
             <Reveal className="lg:col-span-6 lg:col-start-7" delay={80}>
-              <div className="rounded-panel bg-paper p-5 shadow-card sm:p-8 lg:p-10">
+              <div className="rounded-panel bg-card p-5 shadow-card sm:p-8 lg:p-10">
                 <LeadForm type="course" fields={courseEnrollFields(course)} submitLabel="Записаться на курс" tone="mist" />
               </div>
             </Reveal>

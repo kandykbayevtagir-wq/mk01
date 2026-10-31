@@ -9,6 +9,7 @@ import { Container } from "@/components/ui/container";
 import { Eyebrow } from "@/components/ui/typography";
 import { Parallax } from "@/components/ui/parallax";
 import { Visual } from "@/components/ui/visual";
+import { ArchLines } from "@/components/ui/podo-art";
 
 function delay(ms: number) {
   return { "--enter-delay": `${ms}ms` } as React.CSSProperties;
@@ -30,8 +31,16 @@ export function Hero() {
 
   return (
     <section aria-labelledby="hero-title" className="relative overflow-hidden">
-      <div aria-hidden className="absolute inset-y-0 right-0 hidden w-[34%] bg-mist lg:block" />
-      <Container className="relative pb-16 pt-6 sm:pt-10 lg:pb-28 lg:pt-16">
+      {/* Decorative backdrop: sand panel with sensor-plate dots, arches, footprints */}
+      <div aria-hidden className="pointer-events-none absolute inset-0 -z-0">
+        <div className="absolute inset-y-0 right-0 w-full bg-mist max-lg:top-[46%] lg:w-[38%]">
+          <div className="pattern-dots absolute inset-0 opacity-80 [mask-image:linear-gradient(to_left,black,transparent)]" />
+        </div>
+        <ArchLines className="absolute -bottom-2 -left-24 h-56 w-[520px] max-sm:hidden" count={8} />
+        <div className="absolute -right-24 -top-24 size-72 rounded-full border border-clay/30 max-lg:hidden" />
+        <div className="absolute -right-10 -top-10 size-44 rounded-full border border-clay/25 max-lg:hidden" />
+      </div>
+      <Container className="relative z-10 pb-16 pt-6 sm:pt-10 lg:pb-28 lg:pt-16">
         <div className="grid grid-cols-1 gap-10 lg:grid-cols-12 lg:gap-6">
           <div className="flex flex-col lg:col-span-7 lg:pr-8 lg:pt-6">
             <div className="enter" style={delay(0)}>
@@ -74,10 +83,13 @@ export function Hero() {
           </div>
 
           <div className="enter-fade relative lg:col-span-5" style={delay(120)}>
-            <Parallax className="aspect-[4/4.6] rounded-panel bg-graphite sm:aspect-[4/4] lg:aspect-[4/5]" distance={28}>
+            <div aria-hidden className="absolute -bottom-6 -left-6 size-40 rounded-full bg-clay/25 blur-2xl" />
+            <div aria-hidden className="absolute -right-3 -top-3 hidden size-24 rounded-[28px] border border-clay/40 sm:block" />
+            <Parallax className="aspect-[4/4.6] rounded-panel bg-graphite shadow-float sm:aspect-[4/4] lg:aspect-[4/5]" distance={28}>
               <Visual
                 image={founder.portrait}
                 tone="dark"
+                art="feet"
                 seed={7}
                 priority
                 className="h-full w-full"
@@ -95,7 +107,7 @@ export function Hero() {
             {spotlight && (
               <Link
                 href={`/courses/${spotlight.slug}`}
-                className="group absolute -top-4 right-4 hidden w-[260px] rounded-card bg-paper p-5 shadow-float transition-transform duration-300 ease-out-soft hover:-translate-y-1 sm:block lg:-left-10 lg:right-auto lg:top-10"
+                className="group absolute -top-4 right-4 hidden w-[260px] rounded-card bg-card p-5 shadow-float transition-transform duration-300 ease-out-soft hover:-translate-y-1 sm:block lg:-left-10 lg:right-auto lg:top-10"
               >
                 <p className="flex items-center gap-2 text-xs font-medium text-muted">
                   <span className="relative flex size-2">

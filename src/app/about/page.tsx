@@ -124,7 +124,7 @@ export default function AboutPage() {
             </Reveal>
             <div className="mt-12 grid grid-cols-1 gap-4 md:grid-cols-2 lg:gap-6">
               {founder.specializations.length > 0 && (
-                <Reveal className="rounded-card bg-paper p-6 sm:p-8">
+                <Reveal className="rounded-card bg-card p-6 sm:p-8">
                   <Sparkles aria-hidden className="size-6 text-accent" strokeWidth={1.5} />
                   <h3 className="mt-6 text-lg font-semibold">Специализация</h3>
                   <ul className="mt-4 flex flex-wrap gap-2">
@@ -137,14 +137,14 @@ export default function AboutPage() {
                 </Reveal>
               )}
               {founder.teaching && (
-                <Reveal className="rounded-card bg-paper p-6 sm:p-8" delay={60}>
+                <Reveal className="rounded-card bg-card p-6 sm:p-8" delay={60}>
                   <BookOpenCheck aria-hidden className="size-6 text-accent" strokeWidth={1.5} />
                   <h3 className="mt-6 text-lg font-semibold">Преподавательская деятельность</h3>
                   <p className="mt-4 leading-relaxed text-muted">{founder.teaching}</p>
                 </Reveal>
               )}
               {founder.achievements.length > 0 && (
-                <Reveal className="rounded-card bg-paper p-6 sm:p-8" delay={120}>
+                <Reveal className="rounded-card bg-card p-6 sm:p-8" delay={120}>
                   <Award aria-hidden className="size-6 text-accent" strokeWidth={1.5} />
                   <h3 className="mt-6 text-lg font-semibold">Профессиональные достижения</h3>
                   <ul className="mt-4 space-y-3">
@@ -158,7 +158,7 @@ export default function AboutPage() {
                 </Reveal>
               )}
               {founder.qualifications.length > 0 && (
-                <Reveal className="rounded-card bg-paper p-6 sm:p-8 md:col-span-2" delay={180}>
+                <Reveal className="rounded-card bg-card p-6 sm:p-8 md:col-span-2" delay={180}>
                   <h3 className="text-lg font-semibold">Дипломы и сертификаты</h3>
                   <ul className="mt-6 border-t border-line">
                     {founder.qualifications.map((q) => (

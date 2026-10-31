@@ -5,6 +5,7 @@ import { absoluteUrl, jsonLd } from "@/lib/seo";
 import { cn } from "@/lib/utils";
 import { Container } from "@/components/ui/container";
 import { Eyebrow } from "@/components/ui/typography";
+import { ArchLines, Insole } from "@/components/ui/podo-art";
 
 export type Crumb = { href: string; label: string };
 
@@ -71,8 +72,18 @@ export function PageHero({
   className?: string;
 }) {
   return (
-    <section className={cn("relative overflow-hidden border-b border-line", className)}>
-      <Container className="pb-14 pt-6 sm:pt-8 lg:pb-24 lg:pt-10">
+    <section className={cn("relative overflow-hidden bg-mist", className)}>
+      <div aria-hidden className="pointer-events-none absolute inset-0">
+        <div className="pattern-dots absolute inset-y-0 right-0 w-2/3 [mask-image:linear-gradient(to_left,black,transparent)]" />
+        <ArchLines count={9} className="absolute -bottom-1 -right-24 h-64 w-[600px] max-md:h-40 max-md:-right-40" />
+        {!aside && (
+          <>
+            <div className="absolute right-[8%] top-1/2 hidden size-[380px] -translate-y-1/2 rounded-full bg-clay-soft lg:block" />
+            <Insole className="absolute right-[13%] top-1/2 hidden h-[340px] w-auto -translate-y-1/2 rotate-[16deg] lg:block" />
+          </>
+        )}
+      </div>
+      <Container className="relative pb-14 pt-6 sm:pt-8 lg:pb-24 lg:pt-10">
         <Breadcrumbs items={crumbs} className="enter" />
         <div className="mt-10 grid grid-cols-1 gap-10 lg:mt-16 lg:grid-cols-12 lg:gap-6">
           <div className={aside ? "lg:col-span-7" : "lg:col-span-9"}>

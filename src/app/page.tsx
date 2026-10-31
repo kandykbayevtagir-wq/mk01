@@ -13,6 +13,7 @@ import { PartnersTeaser } from "@/components/sections/home/partners-teaser";
 import { CenterTeaser } from "@/components/sections/home/center-teaser";
 import { ProductCategoryGrid } from "@/components/sections/product-categories";
 import { TestimonialGrid } from "@/components/sections/testimonials";
+import { SectionDecor } from "@/components/ui/section-decor";
 import { FinalCta } from "@/components/sections/final-cta";
 
 export const metadata: Metadata = pageMetadata({
@@ -30,8 +31,9 @@ export default function HomePage() {
       <PartnersTeaser />
       <CenterTeaser />
 
-      <section aria-labelledby="products-title" className="border-t border-line py-20 lg:py-32">
-        <Container>
+      <section aria-labelledby="products-title" className="relative overflow-hidden py-20 lg:py-32">
+        <SectionDecor variant={["arches-right"]} />
+        <Container className="relative">
           <Reveal>
             <SectionHeader
               eyebrow="Продукция"
@@ -50,8 +52,9 @@ export default function HomePage() {
         </Container>
       </section>
 
-      <section aria-labelledby="reviews-title" className="bg-mist py-20 lg:py-32">
-        <Container>
+      <section aria-labelledby="reviews-title" className="relative overflow-hidden bg-mist py-20 lg:py-32">
+        <SectionDecor variant={["dots-corner", "arches-left"]} />
+        <Container className="relative">
           <Reveal>
             <SectionHeader
               eyebrow="Отзывы и результаты"

@@ -10,7 +10,7 @@ import { Visual } from "@/components/ui/visual";
 export function TestimonialCard({ item }: { item: Testimonial }) {
   const course = item.courseSlug ? getCourse(item.courseSlug) : null;
   return (
-    <figure className="flex h-full flex-col rounded-card border border-line bg-paper p-6 sm:p-8">
+    <figure className="flex h-full flex-col rounded-card border border-line bg-card p-6 sm:p-8">
       <Quote aria-hidden className="size-7 text-accent" strokeWidth={1.5} />
       <blockquote className="mt-5 flex-1 text-[1.0625rem] leading-relaxed">{item.text}</blockquote>
       <figcaption className="mt-8 flex items-center gap-4 border-t border-line pt-5">
@@ -44,7 +44,7 @@ export function TestimonialGrid({ limit }: { limit?: number }) {
   const items = getTestimonials().slice(0, limit);
   if (items.length === 0) {
     return (
-      <div className="grid grid-cols-1 gap-8 rounded-panel border border-line bg-paper p-6 sm:p-10 lg:grid-cols-12 lg:items-end lg:gap-6">
+      <div className="grid grid-cols-1 gap-8 rounded-panel border border-line bg-card p-6 sm:p-10 lg:grid-cols-12 lg:items-end lg:gap-6">
         <div className="lg:col-span-7">
           <Quote aria-hidden className="size-8 text-accent" strokeWidth={1.5} />
           <p className="mt-6 max-w-2xl text-h3 font-medium">

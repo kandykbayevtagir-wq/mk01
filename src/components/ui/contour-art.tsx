@@ -60,8 +60,8 @@ export function ContourArt({
     { cx: 200 + (rand() - 0.5) * 60, cy: 360 + (rand() - 0.5) * 40, rings: 9, sx: 1, sy: 1.15 },
     { cx: 205 + (rand() - 0.5) * 70, cy: 150 + (rand() - 0.5) * 40, rings: 11, sx: 1.25, sy: 0.9 },
   ];
-  const stroke = tone === "dark" ? "rgba(255,255,255,0.16)" : "rgba(23,23,23,0.11)";
-  const strokeStrong = tone === "dark" ? "rgba(255,255,255,0.32)" : "rgba(23,23,23,0.22)";
+  const stroke = tone === "dark" ? "rgba(255,255,255,0.14)" : "rgba(150,108,78,0.2)";
+  const strokeStrong = tone === "dark" ? "rgba(233,220,203,0.32)" : "rgba(150,108,78,0.38)";
 
   const paths: { d: string; strong: boolean }[] = [];
   for (const c of centres) {

@@ -24,7 +24,7 @@ export function CourseCard({
   return (
     <article
       className={cn(
-        "group relative flex h-full flex-col overflow-hidden rounded-card border border-line bg-paper",
+        "group relative flex h-full flex-col overflow-hidden rounded-card border border-line bg-card",
         "transition-[transform,box-shadow,border-color] duration-500 ease-out-soft",
         "hover:-translate-y-1 hover:border-transparent hover:shadow-lift",
         "focus-within:border-transparent focus-within:shadow-lift",
@@ -43,7 +43,7 @@ export function CourseCard({
         </span>
         <span
           aria-hidden
-          className="absolute bottom-4 right-4 inline-flex size-11 items-center justify-center rounded-full bg-paper text-ink shadow-card transition-[background-color,color,transform] duration-300 ease-out-soft group-hover:bg-accent group-hover:text-white"
+          className="absolute bottom-4 right-4 inline-flex size-11 items-center justify-center rounded-full bg-card text-ink shadow-card transition-[background-color,color,transform] duration-300 ease-out-soft group-hover:bg-accent group-hover:text-white"
         >
           <ArrowUpRight className="size-5 transition-transform duration-300 ease-out-soft group-hover:-translate-y-0.5 group-hover:translate-x-0.5" strokeWidth={1.75} />
         </span>

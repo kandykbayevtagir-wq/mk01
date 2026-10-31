@@ -77,7 +77,7 @@ export function CourseCatalog({
               aria-pressed={active}
               className={cn(
                 "relative isolate inline-flex h-11 shrink-0 snap-start items-center gap-2 rounded-full border px-4 text-sm font-medium transition-colors duration-200",
-                active ? "border-ink text-white" : "border-line bg-paper text-ink hover:border-ink/30",
+                active ? "border-ink text-white" : "border-line bg-card text-ink hover:border-ink/30",
               )}
             >
               {active && (
