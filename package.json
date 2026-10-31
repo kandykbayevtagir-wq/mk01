@@ -9,7 +9,8 @@
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
     "check": "npm run typecheck && npm run lint && npm run build",
-    "content:todo": "grep -rn --color=always 'ЗАПОЛНИТЬ' src/data src/app/privacy || true"
+    "content:todo": "grep -rn --color=always 'ЗАПОЛНИТЬ' src/data src/app/privacy || true",
+    "build:pages": "node scripts/build-static.mjs"
   },
   "dependencies": {
     "clsx": "^2.1.1",

@@ -1,6 +1,7 @@
 import Image from "next/image";
 import type { ImageAsset } from "@/data/types";
 import { cn } from "@/lib/utils";
+import { assetPath } from "@/lib/seo";
 import { ContourArt } from "./contour-art";
 
 const tones = {
@@ -39,7 +40,7 @@ export function Visual({
     <div className={cn("relative isolate overflow-hidden", tones[tone], className)}>
       {image ? (
         <Image
-          src={image.src}
+          src={assetPath(image.src)}
           alt={image.alt}
           fill
           sizes={sizes}

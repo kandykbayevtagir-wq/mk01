@@ -3,7 +3,8 @@
 import Link from "next/link";
 import { useId, useRef, useState } from "react";
 import { AlertCircle, Check, ChevronDown, Loader2 } from "lucide-react";
-import { leadSchemas, type LeadResponse, type LeadType } from "@/lib/leads/schema";
+import { leadSchemas, type LeadType } from "@/lib/leads/schema";
+import { submitLead } from "@/lib/leads/client";
 import { contacts } from "@/data/site";
 import { t } from "@/i18n";
 import { cn, phoneHref, whatsappHref } from "@/lib/utils";
@@ -104,13 +105,8 @@ export function LeadForm({
     setStatus("submitting");
     setErrorCode(null);
     try {
-      const res = await fetch("/api/leads", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
-      const body = (await res.json().catch(() => null)) as LeadResponse | null;
-      if (res.ok && body?.ok) {
+      const { ok, body } = await submitLead(data);
+      if (ok) {
         setStatus("success");
         form.reset();
         requestAnimationFrame(() => statusRef.current?.focus());

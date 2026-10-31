@@ -2,8 +2,18 @@ import type { Metadata } from "next";
 import { site } from "@/data/site";
 import { defaultLocale, localeMeta, locales } from "@/i18n/config";
 
+const trailingSlash = process.env.NEXT_PUBLIC_TRAILING_SLASH === "true";
+
+/** Absolute URL for a site path (site.url already includes any base path). */
 export function absoluteUrl(path = "/") {
-  return `${site.url}${path === "/" ? "" : path}`;
+  if (path === "/") return trailingSlash ? `${site.url}/` : site.url;
+  const isFile = /\.[a-z0-9]+$/i.test(path);
+  return `${site.url}${path}${trailingSlash && !isFile && !path.endsWith("/") ? "/" : ""}`;
+}
+
+/** Prefixes local asset paths (e.g. "/images/x.jpg") with the deploy base path. */
+export function assetPath(src: string) {
+  return src.startsWith("/") ? `${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}${src}` : src;
 }
 
 /**
@@ -39,7 +49,7 @@ export function pageMetadata({
       title: fullTitle,
       description,
       locale: localeMeta[defaultLocale].ogLocale,
-      ...(image ? { images: [{ url: image }] } : {}),
+      ...(image ? { images: [{ url: image.startsWith("http") ? image : absoluteUrl(image) }] } : {}),
     },
     twitter: {
       card: image ? "summary_large_image" : "summary",

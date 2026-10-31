@@ -131,7 +131,27 @@ The site ships in Russian, and the architecture is ready for Kazakh. Steps are d
 
 ## Deployment
 
-**Vercel (recommended):** import the repository, set the environment variables from `.env.example` and deploy. No extra configuration is needed.
+### GitHub Pages (configured)
+
+Every push to `main` runs `.github/workflows/deploy-pages.yml`. The workflow type-checks, lints, builds a fully static site (`npm run build:pages`) and publishes it to the `gh-pages` branch. The site is served at `https://<owner>.github.io/<repo>/`.
+
+One-time setup in the repository settings:
+
+1. **Settings → Pages → Build and deployment:** Source «Deploy from a branch», branch `gh-pages`, folder `/ (root)`.
+2. Private repositories need a paid GitHub plan for Pages. On the free plan, make the repository public (Settings → General → Danger Zone → Change visibility).
+3. **Forms on static hosting:** GitHub Pages has no server, so `/api/leads` isn't available and forms post directly to a form service. Add repository variables under Settings → Secrets and variables → Actions → **Variables**:
+   - Formspree: `LEADS_ENDPOINT` = `https://formspree.io/f/<form-id>`
+   - Web3Forms: `LEADS_ENDPOINT` = `https://api.web3forms.com/submit`, `LEADS_ACCESS_KEY` = your access key
+
+   Without these, forms honestly show «онлайн-приём заявок ещё не подключён» and offer direct contacts.
+
+Static mode differences: no ISR (past course dates drop off on the next deploy), images are served unoptimised (export them as WebP), and the security headers aren't applied.
+
+Local preview of the static build: `NEXT_PUBLIC_BASE_PATH=/mk01 npm run build:pages`. Output goes to `./out`.
+
+### Vercel
+
+Import the repository, set the environment variables from `.env.example` and deploy. No extra configuration is needed. This target keeps the full server feature set: `/api/leads` with Telegram/e-mail delivery, ISR and image optimisation.
 
 **Any Node host:**
 
