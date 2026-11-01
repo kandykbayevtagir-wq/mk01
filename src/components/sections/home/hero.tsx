@@ -11,7 +11,7 @@ import { Eyebrow } from "@/components/ui/typography";
 import { Parallax } from "@/components/ui/parallax";
 import { Visual } from "@/components/ui/visual";
 import { MotionRegion } from "@/components/ui/motion-region";
-import { LiquidLight, LightTrail } from "@/components/ui/liquid-light";
+import { LightTrail } from "@/components/ui/liquid-light";
 import { ArchLines } from "@/components/ui/podo-art";
 
 function delay(ms: number) {
@@ -135,7 +135,8 @@ export function Hero() {
                   imgClassName="object-[50%_20%]"
                   sizes="(min-width: 1024px) 40vw, 100vw"
                 >
-                  <LiquidLight dark lean />
+                  {/* static light: the living pressure map is this viewport's one ambient motion */}
+                  <div aria-hidden className="course-plate__glow absolute inset-0" />
                 </Visual>
               </Parallax>
 

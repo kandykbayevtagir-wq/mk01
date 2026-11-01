@@ -30,6 +30,7 @@ import { Breadcrumbs } from "@/components/sections/page-hero";
 import { Faq } from "@/components/sections/faq";
 import { ContextLinks } from "@/components/sections/context-links";
 import { CourseCard } from "@/components/course/course-card";
+import { CoursePlate } from "@/components/course/course-plate";
 import { MobileEnrollBar } from "@/components/course/mobile-enroll-bar";
 import { LeadForm } from "@/components/forms/lead-form";
 import { courseEnrollFields } from "@/components/forms/presets";
@@ -164,13 +165,11 @@ export default async function CoursePage({ params }: Props) {
             </div>
             <div className="enter-fade lg:col-span-5" style={{ "--enter-delay": "120ms" } as React.CSSProperties}>
               <ViewTransition name={`course-visual-${course.slug}`} default="none" share="course-morph">
-                <Visual
-                  image={course.image}
-                  seed={course.order + 3}
+                <CoursePlate
+                  course={course}
+                  size="page"
                   priority
-                  tone="sand"
                   className="aspect-[4/3] rounded-panel shadow-card lg:aspect-[4/4.2]"
-                  sizes="(min-width: 1024px) 40vw, 100vw"
                 />
               </ViewTransition>
             </div>

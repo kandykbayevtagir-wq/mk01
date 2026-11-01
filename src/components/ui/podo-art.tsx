@@ -2,7 +2,8 @@
  * Podology / orthopaedics illustration kit — pure server-rendered SVG.
  *
  *  • PressureFoot   — baropodometry-style plantar pressure map made of dots
- *                     (rendered as ≤5 <path>s, so the DOM stays tiny)
+ *                     (a cached static file from /art; animated version:
+ *                     components/ui/pressure-field.tsx)
  *  • Insole         — orthotic insole outline with arch & metatarsal zones
  *  • ArchLines      — concentric foot-arch curves
  *  • Footprints     — a walking trail of stylised footprints
@@ -12,114 +13,41 @@
  */
 
 import { cn } from "@/lib/utils";
+import { artSrc, pressureFile } from "@/lib/art/files";
 
 /* ------------------------------------------------------------------ */
-/*  Pressure foot                                                       */
+/*  Pressure foot — static files from /art (see lib/art/pressure.ts)    */
 /* ------------------------------------------------------------------ */
 
-type Ellipse = { cx: number; cy: number; rx: number; ry: number };
+type ArtImgProps = { className?: string; tone?: "light" | "dark"; eager?: boolean };
 
-// Right foot, plantar view, toes up. viewBox 0 0 200 480.
-const footShape: Ellipse[] = [
-  { cx: 100, cy: 398, rx: 50, ry: 62 }, // heel
-  { cx: 120, cy: 285, rx: 40, ry: 92 }, // lateral midfoot band
-  { cx: 97, cy: 168, rx: 72, ry: 56 }, // forefoot
-  { cx: 62, cy: 72, rx: 26, ry: 30 }, // hallux
-  { cx: 103, cy: 80, rx: 15, ry: 17 },
-  { cx: 129, cy: 92, rx: 13, ry: 15 },
-  { cx: 151, cy: 106, rx: 12, ry: 13 },
-  { cx: 168, cy: 124, rx: 10, ry: 11 },
-];
-
-const peaks = [
-  { x: 100, y: 410, s: 34, w: 1 },
-  { x: 66, y: 168, s: 26, w: 0.95 },
-  { x: 102, y: 158, s: 24, w: 0.75 },
-  { x: 137, y: 170, s: 22, w: 0.55 },
-  { x: 62, y: 70, s: 20, w: 0.8 },
-  { x: 128, y: 290, s: 32, w: 0.32 },
-];
-
-const inside = (x: number, y: number) =>
-  footShape.some((e) => ((x - e.cx) / e.rx) ** 2 + ((y - e.cy) / e.ry) ** 2 <= 1);
-
-const intensity = (x: number, y: number) =>
-  Math.min(
-    1,
-    peaks.reduce((sum, p) => sum + p.w * Math.exp(-((x - p.x) ** 2 + (y - p.y) ** 2) / (2 * p.s ** 2)), 0),
-  );
-
-// Gray ramp → near-black, with red reserved for the absolute pressure peaks.
-const lightRamp = ["--art-1", "--art-2", "--art-3", "--art-4", "--art-ink", "--art-5"].map((v) => `var(${v})`);
-const darkRamp = ["--art-d1", "--art-d2", "--art-d3", "--art-d4", "--art-d-ink", "--art-d5"].map((v) => `var(${v})`);
-
-function dotPath(points: { x: number; y: number; r: number }[]) {
-  return points
-    .map(({ x, y, r }) => `M${(x - r).toFixed(1)} ${y}a${r} ${r} 0 1 0 ${(2 * r).toFixed(1)} 0a${r} ${r} 0 1 0 ${(-2 * r).toFixed(1)} 0`)
-    .join("");
-}
-
-const footBuckets = (() => {
-  const step = 12;
-  const buckets: { x: number; y: number; r: number }[][] = [[], [], [], [], [], []];
-  for (let y = 30; y <= 465; y += step) {
-    for (let x = 22; x <= 182; x += step) {
-      const ox = x + ((y / step) % 2 ? step / 2 : 0);
-      if (!inside(ox, y)) continue;
-      const v = Math.pow(intensity(ox, y), 0.75);
-      const level = v >= 0.94 ? 5 : Math.min(4, Math.floor(v * 5));
-      buckets[level].push({ x: ox, y, r: 2.6 + v * 2.4 });
-    }
-  }
-  return buckets.map(dotPath);
-})();
-
-const PEAK = 5;
-
-export function PressureFoot({
-  className,
-  mirror = false,
-  tone = "light",
-  breathe = false,
-}: {
-  className?: string;
-  mirror?: boolean;
-  tone?: "light" | "dark";
-  /** Live sensor reading: the peak sits on its own HTML-level layer so its
-   *  opacity loop is composited (an SVG <path> would repaint every frame). */
-  breathe?: boolean;
-}) {
-  const ramp = tone === "dark" ? darkRamp : lightRamp;
-  const art = (include: (i: number) => boolean, cls?: string) => (
-    <svg viewBox="0 0 200 480" className={cls} aria-hidden focusable="false">
-      <g transform={mirror ? "translate(200 0) scale(-1 1)" : undefined}>
-        {footBuckets.map((d, i) => (include(i) ? <path key={i} d={d} style={{ fill: ramp[i] }} /> : null))}
-      </g>
-    </svg>
-  );
-  if (!breathe) return art(() => true, className);
+export function PressureFoot({ className, mirror = false, tone = "light", eager = false }: ArtImgProps & { mirror?: boolean }) {
   return (
-    <span aria-hidden className={cn("relative inline-flex", className)}>
-      {art((i) => i !== PEAK, "h-full w-auto")}
-      {art((i) => i === PEAK, "pressure-peak absolute inset-0 h-full w-full")}
-    </span>
+    // eslint-disable-next-line @next/next/no-img-element -- static generated SVG; next/image adds nothing here
+    <img
+      src={artSrc(pressureFile("foot-v", tone))}
+      alt=""
+      aria-hidden
+      draggable={false}
+      decoding="async"
+      loading={eager ? "eager" : "lazy"}
+      className={cn("pointer-events-none select-none", mirror && "-scale-x-100", className)}
+    />
   );
 }
 
-export function PressureFeet({
-  className,
-  tone = "light",
-  breathe = false,
-}: {
-  className?: string;
-  tone?: "light" | "dark";
-  breathe?: boolean;
-}) {
+export function PressureFeet({ className, tone = "light", eager = false }: ArtImgProps) {
   return (
-    <div className={cn("flex items-end gap-[6%]", className)} aria-hidden>
-      <PressureFoot mirror tone={tone} breathe={breathe} className="h-full w-auto -translate-y-[6%]" />
-      <PressureFoot tone={tone} breathe={breathe} className="pressure-foot--late h-full w-auto" />
-    </div>
+    // eslint-disable-next-line @next/next/no-img-element -- static generated SVG
+    <img
+      src={artSrc(pressureFile("pair-v", tone))}
+      alt=""
+      aria-hidden
+      draggable={false}
+      decoding="async"
+      loading={eager ? "eager" : "lazy"}
+      className={cn("pointer-events-none aspect-[424/508] w-auto select-none", className)}
+    />
   );
 }
 

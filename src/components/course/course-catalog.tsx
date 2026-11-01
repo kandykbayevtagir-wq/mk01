@@ -120,14 +120,14 @@ export function CourseCatalog({
       </p>
 
       {visible.length > 0 ? (
-        <ul className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-3">
+        <ul className="course-stack mt-6 grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-3">
           {visible.map((course, i) => (
             <li
               key={course.slug}
-              style={{ "--vt-name": `course-${course.slug}` } as React.CSSProperties}
+              style={{ "--vt-name": `course-${course.slug}`, "--stack-i": i } as React.CSSProperties}
               className={cn("vt-filter-item", mobileLimit !== undefined && i >= mobileLimit && "max-md:hidden")}
             >
-              <CourseCard course={course} headingLevel={headingLevel} />
+              <CourseCard course={course} headingLevel={headingLevel} priority={i === 0} />
             </li>
           ))}
         </ul>

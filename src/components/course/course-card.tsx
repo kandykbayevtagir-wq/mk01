@@ -1,127 +1,91 @@
 import { ViewTransition } from "react";
-import { PressLink } from "@/components/ui/press-link";
-import { ArrowUpRight, Clock3, MapPin, MonitorSmartphone } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import type { Course } from "@/data/types";
-import { audienceById, courseCity, nextSession } from "@/data/courses";
+import { audienceById, nextSession } from "@/data/courses";
 import { cn, formatDateRange, formatKzt } from "@/lib/utils";
-import { MotionRegion } from "@/components/ui/motion-region";
-import { CardSheen, LightTrail } from "@/components/ui/liquid-light";
-import { Visual } from "@/components/ui/visual";
+import { PressLink } from "@/components/ui/press-link";
+import { CardSheen } from "@/components/ui/liquid-light";
+import { CoursePlate } from "./course-plate";
 
 /**
- * Course card — the primary commercial unit.
+ * Course card — the primary commercial unit, built for 360–430 px phones.
  *
- * Scan order: category → audience → title → summary → format/duration/city
- * → price + next date → explicit action. Everything is visible without
- * hover or JS. Hover (pointer devices), keyboard focus and touch press add
- * a layered image shift and a one-pass border sheen; the meta rows settle
- * in on a CSS view timeline. Only the featured card owns an IntersectionObserver
- * (MotionRegion) because it is the only one with a looping layer.
+ * Scan order: sensor plate (index, category, format/duration/city) →
+ * audience → title → two-line summary → price | next intake → explicit CTA.
+ * Everything is readable without JS or motion. On a phone the card answers
+ * a press immediately (compression, ink → red CTA, one edge sheen, a
+ * pressure ripple from the finger on the plate) and settles back softly;
+ * the whole card is one link (stretched) that morphs into the course page.
  */
 export function CourseCard({
   course,
   headingLevel = "h3",
-  featuredMotion = false,
+  priority = false,
 }: {
   course: Course;
   headingLevel?: "h2" | "h3";
-  featuredMotion?: boolean;
+  /** First card above the fold: load its map eagerly (it is the LCP element). */
+  priority?: boolean;
 }) {
   const H = headingLevel;
   const session = nextSession(course);
-  const city = courseCity(course);
-  const meta = [
-    course.format && { icon: MonitorSmartphone, label: course.format },
-    course.duration && { icon: Clock3, label: course.duration },
-    city && { icon: MapPin, label: city },
-  ].filter(Boolean) as { icon: typeof Clock3; label: string }[];
 
-  const cardClassName = cn(
-    "course-card group relative flex h-full flex-col overflow-hidden rounded-card border border-line bg-card",
-    "transition-[transform,box-shadow,border-color] duration-[var(--dur-card)] ease-out-soft",
-    "hover:-translate-y-1 hover:border-ink/10 hover:shadow-lift",
-    "active:scale-[0.99] active:duration-[var(--dur-press)]",
-    "focus-within:border-ink/20 focus-within:shadow-lift",
-    featuredMotion && "course-card--featured",
-  );
-  const body = (
-    <>
-      {featuredMotion && <LightTrail />}
+  return (
+    <article
+      data-pressure-host=""
+      className={cn(
+        "course-card group relative flex h-full flex-col overflow-hidden rounded-card border border-line bg-card",
+        "transition-[transform,box-shadow,border-color] duration-[var(--dur-card)] ease-out-soft",
+        "hover:-translate-y-1 hover:border-ink/10 hover:shadow-lift",
+        "focus-within:border-ink/20 focus-within:shadow-lift",
+      )}
+    >
       <CardSheen />
       <ViewTransition name={`course-visual-${course.slug}`} default="none" share="course-morph">
-        <Visual
-          image={course.image}
-          seed={course.order + 3}
-          className="course-card__visual aspect-[16/10] sm:aspect-[16/11]"
-          sizes="(min-width: 1280px) 30vw, (min-width: 768px) 45vw, 100vw"
-          marker={false}
-        >
-          <span className="course-card__chip absolute left-3 top-3 inline-flex h-7 items-center rounded-full bg-card px-3 text-xs font-semibold text-ink shadow-card sm:left-4 sm:top-4 sm:h-8">
-            {course.category}
-          </span>
-        </Visual>
+        <CoursePlate course={course} priority={priority} className="m-1.5 mb-0 aspect-[2/1] rounded-[22px] sm:aspect-[16/9]" />
       </ViewTransition>
 
-      <div className="flex flex-1 flex-col p-5 sm:p-6">
-        <p className="text-[0.8125rem] font-medium text-muted">
+      <div className="flex flex-1 flex-col px-5 pb-5 pt-4 sm:px-6 sm:pb-6">
+        <p className="text-[0.6875rem] font-semibold uppercase tracking-[0.12em] text-muted">
           {course.audiences.map((a) => audienceById[a].short).join(" · ")}
         </p>
-        <H className="mt-1.5 text-h3 font-semibold">
+        <H className="mt-1.5 text-[1.3125rem] font-semibold leading-[1.18] tracking-[-0.02em] sm:text-h3">
           <PressLink
             href={`/courses/${course.slug}`}
-            className="outline-none after:absolute after:inset-0 after:rounded-card focus-visible:after:outline-2 focus-visible:after:outline-offset-2 focus-visible:after:outline-accent"
+            className="outline-none after:absolute after:inset-0 after:z-[3] after:rounded-card focus-visible:after:outline-2 focus-visible:after:outline-offset-2 focus-visible:after:outline-accent"
           >
             {course.title}
           </PressLink>
         </H>
-        <p className="mt-2.5 line-clamp-2 text-[0.9375rem] leading-relaxed text-muted sm:line-clamp-3">{course.summary}</p>
+        <p className="mt-2 line-clamp-2 text-[0.9375rem] leading-snug text-muted">{course.summary}</p>
 
-        {meta.length > 0 && (
-          <ul className="card-settle mt-4 flex flex-wrap gap-1.5">
-            {meta.map(({ icon: Icon, label }) => (
-              <li key={label} className="inline-flex h-7 items-center gap-1.5 rounded-full bg-mist px-2.5 text-xs font-medium text-ink/80">
-                <Icon aria-hidden className="size-3.5 text-muted" strokeWidth={1.75} />
-                {label}
-              </li>
-            ))}
-          </ul>
-        )}
-
-        <div className="card-settle mt-auto pt-5">
-          <dl className="grid grid-cols-2 gap-3 border-t border-line pt-4">
+        <div className="card-settle mt-auto pt-4">
+          <dl className="grid grid-cols-2 gap-3 border-t border-dashed border-ink/15 pt-3">
             <div>
-              <dt className="text-xs text-muted">Стоимость</dt>
-              <dd className={cn("mt-1 font-semibold", course.price ? "text-[1.0625rem]" : "text-[0.9375rem]")}>
+              <dt className="text-[0.6875rem] font-medium uppercase tracking-[0.1em] text-muted">Стоимость</dt>
+              <dd className="mt-0.5 text-[1rem] font-semibold tracking-tight">
                 {course.price ? formatKzt(course.price) : "Уточняется"}
               </dd>
             </div>
             <div>
-              <dt className="text-xs text-muted">Ближайший поток</dt>
-              <dd className="mt-1 flex items-center gap-1.5 text-[0.9375rem] font-medium">
-                <span aria-hidden className={cn("size-1.5 shrink-0 rounded-full", session ? "bg-accent" : "bg-line")} />
+              <dt className="text-[0.6875rem] font-medium uppercase tracking-[0.1em] text-muted">Ближайший поток</dt>
+              <dd className="mt-0.5 flex items-center gap-1.5 text-[1rem] font-semibold tracking-tight">
+                <span aria-hidden className={cn("size-1.5 shrink-0 rounded-full", session ? "bg-accent" : "bg-ink/25")} />
                 {session ? formatDateRange(session.start, session.end) : "По запросу"}
               </dd>
             </div>
           </dl>
-          <div aria-hidden className="mt-4 flex items-center justify-between rounded-2xl bg-mist py-2 pl-4 pr-2 transition-colors duration-[var(--dur-card)] group-hover:bg-ink group-hover:text-white">
-            <span className="text-sm font-semibold">Подробнее о курсе</span>
-            <span className="inline-flex size-9 items-center justify-center rounded-full bg-card text-ink">
-              <ArrowUpRight
-                className="size-[18px] transition-transform duration-[var(--dur-card)] ease-out-soft group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
-                strokeWidth={1.75}
-              />
+          <div
+            aria-hidden
+            className="course-cta mt-3.5 flex h-12 items-center justify-between rounded-full pl-5 pr-1.5 text-white"
+          >
+            <span className="text-[0.9375rem] font-semibold">Подробнее о курсе</span>
+            <span className="course-cta__arrow inline-flex size-9 items-center justify-center rounded-full bg-white text-ink">
+              <ArrowUpRight className="size-[18px]" strokeWidth={1.75} />
             </span>
           </div>
         </div>
       </div>
-    </>
-  );
-
-  return featuredMotion ? (
-    <MotionRegion as="article" className={cardClassName}>
-      {body}
-    </MotionRegion>
-  ) : (
-    <article className={cardClassName}>{body}</article>
+    </article>
   );
 }
