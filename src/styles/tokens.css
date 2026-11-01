@@ -1,27 +1,29 @@
 /*
- * Design tokens — single source of truth for colour, type and motion.
- * Tailwind v4 exposes every --color-* / --font-* / --ease-* token below
- * as a utility (bg-paper, text-ink, border-line, ease-out-soft, …).
+ * Design tokens — single source of truth for colour, type, motion and
+ * decorative art. Tailwind v4 exposes every --color-* / --font-* / --ease-*
+ * token in @theme as a utility (bg-paper, text-ink, border-line, …).
+ * Plain custom properties in :root (--art-*, --dur-*) are consumed by CSS
+ * and by the SVG illustration kit.
  */
 
 @theme {
-  /* Colour — warm editorial palette */
-  --color-paper: #fbf7f1; /* ivory — primary background */
-  --color-card: #fffdf9; /* raised card surface */
-  --color-mist: #f3eadf; /* sand — secondary background */
-  --color-sand: #e9dccb; /* deeper sand */
-  --color-clay: #c99472; /* decorative clay */
-  --color-clay-soft: #eedfcd; /* clay tint */
-  --color-ink: #1e1a17; /* primary typography (warm black) */
-  --color-graphite: #2b2521; /* dark surfaces */
-  --color-graphite-2: #3a332e; /* raised dark surface */
-  --color-muted: #6a6058; /* secondary typography */
-  --color-muted-dark: #b5aa9f; /* secondary typography on graphite */
-  --color-line: #e3d6c5; /* borders */
-  --color-line-dark: #4a413a; /* borders on graphite */
-  --color-accent: #b3262d; /* strategic red */
+  /* Colour — monochrome editorial palette with a rare red accent */
+  --color-paper: #ffffff; /* primary background */
+  --color-card: #ffffff; /* raised card surface */
+  --color-mist: #f6f6f6; /* secondary background */
+  --color-sand: #efefef; /* tertiary surface (image slots, chips) */
+  --color-clay: #9a9a9a; /* decorative mid-gray */
+  --color-clay-soft: #ececec; /* decorative tint */
+  --color-ink: #171717; /* primary typography */
+  --color-graphite: #252525; /* dark surfaces */
+  --color-graphite-2: #2f2f2f; /* raised dark surface */
+  --color-muted: #666666; /* secondary typography (5.7:1 on white, 5.2:1 on mist) */
+  --color-muted-dark: #a3a3a3; /* secondary typography on graphite (6.1:1) */
+  --color-line: #e7e7e7; /* borders */
+  --color-line-dark: #3a3a3a; /* borders on graphite */
+  --color-accent: #b3262d; /* strategic red (6.6:1 on white) */
   --color-accent-strong: #951e24; /* red hover / pressed */
-  --color-accent-soft: #f6e3df; /* red tint for selected states */
+  --color-accent-soft: #f9eaeb; /* red tint for error / selected surfaces */
   --color-success: #2f6b45;
   --color-danger: #b3262d;
 
@@ -29,28 +31,30 @@
   --font-sans: var(--font-manrope), ui-sans-serif, system-ui, -apple-system,
     "Segoe UI", Roboto, Arial, sans-serif;
 
+  /* 34px @375 → 60px; desktop hero overrides with its own clamp */
   --text-display: clamp(1.875rem, 0.4rem + 7.4vw, 3.75rem);
-  --text-display--line-height: 1.02;
+  --text-display--line-height: 1.03;
   --text-display--letter-spacing: -0.035em;
 
   --text-h1: clamp(1.875rem, 1.2rem + 3.4vw, 4.25rem);
-  --text-h1--line-height: 1.04;
+  --text-h1--line-height: 1.05;
   --text-h1--letter-spacing: -0.03em;
 
-  --text-h2: clamp(1.875rem, 1.35rem + 2.2vw, 3.25rem);
-  --text-h2--line-height: 1.08;
+  /* 28px @375 → 52px */
+  --text-h2: clamp(1.75rem, 1.2rem + 2.3vw, 3.25rem);
+  --text-h2--line-height: 1.1;
   --text-h2--letter-spacing: -0.025em;
 
-  --text-h3: clamp(1.25rem, 1.1rem + 0.6vw, 1.625rem);
-  --text-h3--line-height: 1.2;
+  --text-h3: clamp(1.1875rem, 1.05rem + 0.6vw, 1.625rem);
+  --text-h3--line-height: 1.22;
   --text-h3--letter-spacing: -0.015em;
 
   --text-lead: clamp(1.0625rem, 1rem + 0.35vw, 1.3125rem);
   --text-lead--line-height: 1.55;
 
   --text-eyebrow: 0.75rem;
-  --text-eyebrow--line-height: 1;
-  --text-eyebrow--letter-spacing: 0.14em;
+  --text-eyebrow--line-height: 1.2;
+  --text-eyebrow--letter-spacing: 0.12em;
 
   /* Radius */
   --radius-card: 20px;
@@ -60,10 +64,10 @@
   --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-in-out-soft: cubic-bezier(0.65, 0, 0.35, 1);
 
-  /* Shadows */
-  --shadow-card: 0 1px 2px rgb(60 40 25 / 0.05), 0 10px 30px -14px rgb(60 40 25 / 0.16);
-  --shadow-lift: 0 2px 4px rgb(60 40 25 / 0.05), 0 28px 56px -22px rgb(60 40 25 / 0.32);
-  --shadow-float: 0 14px 44px -12px rgb(60 40 25 / 0.35);
+  /* Shadows (neutral) */
+  --shadow-card: 0 1px 2px rgb(23 23 23 / 0.04), 0 10px 30px -16px rgb(23 23 23 / 0.14);
+  --shadow-lift: 0 2px 4px rgb(23 23 23 / 0.04), 0 26px 52px -24px rgb(23 23 23 / 0.28);
+  --shadow-float: 0 14px 44px -14px rgb(23 23 23 / 0.32);
 
   /* Breakpoints (mobile-first) */
   --breakpoint-xs: 23.4375rem; /* 375px */
@@ -71,11 +75,47 @@
 }
 
 :root {
-  --header-h: 64px;
+  --header-h: 60px;
+
+  /* Motion scale — keep every interaction on one of these */
+  --dur-press: 150ms; /* buttons, chips, touch feedback */
+  --dur-nav: 260ms; /* menu, header state */
+  --dur-card: 350ms; /* card hover, image zoom */
+  --dur-reveal: 550ms; /* section reveals */
+
+  /* Decorative art (SVG kit, patterns) — light surfaces */
+  --art-1: #e4e4e4; /* pressure ramp: low → high */
+  --art-2: #c9c9c9;
+  --art-3: #9c9c9c;
+  --art-4: #5e5e5e;
+  --art-ink: #2b2b2b;
+  --art-5: #b3262d; /* peak only — the single red note */
+  --art-line: rgb(23 23 23 / 0.14);
+  --art-line-strong: rgb(23 23 23 / 0.28);
+  --art-fill: #f3f3f3;
+  --art-zone: #dcdcdc;
+  --art-zone-2: #bdbdbd;
+  --art-dot: rgb(23 23 23 / 0.1);
+
+  /* Decorative art — dark surfaces */
+  --art-d1: rgb(255 255 255 / 0.14);
+  --art-d2: rgb(255 255 255 / 0.3);
+  --art-d3: rgb(255 255 255 / 0.52);
+  --art-d4: rgb(255 255 255 / 0.78);
+  --art-d-ink: rgb(255 255 255 / 0.92);
+  --art-d5: #d2343b;
+  --art-line-dark: rgb(255 255 255 / 0.13);
+  --art-line-dark-strong: rgb(255 255 255 / 0.28);
+  --art-fill-dark: rgb(255 255 255 / 0.05);
+  --art-dot-dark: rgb(255 255 255 / 0.08);
+
+  /* Ambient glow */
+  --glow-neutral: rgb(23 23 23 / 0.08);
+  --glow-red: rgb(179 38 45 / 0.1);
 }
 
 @media (min-width: 1024px) {
   :root {
-    --header-h: 76px;
+    --header-h: 72px;
   }
 }

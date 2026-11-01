@@ -43,12 +43,14 @@ export function CourseCatalog({
     return limit ? list.slice(0, limit) : list;
   }, [courses, filter, limit]);
 
-  const options: { id: Filter; label: string }[] = [
-    { id: "all", label: "Все программы" },
-    ...audiences.map((a) => ({ id: a.id as Filter, label: a.label })),
-  ];
+  const options = [
+    { id: "all" as Filter, label: "Все программы" },
+    ...audiences.map((a) => ({ id: a.id as Filter, label: a.label, short: a.short })),
+  ] as { id: Filter; label: string; short?: string }[];
 
-  function select(next: Filter) {
+  function select(next: Filter, button: HTMLButtonElement) {
+    // Keep the chosen chip fully visible in the horizontal scroller (mobile).
+    button.scrollIntoView({ inline: "nearest", block: "nearest", behavior: "smooth" });
     if (next === filter) return;
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (reduce || typeof document.startViewTransition !== "function") {
@@ -65,7 +67,11 @@ export function CourseCatalog({
       <div
         role="group"
         aria-label="Фильтр по аудитории"
-        className="-mx-4 flex snap-x gap-2 overflow-x-auto px-4 pb-1 [scrollbar-width:none] sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0 [&::-webkit-scrollbar]:hidden"
+        className={cn(
+          "-mx-4 flex snap-x scroll-px-4 gap-2 overflow-x-auto px-4 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden",
+          // fade the trailing edge to signal more chips; off once they wrap
+          "[mask-image:linear-gradient(to_right,black_85%,transparent)] sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0 sm:[mask-image:none]",
+        )}
       >
         {options.map((o) => {
           const active = filter === o.id;
@@ -73,22 +79,29 @@ export function CourseCatalog({
             <button
               key={o.id}
               type="button"
-              onClick={() => select(o.id)}
+              onClick={(e) => select(o.id, e.currentTarget)}
               aria-pressed={active}
               className={cn(
-                "relative isolate inline-flex h-11 shrink-0 snap-start items-center gap-2 rounded-full border px-4 text-sm font-medium transition-colors duration-200",
-                active ? "border-ink text-white" : "border-line bg-card text-ink hover:border-ink/30",
+                "press relative isolate inline-flex h-11 shrink-0 snap-start items-center gap-2 rounded-full border px-4 text-sm font-medium transition-colors duration-[var(--dur-press)]",
+                active ? "border-accent text-white" : "border-line bg-card text-ink hover:border-ink/30 active:bg-mist",
               )}
             >
               {active && (
                 <span
                   aria-hidden
-                  className="absolute inset-[-1px] -z-10 rounded-full bg-ink"
+                  className="absolute inset-[-1px] -z-10 rounded-full bg-accent"
                   style={{ viewTransitionName: "course-filter-pill" }}
                 />
               )}
-              <span>{o.label}</span>
-              <span className={cn("text-xs tabular-nums", active ? "text-white/60" : "text-muted")}>
+              {o.short ? (
+                <>
+                  <span className="sm:hidden">{o.short}</span>
+                  <span className="max-sm:hidden">{o.label}</span>
+                </>
+              ) : (
+                <span>{o.label}</span>
+              )}
+              <span className={cn("text-xs tabular-nums", active ? "text-white/75" : "text-muted")}>
                 {counts[o.id]}
               </span>
             </button>

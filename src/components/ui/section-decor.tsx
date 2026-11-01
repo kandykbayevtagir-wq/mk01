@@ -21,10 +21,10 @@ export function SectionDecor({
   return (
     <div aria-hidden className={cn("pointer-events-none absolute inset-0", className)}>
       {list.includes("arches-right") && (
-        <ArchLines tone={tone} count={8} className="absolute -bottom-1 -right-28 h-60 w-[560px] max-md:-right-40 max-md:h-40" />
+        <ArchLines tone={tone} count={8} draw className="draw-scroll absolute -bottom-1 -right-28 h-60 w-[560px] max-md:-right-40 max-md:h-40" />
       )}
       {list.includes("arches-left") && (
-        <ArchLines tone={tone} count={8} className="absolute -bottom-1 -left-28 h-60 w-[560px] max-md:-left-40 max-md:h-40" />
+        <ArchLines tone={tone} count={8} draw className="draw-scroll absolute -bottom-1 -left-28 h-60 w-[560px] max-md:-left-40 max-md:h-40" />
       )}
       {list.includes("dots-corner") && (
         <div

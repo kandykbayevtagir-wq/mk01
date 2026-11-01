@@ -7,7 +7,8 @@
  *  • ArchLines      — concentric foot-arch curves
  *  • Footprints     — a walking trail of stylised footprints
  *
- * All decorative: aria-hidden, no JS, colours from the warm palette.
+ * All decorative: aria-hidden, no JS. Colours come from the --art-* tokens
+ * in src/styles/tokens.css (applied via style, so CSS variables resolve).
  */
 
 import { cn } from "@/lib/utils";
@@ -48,8 +49,9 @@ const intensity = (x: number, y: number) =>
     peaks.reduce((sum, p) => sum + p.w * Math.exp(-((x - p.x) ** 2 + (y - p.y) ** 2) / (2 * p.s ** 2)), 0),
   );
 
-const warmRamp = ["#D3BB9E", "#C9A07E", "#C47E5E", "#BC5141", "#B3262D"];
-const darkRamp = ["rgba(233,220,203,0.30)", "rgba(214,174,139,0.6)", "#C99472", "#C8644A", "#D2343B"];
+// Gray ramp → near-black, with red reserved for the absolute pressure peaks.
+const lightRamp = ["--art-1", "--art-2", "--art-3", "--art-4", "--art-ink", "--art-5"].map((v) => `var(${v})`);
+const darkRamp = ["--art-d1", "--art-d2", "--art-d3", "--art-d4", "--art-d-ink", "--art-d5"].map((v) => `var(${v})`);
 
 function dotPath(points: { x: number; y: number; r: number }[]) {
   return points
@@ -59,13 +61,13 @@ function dotPath(points: { x: number; y: number; r: number }[]) {
 
 const footBuckets = (() => {
   const step = 12;
-  const buckets: { x: number; y: number; r: number }[][] = [[], [], [], [], []];
+  const buckets: { x: number; y: number; r: number }[][] = [[], [], [], [], [], []];
   for (let y = 30; y <= 465; y += step) {
     for (let x = 22; x <= 182; x += step) {
       const ox = x + ((y / step) % 2 ? step / 2 : 0);
       if (!inside(ox, y)) continue;
       const v = Math.pow(intensity(ox, y), 0.75);
-      const level = Math.min(4, Math.floor(v * 5));
+      const level = v >= 0.94 ? 5 : Math.min(4, Math.floor(v * 5));
       buckets[level].push({ x: ox, y, r: 2.6 + v * 2.4 });
     }
   }
@@ -81,12 +83,12 @@ export function PressureFoot({
   mirror?: boolean;
   tone?: "light" | "dark";
 }) {
-  const ramp = tone === "dark" ? darkRamp : warmRamp;
+  const ramp = tone === "dark" ? darkRamp : lightRamp;
   return (
     <svg viewBox="0 0 200 480" className={className} aria-hidden focusable="false">
       <g transform={mirror ? "translate(200 0) scale(-1 1)" : undefined}>
         {footBuckets.map((d, i) => (
-          <path key={i} d={d} fill={ramp[i]} />
+          <path key={i} d={d} style={{ fill: ramp[i] }} />
         ))}
       </g>
     </svg>
@@ -118,28 +120,29 @@ export function Insole({
   tone?: "light" | "dark";
   filled?: boolean;
 }) {
-  const stroke = tone === "dark" ? "rgba(255,255,255,0.35)" : "#B48C6C";
-  const soft = tone === "dark" ? "rgba(255,255,255,0.07)" : "#F6EDE2";
+  const dark = tone === "dark";
+  const stroke = dark ? "var(--art-line-dark-strong)" : "var(--art-line-strong)";
+  const soft = dark ? "var(--art-fill-dark)" : "var(--art-fill)";
   return (
     <svg viewBox="0 0 160 442" className={className} aria-hidden focusable="false">
-      <path d={insoleOutline} fill={filled ? soft : "none"} stroke={stroke} strokeWidth="1.5" />
+      <path d={insoleOutline} style={{ fill: filled ? soft : "none", stroke }} strokeWidth="1.5" />
       <path
         d={insoleOutline}
         fill="none"
-        stroke={stroke}
+        style={{ stroke }}
         strokeWidth="1"
         strokeDasharray="3 5"
         transform="translate(80 221) scale(0.86) translate(-80 -221)"
         opacity="0.8"
       />
       {/* medial arch support */}
-      <path d="M44 210C30 250 34 300 50 330C60 300 64 250 58 214Z" fill={tone === "dark" ? "rgba(201,148,114,0.45)" : "#E3C8AB"} />
+      <path d="M44 210C30 250 34 300 50 330C60 300 64 250 58 214Z" style={{ fill: dark ? "var(--art-d1)" : "var(--art-zone)" }} />
       {/* metatarsal pad */}
-      <path d="M80 150C96 150 104 166 98 186C93 200 67 200 62 186C56 166 64 150 80 150Z" fill={tone === "dark" ? "rgba(201,148,114,0.6)" : "#D6AE8B"} />
+      <path d="M80 150C96 150 104 166 98 186C93 200 67 200 62 186C56 166 64 150 80 150Z" style={{ fill: dark ? "var(--art-d2)" : "var(--art-zone-2)" }} />
       {/* heel cup */}
-      <ellipse cx="82" cy="380" rx="26" ry="30" fill="none" stroke={stroke} strokeWidth="1" />
-      <ellipse cx="82" cy="380" rx="13" ry="15" fill="none" stroke={stroke} strokeWidth="1" opacity="0.7" />
-      <circle cx="82" cy="380" r="3.5" fill="#B3262D" />
+      <ellipse cx="82" cy="380" rx="26" ry="30" fill="none" style={{ stroke }} strokeWidth="1" />
+      <ellipse cx="82" cy="380" rx="13" ry="15" fill="none" style={{ stroke }} strokeWidth="1" opacity="0.7" />
+      <circle cx="82" cy="380" r="3.5" style={{ fill: "var(--color-accent)" }} />
     </svg>
   );
 }
@@ -152,23 +155,40 @@ export function ArchLines({
   className,
   tone = "light",
   count = 7,
+  draw = false,
+  accent = true,
 }: {
   className?: string;
   tone?: "light" | "dark";
   count?: number;
+  /** Line-drawing entrance when the parent reveal becomes visible (or on load in the hero). */
+  draw?: boolean;
+  /** Mark one curve with the red accent. */
+  accent?: boolean;
 }) {
-  const stroke = tone === "dark" ? "rgba(255,255,255,0.14)" : "rgba(160,120,90,0.28)";
+  const stroke = tone === "dark" ? "var(--art-line-dark)" : "var(--art-line)";
   return (
-    <svg viewBox="0 0 400 200" className={className} aria-hidden focusable="false" preserveAspectRatio="xMidYMax meet">
+    <svg
+      viewBox="0 0 400 200"
+      className={cn(draw && "draw-lines", className)}
+      aria-hidden
+      focusable="false"
+      preserveAspectRatio="xMidYMax meet"
+    >
       {Array.from({ length: count }, (_, i) => {
         const r = 40 + i * 24;
+        const isAccent = accent && i === 2;
         return (
           <path
             key={i}
             d={`M${200 - r} 200A${r} ${r * 0.72} 0 0 1 ${200 + r} 200`}
             fill="none"
-            stroke={i === 2 ? "#B3262D" : stroke}
-            strokeOpacity={i === 2 ? 0.55 : 1}
+            pathLength={1}
+            style={{
+              stroke: isAccent ? "var(--color-accent)" : stroke,
+              strokeOpacity: isAccent ? 0.5 : 1,
+              ["--i" as string]: i,
+            }}
             strokeWidth="1.25"
           />
         );
@@ -184,14 +204,14 @@ export function ArchLines({
 function Footprint({ x, y, rot, left, fill }: { x: number; y: number; rot: number; left: boolean; fill: string }) {
   const s = left ? -1 : 1;
   return (
-    <g transform={`translate(${x} ${y}) rotate(${rot}) scale(${s} 1)`}>
-      <ellipse cx="0" cy="0" rx="9" ry="15" fill={fill} />
-      <ellipse cx="1" cy="21" rx="7" ry="8" fill={fill} />
-      <circle cx="-6" cy="-19" r="3.6" fill={fill} />
-      <circle cx="0" cy="-21" r="2.5" fill={fill} />
-      <circle cx="4.5" cy="-19.5" r="2.2" fill={fill} />
-      <circle cx="8" cy="-16.5" r="1.9" fill={fill} />
-      <circle cx="10.5" cy="-13" r="1.6" fill={fill} />
+    <g transform={`translate(${x} ${y}) rotate(${rot}) scale(${s} 1)`} style={{ fill }}>
+      <ellipse cx="0" cy="0" rx="9" ry="15" />
+      <ellipse cx="1" cy="21" rx="7" ry="8" />
+      <circle cx="-6" cy="-19" r="3.6" />
+      <circle cx="0" cy="-21" r="2.5" />
+      <circle cx="4.5" cy="-19.5" r="2.2" />
+      <circle cx="8" cy="-16.5" r="1.9" />
+      <circle cx="10.5" cy="-13" r="1.6" />
     </g>
   );
 }
@@ -205,7 +225,7 @@ export function Footprints({
   steps?: number;
   tone?: "light" | "dark";
 }) {
-  const fill = tone === "dark" ? "rgba(255,255,255,0.12)" : "rgba(180,140,108,0.28)";
+  const fill = tone === "dark" ? "var(--art-line-dark)" : "var(--art-dot)";
   const W = 120;
   const H = steps * 70 + 40;
   return (
@@ -219,7 +239,7 @@ export function Footprints({
             y={H - 40 - i * 70}
             rot={left ? -8 : 8}
             left={left}
-            fill={i === steps - 1 ? (tone === "dark" ? "rgba(201,148,114,0.55)" : "rgba(179,38,45,0.45)") : fill}
+            fill={i === steps - 1 ? "var(--color-accent)" : fill}
           />
         );
       })}

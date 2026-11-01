@@ -19,7 +19,7 @@ export function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer data-tone="dark" className="relative mt-auto overflow-hidden bg-graphite text-white">
+    <footer data-tone="dark" className="grain relative mt-auto overflow-hidden bg-graphite text-white">
       <div aria-hidden className="pattern-dots-dark pointer-events-none absolute inset-0 [mask-image:linear-gradient(to_bottom,transparent,black)]" />
       <ArchLines tone="dark" count={9} className="pointer-events-none absolute -bottom-1 -right-32 h-64 w-[620px] max-md:hidden" />
       <Footprints tone="dark" steps={4} className="pointer-events-none absolute left-[38%] top-10 hidden h-64 w-auto rotate-[30deg] lg:block" />

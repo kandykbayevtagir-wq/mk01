@@ -14,13 +14,16 @@ export function FounderSection() {
       <Container className="relative">
         <div className="grid grid-cols-1 gap-10 lg:grid-cols-12 lg:gap-6">
           <Reveal className="lg:col-span-5">
-            <div className="lg:sticky lg:top-[calc(var(--header-h)+32px)]">
+            <div className="relative lg:sticky lg:top-[calc(var(--header-h)+32px)]">
+              <div aria-hidden className="glow-neutral absolute -inset-10" />
+              <div aria-hidden className="glow-red absolute -bottom-10 -right-10 size-64" />
               <Visual
                 image={founder.portrait}
                 tone="light"
                 art="insole"
                 seed={11}
-                className="aspect-[4/5] rounded-panel"
+                className="relative aspect-[4/4.4] rounded-panel shadow-card sm:aspect-[4/5]"
+                imgClassName="object-[50%_20%]"
                 sizes="(min-width: 1024px) 40vw, 100vw"
               />
               {founder.yearsOfExperience && (

@@ -26,7 +26,7 @@ export function AdvantagesSection({
   if (items.length === 0) return null;
 
   return (
-    <section aria-labelledby="advantages-title" className={cn("relative overflow-hidden py-20 lg:py-32", className)}>
+    <section aria-labelledby="advantages-title" className={cn("relative overflow-hidden bg-mist py-16 sm:py-20 lg:py-32", className)}>
       <SectionDecor variant={["insole"]} />
       <Container className="relative">
         <Reveal>
@@ -34,7 +34,7 @@ export function AdvantagesSection({
         </Reveal>
         <ul
           className={cn(
-            "mt-12 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:mt-16 lg:gap-6",
+            "mt-10 grid grid-cols-1 gap-3 sm:mt-12 sm:grid-cols-2 sm:gap-4 lg:mt-16 lg:gap-6",
             items.length % 3 === 0 ? "lg:grid-cols-3" : "lg:grid-cols-4",
           )}
         >
@@ -45,17 +45,17 @@ export function AdvantagesSection({
                 as="li"
                 key={a.id}
                 delay={i * 70}
-                className="group relative overflow-hidden rounded-card bg-mist p-6 transition-[transform,box-shadow] duration-500 ease-out-soft hover:-translate-y-1 hover:shadow-lift sm:p-8"
+                className="group relative grid grid-cols-[3rem_1fr] gap-x-4 overflow-hidden rounded-card border border-line bg-card p-5 transition-[transform,box-shadow] duration-[var(--dur-card)] ease-out-soft hover:-translate-y-1 hover:shadow-lift sm:block sm:p-8"
               >
                 <span aria-hidden className="pattern-dots absolute -right-6 -top-6 size-32 rounded-full opacity-70 [mask-image:radial-gradient(circle,black,transparent_70%)]" />
-                <span aria-hidden className="absolute right-6 top-6 text-sm font-semibold tabular-nums text-clay">
+                <span aria-hidden className="absolute right-5 top-5 text-xs font-semibold tabular-nums text-clay sm:right-6 sm:top-6 sm:text-sm">
                   {String(i + 1).padStart(2, "0")}
                 </span>
-                <span className="relative inline-flex size-14 items-center justify-center rounded-2xl bg-clay-soft text-ink ring-1 ring-clay/25 transition-colors duration-300 group-hover:bg-accent group-hover:text-white group-hover:ring-accent">
+                <span className="relative row-span-2 inline-flex size-12 items-center justify-center rounded-2xl bg-mist text-ink ring-1 ring-line transition-colors duration-[var(--dur-card)] group-hover:bg-ink group-hover:text-white group-hover:ring-ink sm:size-14">
                   <Icon aria-hidden className="size-5" strokeWidth={1.5} />
                 </span>
-                <h3 className="relative mt-8 text-lg font-semibold tracking-tight">{a.title}</h3>
-                <p className="mt-3 text-[0.9375rem] leading-relaxed text-muted">{a.text}</p>
+                <h3 className="relative self-center pr-8 text-[1.0625rem] font-semibold tracking-tight sm:mt-8 sm:pr-0 sm:text-lg">{a.title}</h3>
+                <p className="col-start-2 mt-1.5 text-[0.9375rem] leading-relaxed text-muted sm:mt-3">{a.text}</p>
               </Reveal>
             );
           })}

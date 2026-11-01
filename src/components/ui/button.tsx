@@ -7,13 +7,13 @@ type Size = "md" | "lg" | "sm";
 
 const base =
   "group/btn relative inline-flex select-none items-center justify-center gap-2 rounded-full font-medium whitespace-nowrap " +
-  "transition-[background-color,color,border-color,box-shadow,transform] duration-200 ease-out-soft " +
-  "active:scale-[0.98] disabled:pointer-events-none disabled:opacity-50";
+  "transition-[background-color,color,border-color,box-shadow,transform] duration-[var(--dur-press)] ease-out-soft " +
+  "active:scale-[0.97] disabled:pointer-events-none disabled:opacity-50";
 
 const variants: Record<Variant, string> = {
-  accent: "bg-accent text-white hover:bg-accent-strong shadow-[0_8px_24px_-10px_rgb(179_38_45/0.55)]",
+  accent: "bg-accent text-white hover:bg-accent-strong active:bg-accent-strong shadow-[0_8px_22px_-12px_rgb(179_38_45/0.6)]",
   primary: "bg-ink text-white hover:bg-graphite-2",
-  outline: "border border-ink/15 bg-card text-ink hover:border-ink/40",
+  outline: "border border-ink/15 bg-card text-ink hover:border-ink/40 active:bg-mist",
   ghost: "text-ink hover:bg-mist",
   light: "bg-white text-ink hover:bg-white/90",
   "outline-light": "border border-white/25 text-white hover:border-white/60",
