@@ -423,3 +423,35 @@
     to { opacity: 1; transform: none; }
   }
 }
+
+/* ---------------------------------------------------------------------
+ * Navigation transitions (React <ViewTransition> in app/template.tsx).
+ * Old page leaves fast, new page arrives gently; header stays anchored;
+ * the desktop active dot glides; the course image morph keeps its pair.
+ * ------------------------------------------------------------------- */
+/* `:only-child` matches the specificity of the generic enter/exit rules in
+   globals.css; these load first, so the page rules must be at least as specific. */
+::view-transition-old(.page-exit):only-child {
+  animation: page-leave 150ms ease-in both;
+}
+::view-transition-new(.page-enter):only-child {
+  animation: page-arrive 340ms var(--ease-out-soft) 90ms both;
+}
+::view-transition-group(site-header) { animation: none; }
+::view-transition-old(site-header) { display: none; }
+/* Filter re-flow names exist only while the filter transition runs, so page
+   navigations never capture every course card as a separate layer. */
+html[data-vt="filter"] .vt-filter-item { view-transition-name: var(--vt-name); }
+::view-transition-new(site-header) { animation: none; }
+::view-transition-group(nav-active-dot) {
+  animation-duration: 380ms;
+  animation-timing-function: var(--ease-out-soft);
+}
+::view-transition-old(mobile-menu) { display: none; }
+::view-transition-new(mobile-menu) { animation: none; }
+@keyframes page-leave {
+  to { opacity: 0; transform: translate3d(0, -6px, 0); }
+}
+@keyframes page-arrive {
+  from { opacity: 0; transform: translate3d(0, 14px, 0); }
+}
