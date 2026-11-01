@@ -1,0 +1,29 @@
+2:"$Sreact.fragment"
+3:"/mk01/_next/static/chunks/0vzhi8423_9m_.js"
+4:"/mk01/_next/static/chunks/29imgbp-fehf5.js"
+5:"/mk01/_next/static/chunks/12pz152omze1m.js"
+6:I[39756,["$3","$4","$5"],"default"]
+7:I[37457,["$3","$4","$5"],"default"]
+c:I[22016,["$3","$4","$5"],""]
+d:I[5014,["$3","$4","$5"],"default"]
+e:I[97367,["$3","$4","$5"],"OutletBoundary"]
+f:"$Sreact.suspense"
+12:"ViewportBoundary"
+13:I[97367,["$3","$4","$5"],"$12"]
+14:"MetadataBoundary"
+15:I[97367,["$3","$4","$5"],"$14"]
+16:I[27201,["$3","$4","$5"],"IconMark"]
+9:X
+9:C
+a:X
+b:[["children",{"s":"__PAGE__","h":160,"d":{"r":["$","$2","c",{"children":[["$","section",null,{"className":"relative overflow-hidden","children":[["$","img",null,{"src":"/mk01/art/contour-5-light-m.svg","alt":"","aria-hidden":true,"draggable":false,"decoding":"async","loading":"lazy","className":"pointer-events-none select-none absolute -right-32 top-0 h-full w-[70%] opacity-60 max-md:hidden"}],["$","div",null,{"className":"mx-auto w-full max-w-[1440px] px-4 sm:px-6 lg:px-10 3xl:max-w-[1600px] relative py-24 lg:py-40","children":[["$","p",null,{"className":"text-sm font-semibold tabular-nums text-accent","children":"404"}],["$","h1",null,{"className":"mt-4 max-w-2xl text-h1 font-semibold","children":"Страница не найдена"}],["$","p",null,{"className":"mt-6 max-w-lg text-lead text-muted","children":"Возможно, ссылка устарела или страница была перемещена. Начните с каталога программ."}],["$","div",null,{"className":"mt-10 flex flex-col gap-3 sm:flex-row","children":[["$","$Lc",null,{"href":"/courses","className":"group/btn relative inline-flex select-none items-center justify-center gap-2 rounded-full font-medium whitespace-nowrap transition-[background-color,color,border-color,box-shadow,transform] duration-[var(--dur-press)] ease-out-soft active:scale-[0.97] disabled:pointer-events-none disabled:opacity-50 bg-accent text-white hover:bg-accent-strong active:bg-accent-strong shadow-[0_8px_22px_-12px_rgb(179_38_45/0.6)] h-14 px-7 text-base","data-ripple":"","children":["Смотреть курсы",["$","span",null,{"aria-hidden":true,"className":"-mr-1 inline-flex size-5 items-center justify-center overflow-hidden transition-transform duration-300 ease-out-soft group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 group-active/btn:translate-x-0.5 group-active/btn:-translate-y-0.5","children":["$","$Ld",null,{"icon":{"name":"arrow-up-right","size":24,"node":[["path",{"d":"M7 7h10v10","key":"1tivn9"}],["path",{"d":"M7 17 17 7","key":"1vkiza"}]]},"className":"size-[18px]","strokeWidth":1.75}]}]]}],["$","$Lc",null,{"href":"/","className":"group/btn relative inline-flex select-none items-center justify-center gap-2 rounded-full font-medium whitespace-nowrap transition-[background-color,color,border-color,box-shadow,transform] duration-[var(--dur-press)] ease-out-soft active:scale-[0.97] disabled:pointer-events-none disabled:opacity-50 border border-ink/15 bg-card text-ink hover:border-ink/40 active:bg-mist h-14 px-7 text-base","data-ripple":"","children":["На главную","$undefined"]}]]}]]}]]}],null,["$","$Le",null,{"children":["$","$f",null,{"name":"Next.MetadataOutlet","children":"$@10"}]}]]}],"p":"$@11","v":null,"s":"$a"}}]]
+1:[["children",{"s":"/_not-found","h":64,"d":{"r":["$","$2","c",{"children":[null,["$","$L6",null,{"parallelRouterKey":"children","template":["$","$L7",null,{}]}]]}],"p":"$@8","v":"$9","s":"$a"},"c":"$Qb"}]]
+0:{"t":{"t":{"s":"","h":16,"c":"$Q1"},"h":{"r":["$","$2","h",{"children":[["$","meta",null,{"name":"robots","content":"noindex"}],["$","$L13",null,{"children":[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}],["$","meta","2",{"name":"theme-color","content":"#fbf7f1"}]]}],["$","$L15",null,{"children":[["$","div",null,{"hidden":true,"children":["$","$f",null,{"name":"Next.Metadata","children":[["$","title","0",{"children":"Профессиональное обучение подологии — Podology MK"}],["$","meta","1",{"name":"description","content":"Авторские курсы подологии для начинающих и практикующих специалистов, центр подологии и профессиональная продукция."}],["$","meta","2",{"name":"application-name","content":"Podology MK"}],["$","link","3",{"rel":"manifest","href":"/mk01/manifest.webmanifest"}],["$","meta","4",{"name":"format-detection","content":"telephone=no"}],["$","link","5",{"rel":"icon","href":"/mk01/icon.svg?icon.3_6krma7cgmrc.svg","sizes":"any","type":"image/svg+xml"}],["$","$L16","6",{}]]}]}],null]}],["$","meta",null,{"name":"next-size-adjust","content":""}]]}],"p":"$@17","v":null,"s":"$a"}},"a":"$@18","u":"$@19","b":"2NkWWSOra6o-dSyjOxzYu"}
+10:null
+19:true
+a:300
+a:C
+18:0
+8:"$undefined"
+17:"$undefined"
+11:"$undefined"
