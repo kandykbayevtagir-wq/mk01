@@ -66,6 +66,7 @@ export function LocationCard({ location, className }: { location: BusinessLocati
             href={location.mapUrl}
             target="_blank"
             rel="noopener noreferrer"
+            data-ripple=""
             className="press inline-flex h-12 w-full items-center justify-between gap-3 rounded-full border border-ink/15 bg-card pl-5 pr-1.5 text-[0.9375rem] font-medium transition-colors duration-[var(--dur-press)] hover:border-ink/40 active:bg-mist sm:w-auto sm:min-w-64"
           >
             <span>

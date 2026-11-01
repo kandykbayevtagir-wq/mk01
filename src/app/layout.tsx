@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Manrope } from "next/font/google";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
+import { PressRipple } from "@/components/ui/press-ripple";
 import { channels, site, socialProfiles } from "@/data/site";
 import { defaultLocale, localeMeta } from "@/i18n/config";
 import { t } from "@/i18n";
@@ -85,6 +86,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           {children}
         </main>
         <Footer />
+        <PressRipple />
       </body>
     </html>
   );

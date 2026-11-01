@@ -85,6 +85,7 @@ export function CourseCatalog({
               key={o.id}
               type="button"
               onClick={(e) => select(o.id, e.currentTarget)}
+              data-ripple=""
               aria-pressed={active}
               className={cn(
                 "press relative isolate inline-flex h-11 shrink-0 snap-start items-center gap-2 rounded-full border px-4 text-sm font-medium transition-colors duration-[var(--dur-press)]",

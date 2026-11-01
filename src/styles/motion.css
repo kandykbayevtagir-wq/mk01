@@ -455,3 +455,60 @@ html[data-vt="filter"] .vt-filter-item { view-transition-name: var(--vt-name); }
 @keyframes page-arrive {
   from { opacity: 0; transform: translate3d(0, 14px, 0); }
 }
+
+/* ---------------------------------------------------------------------
+ * Signature microinteractions
+ * ------------------------------------------------------------------- */
+@layer components {
+  /* Pressure ripple (components/ui/press-ripple.tsx animates ::after). */
+  [data-ripple] {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    --ripple-opacity: 0.16;
+  }
+  [data-ripple]::after {
+    content: "";
+    position: absolute;
+    left: var(--ripple-x, 50%);
+    top: var(--ripple-y, 50%);
+    z-index: -1;
+    width: var(--ripple-size, 200%);
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: radial-gradient(circle, currentColor 0 35%, transparent 70%);
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0);
+    pointer-events: none;
+  }
+  .bg-accent[data-ripple],
+  .bg-ink[data-ripple] { --ripple-opacity: 0.28; }
+
+  @media (prefers-reduced-motion: no-preference) {
+    /* Success: the check draws itself, one pressure ring leaves the mark. */
+    .success-mark path {
+      stroke-dasharray: 1;
+      animation: draw-line 520ms var(--ease-out-soft) 200ms both;
+    }
+    .success-mark::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      border: 1.5px solid var(--color-accent);
+      animation: success-ring 900ms var(--ease-out-soft) 520ms both;
+      pointer-events: none;
+    }
+    /* Accordion: the answer settles in as the panel opens. */
+    details[open] .faq-answer {
+      animation: faq-answer 420ms var(--ease-out-soft) 60ms both;
+    }
+  }
+  @keyframes success-ring {
+    from { opacity: 0.7; transform: scale(1); }
+    to { opacity: 0; transform: scale(1.75); }
+  }
+  @keyframes faq-answer {
+    from { opacity: 0; transform: translate3d(0, -6px, 0); }
+  }
+}
