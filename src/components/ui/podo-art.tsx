@@ -74,32 +74,51 @@ const footBuckets = (() => {
   return buckets.map(dotPath);
 })();
 
+const PEAK = 5;
+
 export function PressureFoot({
   className,
   mirror = false,
   tone = "light",
+  breathe = false,
 }: {
   className?: string;
   mirror?: boolean;
   tone?: "light" | "dark";
+  /** Live sensor reading: the peak sits on its own HTML-level layer so its
+   *  opacity loop is composited (an SVG <path> would repaint every frame). */
+  breathe?: boolean;
 }) {
   const ramp = tone === "dark" ? darkRamp : lightRamp;
-  return (
-    <svg viewBox="0 0 200 480" className={className} aria-hidden focusable="false">
+  const art = (include: (i: number) => boolean, cls?: string) => (
+    <svg viewBox="0 0 200 480" className={cls} aria-hidden focusable="false">
       <g transform={mirror ? "translate(200 0) scale(-1 1)" : undefined}>
-        {footBuckets.map((d, i) => (
-          <path key={i} d={d} className={i === 5 ? "pressure-peak" : undefined} style={{ fill: ramp[i] }} />
-        ))}
+        {footBuckets.map((d, i) => (include(i) ? <path key={i} d={d} style={{ fill: ramp[i] }} /> : null))}
       </g>
     </svg>
   );
+  if (!breathe) return art(() => true, className);
+  return (
+    <span aria-hidden className={cn("relative inline-flex", className)}>
+      {art((i) => i !== PEAK, "h-full w-auto")}
+      {art((i) => i === PEAK, "pressure-peak absolute inset-0 h-full w-full")}
+    </span>
+  );
 }
 
-export function PressureFeet({ className, tone = "light" }: { className?: string; tone?: "light" | "dark" }) {
+export function PressureFeet({
+  className,
+  tone = "light",
+  breathe = false,
+}: {
+  className?: string;
+  tone?: "light" | "dark";
+  breathe?: boolean;
+}) {
   return (
     <div className={cn("flex items-end gap-[6%]", className)} aria-hidden>
-      <PressureFoot mirror tone={tone} className="h-full w-auto -translate-y-[6%]" />
-      <PressureFoot tone={tone} className="h-full w-auto" />
+      <PressureFoot mirror tone={tone} breathe={breathe} className="h-full w-auto -translate-y-[6%]" />
+      <PressureFoot tone={tone} breathe={breathe} className="pressure-foot--late h-full w-auto" />
     </div>
   );
 }

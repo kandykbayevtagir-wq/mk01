@@ -243,7 +243,7 @@
       animation: pressure-breathe 5.2s ease-in-out infinite;
       animation-play-state: var(--ambient-play-state, paused);
     }
-    .motion-hero svg + svg .pressure-peak { animation-delay: -2.6s; }
+    .motion-hero .pressure-foot--late .pressure-peak { animation-delay: -2.6s; }
     .hero-chip {
       animation: chip-float 7s ease-in-out infinite;
       animation-play-state: var(--ambient-play-state, paused);

@@ -87,15 +87,15 @@ export function CourseCard({
           </ul>
         )}
 
-        <div className="mt-auto pt-5">
+        <div className="card-settle mt-auto pt-5">
           <dl className="grid grid-cols-2 gap-3 border-t border-line pt-4">
-            <div className="card-settle">
+            <div>
               <dt className="text-xs text-muted">Стоимость</dt>
               <dd className={cn("mt-1 font-semibold", course.price ? "text-[1.0625rem]" : "text-[0.9375rem]")}>
                 {course.price ? formatKzt(course.price) : "Уточняется"}
               </dd>
             </div>
-            <div className="card-settle [--settle-shift:18px]">
+            <div>
               <dt className="text-xs text-muted">Ближайший поток</dt>
               <dd className="mt-1 flex items-center gap-1.5 text-[0.9375rem] font-medium">
                 <span aria-hidden className={cn("size-1.5 shrink-0 rounded-full", session ? "bg-accent" : "bg-line")} />
@@ -103,7 +103,7 @@ export function CourseCard({
               </dd>
             </div>
           </dl>
-          <div aria-hidden className="card-settle mt-4 flex items-center justify-between rounded-2xl bg-mist py-2 pl-4 pr-2 transition-colors duration-[var(--dur-card)] group-hover:bg-ink group-hover:text-white">
+          <div aria-hidden className="mt-4 flex items-center justify-between rounded-2xl bg-mist py-2 pl-4 pr-2 transition-colors duration-[var(--dur-card)] group-hover:bg-ink group-hover:text-white">
             <span className="text-sm font-semibold">Подробнее о курсе</span>
             <span className="inline-flex size-9 items-center justify-center rounded-full bg-card text-ink">
               <ArrowUpRight

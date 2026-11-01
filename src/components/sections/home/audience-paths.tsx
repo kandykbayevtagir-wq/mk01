@@ -28,9 +28,8 @@ export function AudiencePaths() {
       {/* Seam: an arch contour that starts inside the hero and settles here,
           so the two sections read as one continuous surface. */}
       <ArchLines
-        draw
         count={7}
-        className="draw-scroll seam-drift pointer-events-none absolute -top-24 right-[-120px] -z-10 h-48 w-[420px] sm:-top-32 lg:right-[-60px]"
+        className="seam-drift pointer-events-none absolute -top-24 right-[-120px] -z-10 h-48 w-[420px] sm:-top-32 lg:right-[-60px]"
       />
       <Container>
         <ul className="grid grid-cols-1 gap-3 md:grid-cols-2 md:gap-6">

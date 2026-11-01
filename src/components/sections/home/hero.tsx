@@ -128,6 +128,7 @@ export function Hero() {
                   image={founder.portrait}
                   tone="dark"
                   art="feet"
+                  live
                   seed={7}
                   priority
                   className="h-full w-full"
