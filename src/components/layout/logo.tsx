@@ -11,7 +11,7 @@ export function LogoMark({ className, tone = "light" }: { className?: string; to
         <ellipse cx="16" cy="12.5" rx="3.6" ry="2.4" opacity="0.6" />
         <ellipse cx="16" cy="22.5" rx="4.4" ry="3.6" />
       </g>
-      <circle cx="16" cy="22.5" r="1.7" fill="#B3262D" />
+      <circle cx="16" cy="22.5" r="1.7" style={{ fill: "var(--color-accent)" }} />
     </svg>
   );
 }
@@ -20,7 +20,7 @@ export function Logo({ tone = "light", className }: { tone?: "light" | "dark"; c
   return (
     <Link
       href="/"
-      className={cn("group inline-flex items-center gap-2.5 rounded-lg", className)}
+      className={cn("group inline-flex min-h-11 items-center gap-2.5 rounded-lg", className)}
       aria-label={`${site.name} — на главную`}
     >
       <LogoMark tone={tone} className="transition-transform duration-300 ease-out-soft group-hover:rotate-[-6deg]" />

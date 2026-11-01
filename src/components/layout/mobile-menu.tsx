@@ -89,7 +89,7 @@ export function MobileMenu() {
         aria-expanded={open}
         aria-controls={panelId}
         aria-label={t.common.openMenu}
-        className="relative inline-flex size-11 items-center justify-center rounded-full border border-line bg-paper transition-colors hover:border-ink/30 lg:hidden"
+        className="press relative inline-flex size-11 items-center justify-center rounded-full border border-line bg-paper transition-colors duration-[var(--dur-press)] hover:border-ink/30 active:bg-mist lg:hidden"
       >
         <span aria-hidden className="flex w-[18px] flex-col gap-[5px]">
           <span className="h-[1.5px] w-full rounded-full bg-ink" />
@@ -102,7 +102,7 @@ export function MobileMenu() {
           <div
             className={cn(
               "fixed inset-0 z-[60] lg:hidden",
-              open ? "visible" : "invisible [transition:visibility_0s_linear_450ms]",
+              open ? "visible" : "invisible [transition:visibility_0s_linear_300ms]",
             )}
             inert={!open}
           >
@@ -110,7 +110,7 @@ export function MobileMenu() {
               aria-hidden
               onClick={close}
               className={cn(
-                "absolute inset-0 bg-ink/30 backdrop-blur-sm transition-opacity duration-300",
+                "absolute inset-0 bg-ink/40 transition-opacity duration-[var(--dur-nav)]",
                 open ? "opacity-100" : "opacity-0",
               )}
             />
@@ -121,8 +121,8 @@ export function MobileMenu() {
               aria-modal="true"
               aria-label={t.common.menu}
               className={cn(
-                "absolute inset-x-0 top-0 flex max-h-[100dvh] flex-col overflow-y-auto rounded-b-[28px] bg-paper pb-[max(1.25rem,env(safe-area-inset-bottom))] shadow-float",
-                "transition-transform duration-[450ms] ease-out-soft",
+                "absolute inset-x-0 top-0 flex max-h-[100dvh] flex-col overflow-y-auto overscroll-contain rounded-b-[28px] bg-paper pt-[env(safe-area-inset-top)] pb-[max(1.25rem,env(safe-area-inset-bottom))] shadow-float",
+                "transition-transform duration-300 ease-out-soft",
                 open ? "translate-y-0" : "-translate-y-full",
               )}
             >
@@ -132,7 +132,7 @@ export function MobileMenu() {
                   type="button"
                   onClick={close}
                   aria-label={t.common.closeMenu}
-                  className="inline-flex size-11 items-center justify-center rounded-full border border-line"
+                  className="press inline-flex size-11 items-center justify-center rounded-full border border-line active:bg-mist"
                 >
                   <span aria-hidden className="relative block size-4">
                     <span className="absolute left-0 top-1/2 h-[1.5px] w-full rotate-45 rounded-full bg-ink" />
@@ -153,16 +153,16 @@ export function MobileMenu() {
                       <li
                         key={item.href}
                         className={cn(
-                          "transition-[opacity,transform] duration-500 ease-out-soft",
-                          open ? "translate-y-0 opacity-100" : "translate-y-3 opacity-0",
+                          "transition-[opacity,transform] duration-[var(--dur-reveal)] ease-out-soft",
+                          open ? "translate-y-0 opacity-100" : "translate-y-2 opacity-0",
                         )}
-                        style={{ transitionDelay: open ? `${120 + i * 35}ms` : "0ms" }}
+                        style={{ transitionDelay: open ? `${60 + i * 25}ms` : "0ms" }}
                       >
                         <Link
                           href={item.href}
                           onClick={() => setOpen(false)}
                           aria-current={active ? "page" : undefined}
-                          className="flex min-h-14 items-center justify-between py-3 text-[1.375rem] font-semibold tracking-[-0.02em]"
+                          className="-mx-2 flex min-h-14 items-center justify-between rounded-xl px-2 py-3 text-[1.3125rem] font-semibold tracking-[-0.02em] transition-colors duration-[var(--dur-press)] active:bg-mist"
                         >
                           <span className="flex items-center gap-3">
                             <span
@@ -184,8 +184,8 @@ export function MobileMenu() {
 
               <div
                 className={cn(
-                  "mt-6 flex flex-col gap-4 px-4 transition-[opacity,transform] duration-500 ease-out-soft sm:px-6",
-                  open ? "translate-y-0 opacity-100 delay-[400ms]" : "translate-y-3 opacity-0",
+                  "mt-6 flex flex-col gap-4 px-4 transition-[opacity,transform] duration-[var(--dur-reveal)] ease-out-soft sm:px-6",
+                  open ? "translate-y-0 opacity-100 delay-[260ms]" : "translate-y-2 opacity-0",
                 )}
               >
                 {quickLinks.length > 0 && (

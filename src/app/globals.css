@@ -10,6 +10,8 @@
     -webkit-text-size-adjust: 100%;
     text-rendering: optimizeLegibility;
     scroll-padding-top: calc(var(--header-h) + 16px);
+    /* Smooth <details> height animation where supported (Chrome 129+). */
+    interpolate-size: allow-keywords;
   }
 
   @media (prefers-reduced-motion: no-preference) {
@@ -25,6 +27,7 @@
     font-feature-settings: "ss01", "cv11";
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    -webkit-tap-highlight-color: transparent;
   }
 
   ::selection {
@@ -52,25 +55,37 @@
 
   summary {
     list-style: none;
+    -webkit-user-select: none;
+    user-select: none;
   }
   summary::-webkit-details-marker {
     display: none;
   }
+
+  /* Smooth accordion open/close (progressive enhancement). */
+  details::details-content {
+    block-size: 0;
+    overflow: clip;
+    transition:
+      block-size var(--dur-card) var(--ease-out-soft),
+      content-visibility var(--dur-card) allow-discrete;
+  }
+  details[open]::details-content {
+    block-size: auto;
+  }
 }
 
-/* ------------------------------------------------------------------ */
-/*  Reveal-on-scroll (progressive enhancement, see components/ui/reveal) */
-/* ------------------------------------------------------------------ */
-
 @layer components {
+  /* ---------------------------------------------------------------- */
+  /*  Reveal-on-scroll (see components/ui/reveal) — JS adds `.js`     */
+  /* ---------------------------------------------------------------- */
   .js [data-reveal] {
     opacity: 0;
-    transform: translate3d(0, 18px, 0);
+    transform: translate3d(0, 16px, 0);
     transition:
-      opacity 600ms var(--ease-out-soft),
-      transform 600ms var(--ease-out-soft);
+      opacity var(--dur-reveal) var(--ease-out-soft),
+      transform var(--dur-reveal) var(--ease-out-soft);
     transition-delay: var(--reveal-delay, 0ms);
-    will-change: opacity, transform;
   }
 
   .js [data-reveal][data-visible="true"] {
@@ -78,83 +93,194 @@
     transform: none;
   }
 
-  /* Entrance animation for above-the-fold content: pure CSS, no JS needed. */
+  /* ---------------------------------------------------------------- */
+  /*  Above-the-fold entrances — pure CSS, short delays               */
+  /* ---------------------------------------------------------------- */
   .enter {
-    animation: enter 700ms var(--ease-out-soft) both;
+    animation: enter 560ms var(--ease-out-soft) both;
     animation-delay: var(--enter-delay, 0ms);
   }
 
-  /* Transform-only entrance: keeps the hero headline paintable (and
-     counted for LCP) from the very first frame. */
+  /* Fade only — for small labels. */
+  .enter-soft {
+    animation: enter-soft 480ms ease-out both;
+    animation-delay: var(--enter-delay, 0ms);
+  }
+
+  /* Transform-only: the hero headline is paintable (LCP) from frame one. */
   .enter-rise {
-    animation: enter-rise 800ms var(--ease-out-soft) both;
+    animation: enter-rise 640ms var(--ease-out-soft) both;
     animation-delay: var(--enter-delay, 0ms);
   }
 
-  @keyframes enter-rise {
-    from {
-      transform: translate3d(0, 14px, 0);
-    }
-    to {
-      transform: none;
-    }
-  }
-
+  /* Restrained image reveal. */
   .enter-fade {
-    animation: enter-fade 900ms var(--ease-out-soft) both;
+    animation: enter-fade 720ms var(--ease-out-soft) both;
     animation-delay: var(--enter-delay, 0ms);
   }
 
   @keyframes enter {
     from {
       opacity: 0;
-      transform: translate3d(0, 20px, 0);
-    }
-    to {
-      opacity: 1;
-      transform: none;
+      transform: translate3d(0, 14px, 0);
     }
   }
-
+  @keyframes enter-soft {
+    from {
+      opacity: 0;
+    }
+  }
+  @keyframes enter-rise {
+    from {
+      transform: translate3d(0, 12px, 0);
+    }
+  }
   @keyframes enter-fade {
     from {
       opacity: 0;
-      transform: scale(1.02);
-    }
-    to {
-      opacity: 1;
-      transform: none;
+      transform: scale(0.97);
     }
   }
+
+  /* ---------------------------------------------------------------- */
+  /*  Header — opaque at the top, frosted glass once scrolled          */
+  /* ---------------------------------------------------------------- */
+  .header-glass {
+    background-color: var(--color-paper);
+  }
+  @supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    .header-glass[data-scrolled="true"] {
+      background-color: rgb(255 255 255 / 0.78);
+      -webkit-backdrop-filter: blur(12px) saturate(1.4);
+      backdrop-filter: blur(12px) saturate(1.4);
+    }
+  }
+
+  /* ---------------------------------------------------------------- */
+  /*  Touch feedback                                                  */
+  /* ---------------------------------------------------------------- */
+  .press {
+    transition: transform var(--dur-press) var(--ease-out-soft);
+  }
+  .press:active {
+    transform: scale(0.985);
+  }
+
+  /* ---------------------------------------------------------------- */
+  /*  Patterns, grain, glow                                           */
+  /* ---------------------------------------------------------------- */
 
   /* Pressure-sensor plate: a fine dot grid. */
   .pattern-dots {
-    background-image: radial-gradient(rgb(180 140 108 / 0.32) 1.1px, transparent 1.5px);
+    background-image: radial-gradient(var(--art-dot) 1.1px, transparent 1.5px);
     background-size: 18px 18px;
   }
   .pattern-dots-dark {
-    background-image: radial-gradient(rgb(255 255 255 / 0.09) 1.1px, transparent 1.5px);
+    background-image: radial-gradient(var(--art-dot-dark) 1.1px, transparent 1.5px);
     background-size: 18px 18px;
   }
 
-  /* Repeating arches — foot-arch rhythm. */
-  .pattern-arches {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='40' viewBox='0 0 64 40'%3E%3Cpath d='M4 40a28 22 0 0 1 56 0M16 40a16 12 0 0 1 32 0' fill='none' stroke='%23B48C6C' stroke-opacity='.22' stroke-width='1.2'/%3E%3C/svg%3E");
-    background-size: 64px 40px;
-  }
-
-  /* Soft fade for decorative patterns. */
   .fade-edges {
     mask-image: radial-gradient(ellipse at center, black 35%, transparent 75%);
   }
-  .fade-bottom {
-    mask-image: linear-gradient(to bottom, black, transparent);
+
+  /*
+   * Film grain — a static SVG noise tile on a pseudo-element.
+   * No canvas, no animation. Sits above backgrounds and below content
+   * (z-index:-1 inside an isolated stacking context), so text stays crisp.
+   */
+  .grain {
+    position: relative;
+    isolation: isolate;
+  }
+  .grain::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    border-radius: inherit;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 160px 160px;
+    opacity: 0.05;
+  }
+  .grain[data-tone="dark"]::before,
+  [data-tone="dark"] .grain::before {
+    filter: invert(1);
+    opacity: 0.07;
   }
 
-  .hairline-grid {
-    background-image:
-      linear-gradient(to right, var(--color-line) 1px, transparent 1px);
-    background-size: calc(100% / 12) 100%;
+  /* Ambient light blobs — position with utilities, size via width/height. */
+  .glow-neutral {
+    background: radial-gradient(closest-side, var(--glow-neutral), transparent);
+  }
+  .glow-red {
+    background: radial-gradient(closest-side, var(--glow-red), transparent);
+  }
+
+  /* ---------------------------------------------------------------- */
+  /*  Signature contours                                              */
+  /* ---------------------------------------------------------------- */
+
+  /* Arch lines draw in once on load (hero). */
+  .draw-lines.draw-now path {
+    stroke-dasharray: 1;
+    animation: draw-line 1600ms var(--ease-in-out-soft) both;
+    animation-delay: calc(240ms + var(--i, 0) * 90ms);
+  }
+
+  /* Elsewhere they draw as the section scrolls in (CSS scroll-driven,
+     no JS). Unsupported browsers show the finished drawing. */
+  @supports (animation-timeline: view()) {
+    .draw-lines.draw-scroll path {
+      stroke-dasharray: 1;
+      animation: draw-line linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 40%;
+    }
+  }
+
+  @keyframes draw-line {
+    from {
+      stroke-dashoffset: 1;
+    }
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+
+  /* Very slow ambient drift for decorative layers. */
+  .ambient-drift {
+    animation: drift 16s ease-in-out infinite alternate;
+  }
+  @keyframes drift {
+    from {
+      transform: translate3d(0, 0, 0) rotate(0deg);
+    }
+    to {
+      transform: translate3d(0, -10px, 0) rotate(0.6deg);
+    }
+  }
+
+  /* ---------------------------------------------------------------- */
+  /*  Parallax — CSS scroll-driven, scoped to the element             */
+  /* ---------------------------------------------------------------- */
+  .parallax {
+    view-timeline-name: --parallax;
+  }
+  @supports (animation-timeline: view()) {
+    .parallax > .parallax-layer {
+      animation: parallax linear both;
+      animation-timeline: --parallax;
+    }
+  }
+  @keyframes parallax {
+    from {
+      transform: translate3d(0, calc(var(--parallax-distance) * -1), 0);
+    }
+    to {
+      transform: translate3d(0, var(--parallax-distance), 0);
+    }
   }
 }
 
@@ -163,7 +289,7 @@
 /* ------------------------------------------------------------------ */
 
 ::view-transition-group(*) {
-  animation-duration: 420ms;
+  animation-duration: 380ms;
   animation-timing-function: var(--ease-out-soft);
 }
 
@@ -172,18 +298,17 @@
   animation: none;
 }
 
-/* Cards entering / leaving the grid */
 ::view-transition-new(*):only-child {
-  animation: vt-in 380ms var(--ease-out-soft) both;
+  animation: vt-in 360ms var(--ease-out-soft) both;
 }
 ::view-transition-old(*):only-child {
-  animation: vt-out 200ms ease-in both;
+  animation: vt-out 180ms ease-in both;
 }
 
 @keyframes vt-in {
   from {
     opacity: 0;
-    transform: translateY(14px) scale(0.98);
+    transform: translateY(12px) scale(0.98);
   }
 }
 @keyframes vt-out {
@@ -192,6 +317,10 @@
     transform: scale(0.98);
   }
 }
+
+/* ------------------------------------------------------------------ */
+/*  Reduced motion                                                     */
+/* ------------------------------------------------------------------ */
 
 @media (prefers-reduced-motion: reduce) {
   *,
@@ -206,5 +335,13 @@
   .js [data-reveal] {
     opacity: 1;
     transform: none;
+  }
+
+  .ambient-drift,
+  .parallax > .parallax-layer,
+  .draw-lines path {
+    animation: none !important;
+    transform: none !important;
+    stroke-dashoffset: 0 !important;
   }
 }

@@ -3,7 +3,7 @@ import { ArrowUpRight } from "lucide-react";
 import { audiences, getCourses, nextSession } from "@/data/courses";
 import { founder, founderDisplayName } from "@/data/founder";
 import { t } from "@/i18n";
-import { formatDateRange, plural } from "@/lib/utils";
+import { cn, formatDateRange, plural } from "@/lib/utils";
 import { ButtonLink } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { Eyebrow } from "@/components/ui/typography";
@@ -15,6 +15,16 @@ function delay(ms: number) {
   return { "--enter-delay": `${ms}ms` } as React.CSSProperties;
 }
 
+/**
+ * Mobile-first hero.
+ *
+ * Phone order: eyebrow → headline → description → CTAs → visual (with the
+ * upcoming-course card docked to it) → facts. On desktop the visual moves
+ * into the right column and the course card floats over its edge.
+ *
+ * Motion: short CSS-only sequence (≤300 ms of delays). The headline only
+ * moves — it never fades — so it is paintable for LCP from the first frame.
+ */
 export function Hero() {
   const courses = getCourses();
   const upcoming = courses
@@ -24,108 +34,139 @@ export function Hero() {
   const spotlight = upcoming?.c ?? courses.find((c) => c.featured) ?? courses[0];
 
   const facts = [
-    { value: String(courses.length), label: plural(courses.length, ["программа", "программы", "программ"]) + " обучения" },
-    { value: String(audiences.length), label: "направления для разных уровней подготовки" },
-    { value: "Ваш город", label: "выездные группы с местными организаторами" },
+    { value: String(courses.length), label: plural(courses.length, ["программа", "программы", "программ"]) },
+    { value: String(audiences.length), label: "уровня подготовки" },
+    { value: "Выезд", label: "в ваш город" },
   ];
+
+  const spotlightCard = spotlight && (
+    <Link
+      href={`/courses/${spotlight.slug}`}
+      className={cn(
+        "group press flex items-center gap-4 rounded-card border border-line bg-card p-4 shadow-float",
+        "transition-[transform,border-color] duration-[var(--dur-card)] ease-out-soft hover:-translate-y-0.5 hover:border-ink/20",
+      )}
+    >
+      <div className="min-w-0 flex-1">
+        <p className="flex items-center gap-2 text-xs font-medium text-muted">
+          <span className="relative flex size-2">
+            <span className="absolute inline-flex size-full animate-ping rounded-full bg-accent/40 [animation-duration:2.4s] motion-reduce:hidden" />
+            <span className="relative inline-flex size-2 rounded-full bg-accent" />
+          </span>
+          {upcoming ? "Ближайший старт" : "Рекомендуем начать"}
+        </p>
+        <p className="mt-1.5 truncate text-[0.9375rem] font-semibold">{spotlight.title}</p>
+        <p className="mt-0.5 truncate text-[0.8125rem] text-muted">
+          {upcoming?.s ? `${formatDateRange(upcoming.s.start, upcoming.s.end)} · ${upcoming.s.city}` : "Набор по заявкам"}
+        </p>
+      </div>
+      <span className="inline-flex size-10 shrink-0 items-center justify-center rounded-full bg-mist transition-colors duration-[var(--dur-press)] group-hover:bg-ink group-hover:text-white">
+        <ArrowUpRight aria-hidden className="size-[18px]" strokeWidth={1.75} />
+      </span>
+    </Link>
+  );
 
   return (
     <section aria-labelledby="hero-title" className="relative overflow-hidden">
-      {/* Decorative backdrop: sand panel with sensor-plate dots, arches, footprints */}
-      <div aria-hidden className="pointer-events-none absolute inset-0 -z-0">
-        <div className="absolute inset-y-0 right-0 w-full bg-mist max-lg:top-[46%] lg:w-[38%]">
-          <div className="pattern-dots absolute inset-0 opacity-80 [mask-image:linear-gradient(to_left,black,transparent)]" />
+      {/* Backdrop: soft-gray panel (mobile: behind the visual; desktop: right third) */}
+      <div aria-hidden className="pointer-events-none absolute inset-0">
+        <div className="absolute inset-x-0 bottom-0 top-[52%] bg-mist sm:top-[46%] lg:inset-y-0 lg:left-auto lg:w-[38%]">
+          <div className="pattern-dots absolute inset-0 [mask-image:linear-gradient(to_bottom,black,transparent_85%)] lg:[mask-image:linear-gradient(to_left,black,transparent)]" />
         </div>
-        <ArchLines className="absolute -bottom-2 -left-24 h-56 w-[520px] max-sm:hidden" count={8} />
-        <div className="absolute -right-24 -top-24 size-72 rounded-full border border-clay/30 max-lg:hidden" />
-        <div className="absolute -right-10 -top-10 size-44 rounded-full border border-clay/25 max-lg:hidden" />
+        <ArchLines draw accent className="draw-now absolute -bottom-1 -left-24 h-28 w-[300px] max-lg:hidden" count={8} />
       </div>
-      <Container className="relative z-10 pb-16 pt-6 sm:pt-10 lg:pb-28 lg:pt-16">
-        <div className="grid grid-cols-1 gap-10 lg:grid-cols-12 lg:gap-6">
+
+      <Container className="relative pb-12 pt-7 sm:pt-10 lg:pb-24 lg:pt-14">
+        <div className="grid grid-cols-1 gap-9 lg:grid-cols-12 lg:gap-6">
+          {/* Copy */}
           <div className="flex flex-col lg:col-span-7 lg:pr-8 lg:pt-6">
-            <div className="enter" style={delay(0)}>
-              <Eyebrow>Школа подологии · Обучение и практика</Eyebrow>
+            <div className="enter-soft" style={delay(0)}>
+              <Eyebrow>Школа подологии</Eyebrow>
             </div>
             <h1
               id="hero-title"
-              className="enter-rise mt-6 text-display font-semibold lg:mt-8 lg:text-[length:clamp(3rem,5vw,4.875rem)]"
-              style={delay(80)}
+              className="enter-rise mt-4 text-display font-semibold lg:mt-7 lg:text-[length:clamp(3rem,5vw,4.875rem)]"
+              style={delay(40)}
             >
               Профессиональное обучение подологии<span className="text-accent">.</span>
             </h1>
-            <p className="enter mt-6 max-w-xl text-lead text-muted lg:mt-8" style={delay(160)}>
+            <p className="enter mt-4 max-w-[34ch] text-lead text-muted lg:mt-7 lg:max-w-xl" style={delay(110)}>
               Авторские курсы, практические знания и профессиональное развитие специалистов.
             </p>
-            <div className="enter mt-8 flex flex-col gap-3 sm:flex-row lg:mt-10" style={delay(240)}>
-              <ButtonLink href="/courses" variant="accent" size="lg" arrow>
+            <div className="mt-7 flex flex-col gap-2.5 sm:flex-row sm:gap-3 lg:mt-10">
+              <ButtonLink href="/courses" variant="accent" size="lg" arrow className="enter" style={delay(170)}>
                 {t.common.chooseCourse}
               </ButtonLink>
-              <ButtonLink href="/about" variant="outline" size="lg">
+              <ButtonLink href="/about" variant="outline" size="lg" className="enter" style={delay(220)}>
                 О преподавателе
               </ButtonLink>
             </div>
 
-            <dl className="enter mt-12 grid grid-cols-1 border-t border-line sm:grid-cols-3 lg:mt-auto lg:pt-0" style={delay(320)}>
+            {/* Facts — desktop position (bottom of the copy column) */}
+            <dl className="enter mt-auto hidden grid-cols-3 border-t border-line pt-0 lg:grid" style={delay(300)}>
               {facts.map((f, i) => (
-                <div
-                  key={f.label}
-                  className={
-                    "flex items-baseline gap-3 border-b border-line py-4 sm:block sm:border-b-0 sm:py-6 " +
-                    (i > 0 ? "sm:border-l sm:pl-5" : "sm:pr-5")
-                  }
-                >
+                <div key={f.label} className={cn("py-6", i > 0 ? "border-l border-line pl-5" : "pr-5")}>
                   <dt className="sr-only">{f.label}</dt>
-                  <dd className="min-w-[5.5rem] text-xl font-semibold tracking-tight sm:min-w-0 sm:text-2xl lg:text-[2rem]">{f.value}</dd>
-                  <dd className="text-[0.8125rem] leading-snug text-muted sm:mt-2">{f.label}</dd>
+                  <dd className="text-[2rem] font-semibold leading-none tracking-tight">{f.value}</dd>
+                  <dd className="mt-2 text-[0.8125rem] leading-snug text-muted">{f.label}</dd>
                 </div>
               ))}
             </dl>
           </div>
 
-          <div className="enter-fade relative lg:col-span-5" style={delay(120)}>
-            <div aria-hidden className="absolute -bottom-6 -left-6 size-40 rounded-full bg-clay/25 blur-2xl" />
-            <div aria-hidden className="absolute -right-3 -top-3 hidden size-24 rounded-[28px] border border-clay/40 sm:block" />
-            <Parallax className="aspect-[4/4.6] rounded-panel bg-graphite shadow-float sm:aspect-[4/4] lg:aspect-[4/5]" distance={28}>
-              <Visual
-                image={founder.portrait}
-                tone="dark"
-                art="feet"
-                seed={7}
-                priority
-                className="h-full w-full"
-                sizes="(min-width: 1024px) 40vw, 100vw"
-              />
-            </Parallax>
+          {/* Visual */}
+          <div className="relative lg:col-span-5">
+            <div aria-hidden className="glow-red absolute -inset-x-10 -top-10 bottom-0 lg:-inset-16" />
+            <div aria-hidden className="glow-neutral absolute -bottom-16 -left-16 size-72" />
 
-            <div className="pointer-events-none absolute inset-x-4 bottom-4 flex items-end justify-between gap-4 sm:inset-x-6 sm:bottom-6">
-              <div className="rounded-2xl bg-white/10 px-4 py-3 text-white backdrop-blur-md">
+            <div className="enter-fade relative" style={delay(120)}>
+              <Parallax
+                className="grain aspect-[4/3.3] rounded-panel bg-graphite shadow-float sm:aspect-[16/11] lg:aspect-[4/5]"
+                distance={24}
+              >
+                <Visual
+                  image={founder.portrait}
+                  tone="dark"
+                  art="feet"
+                  seed={7}
+                  priority
+                  className="h-full w-full"
+                  imgClassName="object-[50%_20%]"
+                  sizes="(min-width: 1024px) 40vw, 100vw"
+                />
+              </Parallax>
+
+              {/* Caption — gradient scrim guarantees legibility over photos */}
+              <div className="pointer-events-none absolute inset-x-0 bottom-0 rounded-b-panel bg-gradient-to-t from-black/70 via-black/30 to-transparent px-5 pb-5 pt-14 text-white sm:px-6 sm:pb-6 max-sm:pb-14">
                 <p className="text-[0.9375rem] font-semibold">{founderDisplayName()}</p>
-                <p className="mt-0.5 text-[0.8125rem] text-white/75">{founder.role}</p>
+                <p className="mt-0.5 line-clamp-1 max-w-[34ch] text-[0.8125rem] leading-snug text-white/80 sm:line-clamp-none">{founder.role}</p>
               </div>
+
+              {/* Desktop/tablet floating course card */}
+              {spotlight && (
+                <div className="absolute right-4 top-4 hidden w-[290px] sm:block lg:-left-12 lg:right-auto lg:top-10">
+                  {spotlightCard}
+                </div>
+              )}
             </div>
 
+            {/* Mobile: course card docked under the visual */}
             {spotlight && (
-              <Link
-                href={`/courses/${spotlight.slug}`}
-                className="group absolute -top-4 right-4 hidden w-[260px] rounded-card bg-card p-5 shadow-float transition-transform duration-300 ease-out-soft hover:-translate-y-1 sm:block lg:-left-10 lg:right-auto lg:top-10"
-              >
-                <p className="flex items-center gap-2 text-xs font-medium text-muted">
-                  <span className="relative flex size-2">
-                    <span className="absolute inline-flex size-full animate-ping rounded-full bg-accent/40 motion-reduce:hidden" />
-                    <span className="relative inline-flex size-2 rounded-full bg-accent" />
-                  </span>
-                  {upcoming ? "Ближайший старт" : "Рекомендуем начать"}
-                </p>
-                <p className="mt-2 font-semibold leading-snug">{spotlight.title}</p>
-                <p className="mt-3 flex items-center justify-between text-[0.8125rem] text-muted">
-                  {upcoming?.s ? `${formatDateRange(upcoming.s.start, upcoming.s.end)} · ${upcoming.s.city}` : "Набор по заявкам"}
-                  <ArrowUpRight
-                    aria-hidden
-                    className="size-4 text-ink transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
-                  />
-                </p>
-              </Link>
+              <div className="enter relative -mt-10 px-3 sm:hidden" style={delay(260)}>
+                {spotlightCard}
+              </div>
             )}
+
+            {/* Facts — mobile/tablet strip */}
+            <dl className="enter relative mt-6 grid grid-cols-3 rounded-card border border-line bg-card lg:hidden" style={delay(300)}>
+              {facts.map((f, i) => (
+                <div key={f.label} className={cn("px-3 py-4 text-center sm:py-5", i > 0 && "border-l border-line")}>
+                  <dt className="sr-only">{f.label}</dt>
+                  <dd className="text-xl font-semibold leading-none tracking-tight sm:text-2xl">{f.value}</dd>
+                  <dd className="mt-1.5 text-xs leading-snug text-muted">{f.label}</dd>
+                </div>
+              ))}
+            </dl>
           </div>
         </div>
       </Container>

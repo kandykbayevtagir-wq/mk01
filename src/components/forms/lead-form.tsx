@@ -217,6 +217,9 @@ export function LeadForm({
                 {...common}
                 type={f.kind}
                 inputMode={f.kind === "tel" ? "tel" : f.kind === "email" ? "email" : undefined}
+                enterKeyHint="next"
+                autoCapitalize={f.name === "name" || f.name === "city" ? "words" : f.kind === "email" ? "none" : undefined}
+                spellCheck={f.kind === "tel" || f.kind === "email" ? false : undefined}
                 autoComplete={f.autoComplete}
                 placeholder={f.placeholder}
                 className={cn(fieldBase, errorRing, "h-14")}

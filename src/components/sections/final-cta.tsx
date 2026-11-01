@@ -16,18 +16,18 @@ export function FinalCta({
   return (
     <section aria-labelledby="final-cta-title" className="py-6 lg:py-10">
       <Container>
-        <Reveal className="relative isolate overflow-hidden rounded-panel bg-sand px-6 py-16 sm:px-10 lg:px-16 lg:py-24">
+        <Reveal className="grain relative isolate overflow-hidden rounded-panel bg-mist px-6 py-14 sm:px-10 sm:py-16 lg:px-16 lg:py-24">
           <div aria-hidden className="pattern-dots absolute inset-0 -z-10 opacity-90 [mask-image:linear-gradient(to_left,black,transparent_75%)]" />
-          <div aria-hidden className="absolute -right-16 -top-16 -z-10 size-80 rounded-full bg-clay-soft" />
+          <div aria-hidden className="glow-red absolute -right-24 -top-24 -z-10 size-[460px]" />
           <PressureFeet className="absolute bottom-[-8%] right-[4%] -z-10 h-[115%] opacity-90 max-lg:hidden" />
-          <ArchLines className="absolute -bottom-1 -left-24 -z-10 h-48 w-[460px]" />
+          <ArchLines draw className="draw-scroll absolute -bottom-1 -left-24 -z-10 h-48 w-[460px]" />
           <div className="max-w-3xl">
           <h2 id="final-cta-title" className="text-h1 font-semibold">
             {title}
             <span className="text-accent">.</span>
           </h2>
           <div className="mt-10 flex flex-col gap-6 sm:flex-row sm:items-center">
-            <ButtonLink href={cta.href} variant="accent" size="lg" arrow>
+            <ButtonLink href={cta.href} variant="accent" size="lg" arrow className="w-full sm:w-auto">
               {cta.label}
             </ButtonLink>
             {showLinks && (

@@ -1,17 +1,19 @@
 import Link from "next/link";
-import { ArrowUpRight, CalendarDays, Clock3, MapPin, MonitorSmartphone } from "lucide-react";
+import { ArrowUpRight, Clock3, MapPin, MonitorSmartphone } from "lucide-react";
 import type { Course } from "@/data/types";
 import { audienceById, courseCity, nextSession } from "@/data/courses";
 import { cn, formatDateRange, formatKzt } from "@/lib/utils";
 import { Visual } from "@/components/ui/visual";
 
-export function CourseCard({
-  course,
-  headingLevel = "h3",
-}: {
-  course: Course;
-  headingLevel?: "h2" | "h3";
-}) {
+/**
+ * Course card — the primary commercial unit.
+ *
+ * Scan order: category → audience → title → summary → format/duration/city
+ * → price + next date → explicit action. Everything is visible without
+ * hover; hover (pointer devices only) adds lift, image zoom and arrow
+ * motion, touch gets an immediate press state.
+ */
+export function CourseCard({ course, headingLevel = "h3" }: { course: Course; headingLevel?: "h2" | "h3" }) {
   const H = headingLevel;
   const session = nextSession(course);
   const city = courseCity(course);
@@ -25,27 +27,22 @@ export function CourseCard({
     <article
       className={cn(
         "group relative flex h-full flex-col overflow-hidden rounded-card border border-line bg-card",
-        "transition-[transform,box-shadow,border-color] duration-500 ease-out-soft",
-        "hover:-translate-y-1 hover:border-transparent hover:shadow-lift",
-        "focus-within:border-transparent focus-within:shadow-lift",
+        "transition-[transform,box-shadow,border-color] duration-[var(--dur-card)] ease-out-soft",
+        "hover:-translate-y-1 hover:border-ink/10 hover:shadow-lift",
+        "active:scale-[0.99] active:duration-[var(--dur-press)]",
+        "focus-within:border-ink/20 focus-within:shadow-lift",
       )}
     >
       <Visual
         image={course.image}
         seed={course.order + 3}
-        className="aspect-[4/3] sm:aspect-[16/11]"
+        className="aspect-[16/10] sm:aspect-[16/11]"
         imgClassName="transition-transform duration-700 ease-out-soft group-hover:scale-[1.04]"
         sizes="(min-width: 1280px) 30vw, (min-width: 768px) 45vw, 100vw"
         marker={false}
       >
-        <span className="absolute left-4 top-4 inline-flex h-8 items-center rounded-full bg-paper/90 px-3 text-xs font-semibold text-ink backdrop-blur">
+        <span className="absolute left-3 top-3 inline-flex h-7 items-center rounded-full bg-card px-3 text-xs font-semibold text-ink shadow-card sm:left-4 sm:top-4 sm:h-8">
           {course.category}
-        </span>
-        <span
-          aria-hidden
-          className="absolute bottom-4 right-4 inline-flex size-11 items-center justify-center rounded-full bg-card text-ink shadow-card transition-[background-color,color,transform] duration-300 ease-out-soft group-hover:bg-accent group-hover:text-white"
-        >
-          <ArrowUpRight className="size-5 transition-transform duration-300 ease-out-soft group-hover:-translate-y-0.5 group-hover:translate-x-0.5" strokeWidth={1.75} />
         </span>
       </Visual>
 
@@ -53,7 +50,7 @@ export function CourseCard({
         <p className="text-[0.8125rem] font-medium text-muted">
           {course.audiences.map((a) => audienceById[a].short).join(" · ")}
         </p>
-        <H className="mt-2 text-h3 font-semibold">
+        <H className="mt-1.5 text-h3 font-semibold">
           <Link
             href={`/courses/${course.slug}`}
             className="outline-none after:absolute after:inset-0 after:rounded-card focus-visible:after:outline-2 focus-visible:after:outline-offset-2 focus-visible:after:outline-accent"
@@ -61,34 +58,43 @@ export function CourseCard({
             {course.title}
           </Link>
         </H>
-        <p className="mt-3 line-clamp-3 text-[0.9375rem] leading-relaxed text-muted">{course.summary}</p>
+        <p className="mt-2.5 line-clamp-2 text-[0.9375rem] leading-relaxed text-muted sm:line-clamp-3">{course.summary}</p>
 
         {meta.length > 0 && (
-          <ul className="mt-5 flex flex-wrap gap-x-4 gap-y-2 text-[0.8125rem] text-ink/80">
+          <ul className="mt-4 flex flex-wrap gap-1.5">
             {meta.map(({ icon: Icon, label }) => (
-              <li key={label} className="inline-flex items-center gap-1.5">
-                <Icon aria-hidden className="size-4 text-muted" strokeWidth={1.5} />
+              <li key={label} className="inline-flex h-7 items-center gap-1.5 rounded-full bg-mist px-2.5 text-xs font-medium text-ink/80">
+                <Icon aria-hidden className="size-3.5 text-muted" strokeWidth={1.75} />
                 {label}
               </li>
             ))}
           </ul>
         )}
 
-        <div className="mt-auto pt-6">
-          <div className="flex items-end justify-between gap-4 border-t border-line pt-5">
+        <div className="mt-auto pt-5">
+          <dl className="grid grid-cols-2 gap-3 border-t border-line pt-4">
             <div>
-              <p className="text-xs text-muted">Стоимость</p>
-              <p className={cn("mt-1 font-semibold", course.price ? "text-lg" : "text-[0.9375rem]")}>
+              <dt className="text-xs text-muted">Стоимость</dt>
+              <dd className={cn("mt-1 font-semibold", course.price ? "text-[1.0625rem]" : "text-[0.9375rem]")}>
                 {course.price ? formatKzt(course.price) : "Уточняется"}
-              </p>
+              </dd>
             </div>
-            <div className="text-right">
-              <p className="text-xs text-muted">Ближайший поток</p>
-              <p className="mt-1 inline-flex items-center gap-1.5 text-[0.9375rem] font-medium">
-                <CalendarDays aria-hidden className="size-4 text-accent" strokeWidth={1.75} />
+            <div>
+              <dt className="text-xs text-muted">Ближайший поток</dt>
+              <dd className="mt-1 flex items-center gap-1.5 text-[0.9375rem] font-medium">
+                <span aria-hidden className={cn("size-1.5 shrink-0 rounded-full", session ? "bg-accent" : "bg-line")} />
                 {session ? formatDateRange(session.start, session.end) : "По запросу"}
-              </p>
+              </dd>
             </div>
+          </dl>
+          <div aria-hidden className="mt-4 flex items-center justify-between rounded-2xl bg-mist py-2 pl-4 pr-2 transition-colors duration-[var(--dur-card)] group-hover:bg-ink group-hover:text-white">
+            <span className="text-sm font-semibold">Подробнее о курсе</span>
+            <span className="inline-flex size-9 items-center justify-center rounded-full bg-card text-ink">
+              <ArrowUpRight
+                className="size-[18px] transition-transform duration-[var(--dur-card)] ease-out-soft group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+                strokeWidth={1.75}
+              />
+            </span>
           </div>
         </div>
       </div>

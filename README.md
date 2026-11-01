@@ -103,15 +103,31 @@ src/
 
 ### Design system
 
-Tokens are defined once in `src/styles/tokens.css` and exposed as Tailwind utilities: `bg-paper`, `bg-mist`, `text-ink`, `bg-graphite`, `text-muted`, `border-line`, `text-accent`, `text-display`/`text-h1`/`text-h2`/`text-h3`/`text-lead`, `rounded-card`/`rounded-panel` and `ease-out-soft`. The accent red `#B3262D` is reserved for primary conversion actions, active states and small markers.
+Tokens are defined once in `src/styles/tokens.css`:
 
-### Motion
+- **Colour:** monochrome palette exposed as utilities. White `bg-paper`/`bg-card`, soft gray `bg-mist` (#F6F6F6), graphite `bg-graphite`, `text-ink`, `text-muted`, `border-line`. The red `text-accent`/`bg-accent` (#B3262D) is used only for primary CTAs, the selected filter, active navigation and small markers.
+- **Decorative art:** `--art-*` custom properties, a gray ramp with red reserved for pressure peaks. The SVG kit reads them through `style`, so no component hardcodes a colour.
+- **Motion scale:** `--dur-press` 150 ms, `--dur-nav` 260 ms, `--dur-card` 350 ms, `--dur-reveal` 550 ms. Easing is `ease-out-soft`.
+- **Type scale:** `text-display`, `text-h1`, `text-h2`, `text-h3`, `text-lead` and `text-eyebrow`, all using `clamp()` and tuned for a 375 px canvas.
 
-- Above-the-fold entrance: pure CSS keyframes (`.enter`, `.enter-rise`, `.enter-fade`). The hero headline moves but never fades, so it stays visible for LCP.
-- Scroll reveals: `<Reveal>` (IntersectionObserver + CSS transition). Content is visible without JS.
-- Course filter: the View Transitions API morphs cards and the active filter pill. Unsupported browsers update instantly.
-- Parallax: a small rAF-based component, active only while on screen.
-- Every animation respects `prefers-reduced-motion`.
+### Motion & effects
+
+All motion is CSS-first, with no animation library:
+
+| Effect | Implementation |
+| --- | --- |
+| Hero entrance | CSS keyframes with ≤300 ms of stagger. The headline only moves and never fades, so it counts for LCP from the first frame. |
+| Section reveals | `<Reveal>`: one IntersectionObserver per element plus a CSS transition. Content stays visible without JS. |
+| Course filter re-flow | View Transitions API. The selected chip slides between positions. |
+| Parallax | CSS scroll-driven animation (`view-timeline`). No JS and no scroll listener. |
+| Contour drawing | Arch curves draw in on load (hero) or as a section scrolls into view (`animation-timeline: view()`). |
+| Header glass | IntersectionObserver sentinel toggles a 12 px backdrop blur. Falls back to opaque where `backdrop-filter` is unsupported. |
+| Film grain | Static SVG noise tile on a `::before` (`.grain`), used only on graphite panels, the final CTA and the footer. |
+| Ambient glow | `.glow-neutral` / `.glow-red` radial gradients. |
+| Accordions | `::details-content` + `interpolate-size` where supported, otherwise an instant toggle. |
+| Touch feedback | `active:` scale/colour states. Hover effects apply only on hover-capable devices (Tailwind v4 default). |
+
+Everything above is disabled or made static under `prefers-reduced-motion`. Browsers without scroll-driven animations show the finished, static state.
 
 ---
 
@@ -169,4 +185,4 @@ Pages are static and revalidate hourly (ISR). Only `/api/leads` runs on demand.
 - Responsive review at 320, 375, 390, 768, 1024 and 1440 px, with no horizontal overflow.
 - Forms: validation errors with focus on the first invalid field, `not_configured` state, and real delivery to a webhook ending in the success state.
 - Mobile menu: focus trap, Escape to close, focus returns to the toggle, scroll lock released on navigation.
-- Lighthouse (mobile, local production build): Accessibility, Best Practices and SEO score 100 on the checked pages. With applied throttling (slow 4G, 4× CPU), the homepage measures LCP ≈ 2.0 s and CLS 0. Re-measure on the real hosting and domain, and use field data (CrUX / Vercel Speed Insights) for INP.
+- Lighthouse (mobile, local production build, applied slow-4G and 4× CPU throttling): Accessibility, Best Practices and SEO score 100 on home, catalogue, course and partner pages. The homepage measures LCP ≈ 1.8 s, TBT ≈ 190–270 ms and CLS 0. Re-measure on the real hosting and domain, and use field data (CrUX / Vercel Speed Insights) for INP.

@@ -60,8 +60,8 @@ export function ContourArt({
     { cx: 200 + (rand() - 0.5) * 60, cy: 360 + (rand() - 0.5) * 40, rings: 9, sx: 1, sy: 1.15 },
     { cx: 205 + (rand() - 0.5) * 70, cy: 150 + (rand() - 0.5) * 40, rings: 11, sx: 1.25, sy: 0.9 },
   ];
-  const stroke = tone === "dark" ? "rgba(255,255,255,0.14)" : "rgba(150,108,78,0.2)";
-  const strokeStrong = tone === "dark" ? "rgba(233,220,203,0.32)" : "rgba(150,108,78,0.38)";
+  const stroke = tone === "dark" ? "var(--art-line-dark)" : "var(--art-line)";
+  const strokeStrong = tone === "dark" ? "var(--art-line-dark-strong)" : "var(--art-line-strong)";
 
   const paths: { d: string; strong: boolean }[] = [];
   for (const c of centres) {
@@ -86,13 +86,13 @@ export function ContourArt({
     >
       <g fill="none" strokeWidth="1" vectorEffect="non-scaling-stroke">
         {paths.map((p, i) => (
-          <path key={i} d={p.d} stroke={p.strong ? strokeStrong : stroke} vectorEffect="non-scaling-stroke" />
+          <path key={i} d={p.d} style={{ stroke: p.strong ? strokeStrong : stroke }} vectorEffect="non-scaling-stroke" />
         ))}
       </g>
       {marker && (
         <>
-          <circle cx={markerCentre.cx} cy={markerCentre.cy} r="14" fill="none" stroke="#B3262D" strokeOpacity="0.35" />
-          <circle cx={markerCentre.cx} cy={markerCentre.cy} r="4" fill="#B3262D" />
+          <circle cx={markerCentre.cx} cy={markerCentre.cy} r="14" fill="none" style={{ stroke: "var(--color-accent)" }} strokeOpacity="0.35" />
+          <circle cx={markerCentre.cx} cy={markerCentre.cy} r="4" style={{ fill: "var(--color-accent)" }} />
         </>
       )}
     </svg>

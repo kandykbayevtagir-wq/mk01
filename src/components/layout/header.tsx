@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { navigation } from "@/data/site";
 import { t } from "@/i18n";
 import { cn } from "@/lib/utils";
@@ -18,22 +18,27 @@ export function isActive(pathname: string, href: string) {
 export function Header() {
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
+  const sentinel = useRef<HTMLDivElement>(null);
 
+  // One IntersectionObserver on a sentinel at the top of the page instead
+  // of a global scroll listener.
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 8);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    const el = sentinel.current;
+    if (!el || !("IntersectionObserver" in window)) return;
+    const io = new IntersectionObserver(([entry]) => setScrolled(!entry.isIntersecting));
+    io.observe(el);
+    return () => io.disconnect();
   }, []);
 
   return (
+    <>
+    <div ref={sentinel} aria-hidden className="pointer-events-none absolute left-0 top-0 h-3 w-px" />
     <header
+      data-scrolled={scrolled}
       className={cn(
-        "sticky top-0 z-50 h-[var(--header-h)] transition-[background-color,border-color,backdrop-filter] duration-300 ease-out-soft",
-        "border-b",
-        scrolled
-          ? "border-line bg-paper/85 backdrop-blur-xl backdrop-saturate-150"
-          : "border-transparent bg-paper",
+        "header-glass sticky top-0 z-50 h-[var(--header-h)] border-b",
+        "transition-[background-color,border-color,box-shadow] duration-[var(--dur-nav)] ease-out-soft",
+        scrolled ? "border-line" : "border-transparent",
       )}
     >
       <Container className="flex h-full items-center justify-between gap-6">
@@ -49,7 +54,7 @@ export function Header() {
                     href={item.href}
                     aria-current={active ? "page" : undefined}
                     className={cn(
-                      "relative inline-flex h-10 items-center rounded-full px-3 text-[0.875rem] font-medium transition-colors duration-200",
+                      "relative inline-flex h-10 items-center rounded-full px-3 text-[0.875rem] font-medium transition-colors duration-[var(--dur-press)]",
                       active ? "text-ink" : "text-muted hover:text-ink",
                     )}
                   >
@@ -57,7 +62,7 @@ export function Header() {
                     <span
                       aria-hidden
                       className={cn(
-                        "absolute bottom-1 left-1/2 size-1 -translate-x-1/2 rounded-full bg-accent transition-[opacity,transform] duration-300 ease-out-soft",
+                        "absolute bottom-1 left-1/2 size-1 -translate-x-1/2 rounded-full bg-accent transition-[opacity,transform] duration-[var(--dur-nav)] ease-out-soft",
                         active ? "scale-100 opacity-100" : "scale-0 opacity-0",
                       )}
                     />
@@ -76,5 +81,6 @@ export function Header() {
         </div>
       </Container>
     </header>
+    </>
   );
 }

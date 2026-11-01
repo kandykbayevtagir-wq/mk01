@@ -13,7 +13,7 @@ export function PartnersTeaser() {
         <Reveal>
           <div
             data-tone="dark"
-            className="relative isolate overflow-hidden rounded-panel bg-graphite px-6 py-14 text-white sm:px-10 lg:px-16 lg:py-24"
+            className="grain relative isolate overflow-hidden rounded-panel bg-graphite px-6 py-14 text-white sm:px-10 lg:px-16 lg:py-24"
           >
             <div aria-hidden className="pattern-dots-dark absolute inset-0 -z-10 [mask-image:linear-gradient(to_left,black,transparent_70%)]" />
             <ContourArt
@@ -23,7 +23,8 @@ export function PartnersTeaser() {
               className="absolute -right-24 -top-10 -z-10 h-[140%] w-[70%] opacity-60 max-lg:hidden"
             />
             <Footprints tone="dark" steps={5} className="absolute -bottom-4 left-[44%] -z-10 h-[300px] w-auto rotate-[28deg] max-lg:hidden" />
-            <div aria-hidden className="absolute -left-20 -top-20 -z-10 size-64 rounded-full bg-clay/20 blur-3xl" />
+            <div aria-hidden className="absolute -left-24 -top-24 -z-10 size-[420px] bg-[radial-gradient(closest-side,rgb(179_38_45/0.22),transparent)]" />
+            <div aria-hidden className="absolute -bottom-32 right-0 -z-10 size-[520px] bg-[radial-gradient(closest-side,rgb(255_255_255/0.06),transparent)]" />
             <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-6">
               <div className="lg:col-span-6">
                 <Eyebrow tone="dark">Партнёрство</Eyebrow>
@@ -34,7 +35,7 @@ export function PartnersTeaser() {
                   Местные партнёры собирают группы и подбирают площадку, а мы привозим профессиональную программу и
                   проводим обучение.
                 </p>
-                <ButtonLink href="/partners" variant="light" size="lg" arrow className="mt-10">
+                <ButtonLink href="/partners" variant="accent" size="lg" arrow className="mt-10 w-full sm:w-auto">
                   Стать организатором
                 </ButtonLink>
               </div>
