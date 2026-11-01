@@ -14,3 +14,8 @@ export function LiquidLight({ dark = false, lean = false }: { dark?: boolean; le
 export function LightTrail() {
   return <span aria-hidden="true" className="light-trail"><span /></span>;
 }
+
+/** One-pass edge highlight for hover, keyboard focus and touch press (CSS-only, no loop). */
+export function CardSheen() {
+  return <span aria-hidden="true" className="card-sheen"><span /></span>;
+}
