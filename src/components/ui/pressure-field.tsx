@@ -242,7 +242,9 @@ function draw(f: Field, now: number) {
     const waveA = st[fi + 4];
     const hd = D[o + 5] - st[fi + 3];
     const wave = waveA > 0 ? waveA * Math.exp(-hd * hd * invW) : 0;
-    let v = D[o + 4] * (1 - 0.4 * E) + E * (0.9 * dyn + wave);
+    // the standing map dims only while this foot is loaded, so each cycle
+    // pulses: full standing map (swing) → rolling load (stance)
+    let v = D[o + 4] * (1 - 0.4 * E * load) + E * (0.9 * dyn + wave);
     let x = D[o];
     let y = D[o + 1];
     // coordinated micro-motion: dots yield slightly away from the load
