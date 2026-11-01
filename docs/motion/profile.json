@@ -1,0 +1,68 @@
+[
+  {
+    "name": "baseline",
+    "scene": "hero",
+    "viewport": "390x844 DPR2",
+    "samples": 300,
+    "p95FrameMs": 16.7,
+    "framesOver33ms": 0,
+    "taskMs": 227.69,
+    "layouts": 0,
+    "activeAmbientRegions": 0
+  },
+  {
+    "name": "baseline",
+    "scene": "featured",
+    "viewport": "390x844 DPR2",
+    "samples": 301,
+    "p95FrameMs": 16.8,
+    "framesOver33ms": 0,
+    "taskMs": 221.17,
+    "layouts": 0,
+    "activeAmbientRegions": 0
+  },
+  {
+    "name": "baseline",
+    "scene": "offscreen",
+    "viewport": "390x844 DPR2",
+    "samples": 289,
+    "p95FrameMs": 16.8,
+    "framesOver33ms": 2,
+    "taskMs": 310.55,
+    "layouts": 0,
+    "activeAmbientRegions": 0
+  },
+  {
+    "name": "motion",
+    "scene": "hero",
+    "viewport": "390x844 DPR2",
+    "samples": 300,
+    "p95FrameMs": 16.7,
+    "framesOver33ms": 0,
+    "taskMs": 343.4,
+    "layouts": 0,
+    "activeAmbientRegions": 1
+  },
+  {
+    "name": "motion",
+    "scene": "featured",
+    "viewport": "390x844 DPR2",
+    "samples": 280,
+    "p95FrameMs": 16.8,
+    "framesOver33ms": 4,
+    "taskMs": 414.91,
+    "layouts": 0,
+    "activeAmbientRegions": 2
+  },
+  {
+    "name": "motion",
+    "scene": "offscreen",
+    "viewport": "390x844 DPR2",
+    "samples": 300,
+    "p95FrameMs": 16.8,
+    "framesOver33ms": 0,
+    "taskMs": 136.71,
+    "layouts": 0,
+    "activeAmbientRegions": 0
+  }
+]
