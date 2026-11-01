@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { MapPin, Clock3, ShieldCheck } from "lucide-react";
+import { ShieldCheck } from "lucide-react";
 import { center, services, specialists } from "@/data/center";
 import { channels, locations, socialProfiles } from "@/data/site";
 import { absoluteUrl, jsonLd, pageMetadata } from "@/lib/seo";
@@ -11,6 +11,8 @@ import { Reveal } from "@/components/ui/reveal";
 import { Visual } from "@/components/ui/visual";
 import { PageHero } from "@/components/sections/page-hero";
 import { FormSection } from "@/components/sections/form-section";
+import { ContextLinks } from "@/components/sections/context-links";
+import { LocationCard } from "@/components/contact/location-card";
 import { appointmentFields } from "@/components/forms/presets";
 
 export const metadata: Metadata = pageMetadata({
@@ -29,9 +31,10 @@ export default function CenterPage() {
       "@type": "HealthAndBeautyBusiness",
       "@id": `${absoluteUrl("/center")}#${l.id}`,
       name: `${l.name} — ${l.label}`,
+      description: l.detail ?? undefined,
       url: absoluteUrl("/center"),
       telephone: l.phone ?? channels.phone.value,
-      hasMap: l.twoGisUrl,
+      ...(l.mapUrl ? { hasMap: l.mapUrl } : {}),
       sameAs: socialProfiles,
       ...(l.hours ? { openingHours: l.hours } : {}),
       address: {
@@ -51,9 +54,14 @@ export default function CenterPage() {
         title={center.name}
         lead={center.intro}
         actions={
-          <ButtonLink href="#zapis" variant="accent" size="lg" arrow>
-            Записаться на приём
-          </ButtonLink>
+          <>
+            <ButtonLink href="#zapis" variant="accent" size="lg" arrow>
+              Записаться на приём
+            </ButtonLink>
+            <ButtonLink href="/courses" variant="ghost" size="lg">
+              Обучение для специалистов
+            </ButtonLink>
+          </>
         }
         aside={
           <Visual
@@ -147,6 +155,21 @@ export default function CenterPage() {
         </section>
       )}
 
+      <section id="adresa" aria-labelledby="locations-title" className="scroll-mt-[var(--header-h)] border-t border-line py-16 lg:py-24">
+        <Container>
+          <Reveal>
+            <SectionHeader eyebrow="Адреса" title={<span id="locations-title">Где нас найти</span>} lead="Два филиала в Актобе." />
+          </Reveal>
+          <ul className="mt-10 grid grid-cols-1 gap-3 md:grid-cols-2 md:gap-6">
+            {locations.map((l, i) => (
+              <Reveal as="li" key={l.id} delay={i * 70}>
+                <LocationCard location={l} />
+              </Reveal>
+            ))}
+          </ul>
+        </Container>
+      </section>
+
       <FormSection
         id="zapis"
         eyebrow="Запись"
@@ -157,34 +180,14 @@ export default function CenterPage() {
         submitLabel="Записаться"
         successText="Спасибо! Администратор свяжется с вами, чтобы согласовать время визита."
         contactMessage="Здравствуйте! Хочу записаться в центр подологии."
-      >
-        <ul className="mt-10 border-t border-line">
-          {locations.map((l) => (
-            <li key={l.id} className="border-b border-line">
-              <a
-                href={l.twoGisUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group flex min-h-14 items-center gap-3 py-3"
-              >
-                <MapPin aria-hidden className="size-5 shrink-0 text-accent" strokeWidth={1.5} />
-                <span className="flex-1">
-                  <span className="block font-medium">{l.address ? `${l.city}, ${l.address}` : `${l.label} · ${l.city}`}</span>
-                  {l.hours && (
-                    <span className="mt-0.5 flex items-center gap-1.5 text-sm text-muted">
-                      <Clock3 aria-hidden className="size-3.5" strokeWidth={1.75} />
-                      {l.hours}
-                    </span>
-                  )}
-                </span>
-                <span className="text-sm text-muted transition-colors group-hover:text-ink">
-                  2ГИС<span className="sr-only"> (откроется в новой вкладке)</span>
-                </span>
-              </a>
-            </li>
-          ))}
-        </ul>
-      </FormSection>
+      />
+
+      <ContextLinks
+        items={[
+          { href: "/products", title: "Профессиональная продукция", text: "Стельки, материалы и средства ухода." },
+          { href: "/reviews", title: "Отзывы", text: "Что говорят клиенты и выпускники." },
+        ]}
+      />
     </>
   );
 }

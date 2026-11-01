@@ -1,9 +1,10 @@
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
-import { audiences, getCourses, nextSession } from "@/data/courses";
+import { getCourses, nextSession } from "@/data/courses";
 import { founder, founderDisplayName } from "@/data/founder";
+import { site } from "@/data/site";
 import { t } from "@/i18n";
-import { cn, formatDateRange, plural } from "@/lib/utils";
+import { cn, formatDateRange } from "@/lib/utils";
 import { ButtonLink } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { Eyebrow } from "@/components/ui/typography";
@@ -19,7 +20,7 @@ function delay(ms: number) {
  * Mobile-first hero.
  *
  * Phone order: eyebrow → headline → description → CTAs → visual (with the
- * upcoming-course card docked to it) → facts. On desktop the visual moves
+ * upcoming-course card docked to it). On desktop the visual moves
  * into the right column and the course card floats over its edge.
  *
  * Motion: short CSS-only sequence (≤300 ms of delays). The headline only
@@ -32,12 +33,6 @@ export function Hero() {
     .filter((x) => x.s)
     .sort((a, b) => a.s!.start.localeCompare(b.s!.start))[0];
   const spotlight = upcoming?.c ?? courses.find((c) => c.featured) ?? courses[0];
-
-  const facts = [
-    { value: String(courses.length), label: plural(courses.length, ["программа", "программы", "программ"]) },
-    { value: String(audiences.length), label: "уровня подготовки" },
-    { value: "Выезд", label: "в ваш город" },
-  ];
 
   const spotlightCard = spotlight && (
     <Link
@@ -81,7 +76,7 @@ export function Hero() {
           {/* Copy */}
           <div className="flex flex-col lg:col-span-7 lg:pr-8 lg:pt-6">
             <div className="enter-soft" style={delay(0)}>
-              <Eyebrow>Школа подологии</Eyebrow>
+              <Eyebrow>{site.name} · Актобе</Eyebrow>
             </div>
             <h1
               id="hero-title"
@@ -98,20 +93,9 @@ export function Hero() {
                 {t.common.chooseCourse}
               </ButtonLink>
               <ButtonLink href="/about" variant="outline" size="lg" className="enter" style={delay(220)}>
-                О преподавателе
+                О Марине
               </ButtonLink>
             </div>
-
-            {/* Facts — desktop position (bottom of the copy column) */}
-            <dl className="enter mt-auto hidden grid-cols-3 border-t border-line pt-0 lg:grid" style={delay(300)}>
-              {facts.map((f, i) => (
-                <div key={f.label} className={cn("py-6", i > 0 ? "border-l border-line pl-5" : "pr-5")}>
-                  <dt className="sr-only">{f.label}</dt>
-                  <dd className="text-[2rem] font-semibold leading-none tracking-tight">{f.value}</dd>
-                  <dd className="mt-2 text-[0.8125rem] leading-snug text-muted">{f.label}</dd>
-                </div>
-              ))}
-            </dl>
           </div>
 
           {/* Visual */}
@@ -156,17 +140,6 @@ export function Hero() {
                 {spotlightCard}
               </div>
             )}
-
-            {/* Facts — mobile/tablet strip */}
-            <dl className="enter relative mt-6 grid grid-cols-3 rounded-card border border-line bg-card lg:hidden" style={delay(300)}>
-              {facts.map((f, i) => (
-                <div key={f.label} className={cn("px-3 py-4 text-center sm:py-5", i > 0 && "border-l border-line")}>
-                  <dt className="sr-only">{f.label}</dt>
-                  <dd className="text-xl font-semibold leading-none tracking-tight sm:text-2xl">{f.value}</dd>
-                  <dd className="mt-1.5 text-xs leading-snug text-muted">{f.label}</dd>
-                </div>
-              ))}
-            </dl>
           </div>
         </div>
       </Container>

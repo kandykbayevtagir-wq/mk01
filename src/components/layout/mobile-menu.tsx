@@ -5,18 +5,20 @@ import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useId, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { ArrowUpRight } from "lucide-react";
-import { channels, navigation } from "@/data/site";
+import { channels, navigation, secondaryNavigation } from "@/data/site";
 import { SocialIconRow } from "@/components/contact/contact-channels";
 import { t } from "@/i18n";
 import { cn } from "@/lib/utils";
 import { ButtonLink } from "@/components/ui/button";
 import { Logo } from "./logo";
+import { headerCta } from "./header-cta";
 
 export function MobileMenu() {
   const [open, setOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const pathname = usePathname();
   const panelId = useId();
+  const cta = headerCta(pathname);
   const toggleRef = useRef<HTMLButtonElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
 
@@ -138,12 +140,9 @@ export function MobileMenu() {
 
               <nav aria-label="Мобильная навигация" className="px-4 sm:px-6">
                 <ul className="divide-y divide-line border-y border-line">
-                  {[{ href: "/", key: "home" as const }, ...navigation].map((item, i) => {
-                    const active =
-                      item.href === "/"
-                        ? pathname === "/"
-                        : pathname === item.href || pathname.startsWith(`${item.href}/`);
-                    const label = item.key === "home" ? t.common.home : t.nav[item.key];
+                  {navigation.map((item, i) => {
+                    const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
+                    const label = t.nav[item.key];
                     return (
                       <li
                         key={item.href}
@@ -175,6 +174,19 @@ export function MobileMenu() {
                     );
                   })}
                 </ul>
+                <ul className="mt-3 flex flex-wrap gap-x-5 gap-y-1">
+                  {secondaryNavigation.map((item) => (
+                    <li key={item.href}>
+                      <Link
+                        href={item.href}
+                        onClick={() => setOpen(false)}
+                        className="inline-flex min-h-11 items-center text-[0.9375rem] font-medium text-muted transition-colors duration-[var(--dur-press)] active:text-ink"
+                      >
+                        {t.nav[item.key]}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
               </nav>
 
               <div
@@ -193,8 +205,16 @@ export function MobileMenu() {
                   </a>
                   <SocialIconRow tone="light" />
                 </div>
-                <ButtonLink href="/courses" variant="accent" size="lg" arrow className="w-full">
-                  {t.common.chooseCourse}
+                <ButtonLink
+                  href={cta.href}
+                  external={cta.external}
+                  onClick={() => setOpen(false)}
+                  variant="accent"
+                  size="lg"
+                  arrow
+                  className="w-full"
+                >
+                  {cta.label}
                 </ButtonLink>
               </div>
             </div>

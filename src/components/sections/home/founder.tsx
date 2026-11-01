@@ -39,7 +39,7 @@ export function FounderSection() {
 
           <div className="lg:col-span-6 lg:col-start-7">
             <Reveal>
-              <Eyebrow>О преподавателе</Eyebrow>
+              <Eyebrow>О Марине</Eyebrow>
               <h2 id="founder-title" className="mt-4 text-h2 font-semibold">
                 {founder.name ?? "Преподаватель-практик и основатель центра подологии"}
               </h2>
@@ -71,7 +71,7 @@ export function FounderSection() {
 
             <Reveal className="mt-10">
               <ButtonLink href="/about" variant="primary" arrow>
-                {founder.name ? `Подробнее — ${founderDisplayName()}` : "Подробнее о преподавателе"}
+                {founder.name ? `Подробнее — ${founderDisplayName()}` : "Подробнее о Марине"}
               </ButtonLink>
             </Reveal>
           </div>

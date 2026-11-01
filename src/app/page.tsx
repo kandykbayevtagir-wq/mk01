@@ -13,6 +13,8 @@ import { PartnersTeaser } from "@/components/sections/home/partners-teaser";
 import { CenterTeaser } from "@/components/sections/home/center-teaser";
 import { ProductCategoryGrid } from "@/components/sections/product-categories";
 import { TestimonialGrid } from "@/components/sections/testimonials";
+import { getTestimonials } from "@/data/testimonials";
+import { AudiencePaths } from "@/components/sections/home/audience-paths";
 import { SectionDecor } from "@/components/ui/section-decor";
 import { FinalCta } from "@/components/sections/final-cta";
 
@@ -22,23 +24,24 @@ export const metadata: Metadata = pageMetadata({
 });
 
 export default function HomePage() {
+  const hasReviews = getTestimonials().length > 0;
   return (
     <>
       <Hero />
+      <AudiencePaths />
       <ProgramsSection />
       <FounderSection />
       <AdvantagesSection />
-      <PartnersTeaser />
       <CenterTeaser />
 
-      <section aria-labelledby="products-title" className="relative overflow-hidden py-20 lg:py-32">
+      <section aria-labelledby="products-title" className="relative overflow-hidden bg-mist py-16 sm:py-20 lg:py-28">
         <SectionDecor variant={["arches-right"]} />
         <Container className="relative">
           <Reveal>
             <SectionHeader
               eyebrow="Продукция"
               title={<span id="products-title">Профессиональная продукция</span>}
-              lead="Ортопедические стельки, материалы для подологов и специализированные средства ухода — с консультацией специалиста."
+              lead="Стельки, материалы для подологов и средства ухода — с консультацией специалиста."
               action={
                 <ButtonLink href="/products" variant="outline" arrow>
                   Весь каталог
@@ -46,32 +49,35 @@ export default function HomePage() {
               }
             />
           </Reveal>
-          <div className="mt-12 lg:mt-16">
+          <div className="mt-10 lg:mt-14">
             <ProductCategoryGrid />
           </div>
         </Container>
       </section>
 
-      <section aria-labelledby="reviews-title" className="relative overflow-hidden bg-mist py-20 lg:py-32">
-        <SectionDecor variant={["dots-corner", "arches-left"]} />
-        <Container className="relative">
-          <Reveal>
-            <SectionHeader
-              eyebrow="Отзывы и результаты"
-              title={<span id="reviews-title">Что говорят выпускники</span>}
-              action={
-                <ButtonLink href="/reviews" variant="outline" arrow>
-                  Все отзывы
-                </ButtonLink>
-              }
-            />
-          </Reveal>
-          <Reveal className="mt-12 lg:mt-16" delay={80}>
-            <TestimonialGrid limit={3} />
-          </Reveal>
-        </Container>
-      </section>
+      {/* Shown only when verified testimonials exist — no empty placeholder on the homepage. */}
+      {hasReviews && (
+        <section aria-labelledby="reviews-title" className="py-16 sm:py-20 lg:py-28">
+          <Container>
+            <Reveal>
+              <SectionHeader
+                eyebrow="Отзывы"
+                title={<span id="reviews-title">Что говорят выпускники</span>}
+                action={
+                  <ButtonLink href="/reviews" variant="outline" arrow>
+                    Все отзывы
+                  </ButtonLink>
+                }
+              />
+            </Reveal>
+            <Reveal className="mt-10 lg:mt-14" delay={80}>
+              <TestimonialGrid limit={3} />
+            </Reveal>
+          </Container>
+        </section>
+      )}
 
+      <PartnersTeaser />
       <FinalCta />
     </>
   );

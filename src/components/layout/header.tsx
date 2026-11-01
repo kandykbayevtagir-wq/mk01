@@ -10,6 +10,7 @@ import { ButtonLink } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { Logo } from "./logo";
 import { MobileMenu } from "./mobile-menu";
+import { headerCta } from "./header-cta";
 
 export function isActive(pathname: string, href: string) {
   return pathname === href || pathname.startsWith(`${href}/`);
@@ -19,6 +20,7 @@ export function Header() {
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const sentinel = useRef<HTMLDivElement>(null);
+  const cta = headerCta(pathname);
 
   // One IntersectionObserver on a sentinel at the top of the page instead
   // of a global scroll listener.
@@ -45,7 +47,7 @@ export function Header() {
         <Logo />
 
         <nav aria-label="Основная навигация" className="hidden lg:block">
-          <ul className="flex items-center gap-1 xl:gap-2">
+          <ul className="flex items-center gap-1 xl:gap-3">
             {navigation.map((item) => {
               const active = isActive(pathname, item.href);
               return (
@@ -54,7 +56,7 @@ export function Header() {
                     href={item.href}
                     aria-current={active ? "page" : undefined}
                     className={cn(
-                      "relative inline-flex h-10 items-center rounded-full px-3 text-[0.875rem] font-medium transition-colors duration-[var(--dur-press)]",
+                      "relative inline-flex h-10 items-center rounded-full px-3.5 text-[0.9375rem] font-medium transition-colors duration-[var(--dur-press)]",
                       active ? "text-ink" : "text-muted hover:text-ink",
                     )}
                   >
@@ -74,8 +76,8 @@ export function Header() {
         </nav>
 
         <div className="flex items-center gap-2">
-          <ButtonLink href="/courses" variant="accent" size="sm" className="hidden sm:inline-flex">
-            {t.common.chooseCourse}
+          <ButtonLink href={cta.href} external={cta.external} variant="accent" size="sm" className="hidden sm:inline-flex">
+            {cta.label}
           </ButtonLink>
           <MobileMenu />
         </div>

@@ -10,7 +10,7 @@ export function ProductCategoryGrid({ headingLevel = "h3" }: { headingLevel?: "h
     <ul className="grid grid-cols-1 gap-4 md:grid-cols-3 md:gap-6">
       {productCategories.map((c, i) => (
         <Reveal as="li" key={c.id} delay={i * 80}>
-          <article className="group relative flex h-full flex-col overflow-hidden rounded-card bg-mist transition-shadow duration-500 ease-out-soft hover:shadow-lift">
+          <article className="group relative flex h-full flex-col overflow-hidden rounded-card border border-line bg-card transition-shadow duration-500 ease-out-soft hover:shadow-lift">
             <Visual
               image={null}
               seed={30 + i}

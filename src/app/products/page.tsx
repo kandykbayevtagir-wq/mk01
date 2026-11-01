@@ -10,6 +10,7 @@ import { Reveal } from "@/components/ui/reveal";
 import { Visual } from "@/components/ui/visual";
 import { PageHero } from "@/components/sections/page-hero";
 import { FormSection } from "@/components/sections/form-section";
+import { ContextLinks } from "@/components/sections/context-links";
 import { productFields } from "@/components/forms/presets";
 
 export const metadata: Metadata = pageMetadata({
@@ -29,7 +30,7 @@ export default function ProductsPage() {
         lead="Решения, которые специалисты используют в работе и рекомендуют клиентам. Поможем подобрать продукт под задачу."
         actions={
           <ButtonLink href="#zapros" variant="accent" size="lg" arrow>
-            Запросить консультацию
+            Уточнить наличие
           </ButtonLink>
         }
       />
@@ -88,11 +89,12 @@ export default function ProductsPage() {
                   {items.length === 0 && (
                     <p className="mt-8 text-[0.9375rem] text-muted">Ассортимент, наличие и стоимость уточняйте у специалиста.</p>
                   )}
-                  <div className="mt-8">
-                    <ButtonLink href="#zapros" variant="outline" arrow>
-                      Узнать о наличии
-                    </ButtonLink>
-                  </div>
+                  <a
+                    href="#zapros"
+                    className="mt-6 inline-flex min-h-11 items-center gap-1.5 self-start text-[0.9375rem] font-semibold underline decoration-line underline-offset-4 transition-colors hover:decoration-ink"
+                  >
+                    Запросить по этой категории
+                  </a>
                 </Reveal>
               </div>
 
@@ -138,6 +140,13 @@ export default function ProductsPage() {
         submitLabel="Отправить запрос"
         successText="Спасибо! Специалист свяжется с вами, чтобы помочь с выбором."
         contactMessage="Здравствуйте! Интересует профессиональная продукция."
+      />
+
+      <ContextLinks
+        items={[
+          { href: "/center", title: "Центр подологии", text: "Консультация специалиста в Актобе." },
+          { href: "/courses", title: "Обучение", text: "Курсы для специалистов." },
+        ]}
       />
     </>
   );

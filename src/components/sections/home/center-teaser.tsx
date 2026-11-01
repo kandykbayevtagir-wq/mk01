@@ -9,7 +9,7 @@ import { Visual } from "@/components/ui/visual";
 
 export function CenterTeaser() {
   return (
-    <section aria-labelledby="center-title" className="relative overflow-hidden bg-mist py-20 lg:py-32">
+    <section aria-labelledby="center-title" className="relative overflow-hidden py-16 sm:py-20 lg:py-28">
       <SectionDecor variant={["dots-corner", "footprints"]} />
       <Container className="relative">
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-6">

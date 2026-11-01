@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
-import { locations, site } from "@/data/site";
+import { ArrowRight, ArrowUpRight } from "lucide-react";
+import { locations, site, unmappedTwoGisRecords } from "@/data/site";
 import { pageMetadata } from "@/lib/seo";
 import { Container } from "@/components/ui/container";
 import { Reveal } from "@/components/ui/reveal";
@@ -15,12 +15,12 @@ import { PaymentMethods } from "@/components/contact/payment-methods";
 
 export const metadata: Metadata = pageMetadata({
   title: "Контакты",
-  description: `${site.name}, Актобе: WhatsApp и телефон +7 778 056 9356, Telegram и Instagram @marina_kandykbayeva, два филиала в 2ГИС и способы оплаты.`,
+  description: `${site.name}, Актобе: проспект Алии Молдагуловой, 54А и улица Кобланды, 12. WhatsApp и телефон +7 778 056 9356, Telegram, Instagram и способы оплаты.`,
   path: "/contacts",
 });
 
 const routes = [
-  { href: "/courses", title: "Записаться на курс" },
+  { href: "/courses", title: "Записаться на обучение" },
   { href: "/partners#zayavka", title: "Организовать обучение в своём городе" },
   { href: "/center#zapis", title: "Записаться в центр" },
   { href: "/products#zapros", title: "Подобрать продукцию" },
@@ -37,13 +37,13 @@ export default function ContactsPage() {
         aside={<ContactChannels layout="stack" whatsappMessage="Здравствуйте! У меня вопрос." />}
       />
 
-      <section aria-labelledby="locations-title" className="py-16 lg:py-24">
+      <section id="adresa" aria-labelledby="locations-title" className="scroll-mt-[var(--header-h)] py-16 lg:py-24">
         <Container>
           <Reveal>
             <SectionHeader
               eyebrow="Адреса"
               title={<span id="locations-title">Два филиала в Актобе</span>}
-              lead="Откройте карточку филиала в 2ГИС, чтобы построить маршрут."
+              lead="Приём специалистов центра подологии."
             />
           </Reveal>
           <ul className="mt-10 grid grid-cols-1 gap-3 md:grid-cols-2 md:gap-6 lg:mt-12">
@@ -53,6 +53,22 @@ export default function ContactsPage() {
               </Reveal>
             ))}
           </ul>
+          <p className="mt-6 flex flex-wrap items-center gap-x-2 gap-y-1 text-[0.9375rem] text-muted">
+            Podology MK в 2ГИС:
+            {unmappedTwoGisRecords.map((r, i) => (
+              <a
+                key={r.id}
+                href={r.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex min-h-11 items-center gap-1 font-medium text-ink underline decoration-line underline-offset-4 hover:decoration-ink"
+              >
+                Карточка {i + 1}
+                <ArrowUpRight aria-hidden className="size-3.5" strokeWidth={1.75} />
+                <span className="sr-only"> (откроется в новой вкладке)</span>
+              </a>
+            ))}
+          </p>
         </Container>
       </section>
 

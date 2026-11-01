@@ -6,7 +6,7 @@ import { ArchLines, PressureFeet } from "@/components/ui/podo-art";
 
 export function FinalCta({
   title = "Выберите следующий шаг в профессиональном развитии",
-  cta = { href: "/courses", label: "Смотреть программы обучения" },
+  cta = { href: "/courses", label: "Выбрать курс" },
   showLinks = true,
 }: {
   title?: string;
