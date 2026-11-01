@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { PressLink } from "@/components/ui/press-link";
 import { ArrowUpRight } from "lucide-react";
 import { getCourses, nextSession } from "@/data/courses";
 import { founder, founderDisplayName } from "@/data/founder";
@@ -10,6 +10,8 @@ import { Container } from "@/components/ui/container";
 import { Eyebrow } from "@/components/ui/typography";
 import { Parallax } from "@/components/ui/parallax";
 import { Visual } from "@/components/ui/visual";
+import { MotionRegion } from "@/components/ui/motion-region";
+import { LiquidLight, LightTrail } from "@/components/ui/liquid-light";
 import { ArchLines } from "@/components/ui/podo-art";
 
 function delay(ms: number) {
@@ -35,17 +37,17 @@ export function Hero() {
   const spotlight = upcoming?.c ?? courses.find((c) => c.featured) ?? courses[0];
 
   const spotlightCard = spotlight && (
-    <Link
+    <PressLink
       href={`/courses/${spotlight.slug}`}
       className={cn(
-        "group press flex items-center gap-4 rounded-card border border-line bg-card p-4 shadow-float",
+        "spotlight-card group press relative isolate flex items-center gap-4 rounded-card border border-line bg-card p-4 shadow-float",
         "transition-[transform,border-color] duration-[var(--dur-card)] ease-out-soft hover:-translate-y-0.5 hover:border-ink/20",
       )}
     >
+      <LightTrail />
       <div className="min-w-0 flex-1">
         <p className="flex items-center gap-2 text-xs font-medium text-muted">
           <span className="relative flex size-2">
-            <span className="absolute inline-flex size-full animate-ping rounded-full bg-accent/40 [animation-duration:2.4s] motion-reduce:hidden" />
             <span className="relative inline-flex size-2 rounded-full bg-accent" />
           </span>
           {upcoming ? "Ближайший старт" : "Рекомендуем начать"}
@@ -58,14 +60,15 @@ export function Hero() {
       <span className="inline-flex size-10 shrink-0 items-center justify-center rounded-full bg-mist transition-colors duration-[var(--dur-press)] group-hover:bg-ink group-hover:text-white">
         <ArrowUpRight aria-hidden className="size-[18px]" strokeWidth={1.75} />
       </span>
-    </Link>
+    </PressLink>
   );
 
   return (
-    <section aria-labelledby="hero-title" className="relative overflow-hidden">
+    <MotionRegion as="section" aria-labelledby="hero-title" className="motion-hero relative isolate overflow-hidden">
       {/* Backdrop: soft-gray panel (mobile: behind the visual; desktop: right third) */}
       <div aria-hidden className="pointer-events-none absolute inset-0">
         <div className="absolute inset-x-0 bottom-0 top-[52%] bg-mist sm:top-[46%] lg:inset-y-0 lg:left-auto lg:w-[38%]">
+          <LiquidLight />
           <div className="pattern-dots absolute inset-0 [mask-image:linear-gradient(to_bottom,black,transparent_85%)] lg:[mask-image:linear-gradient(to_left,black,transparent)]" />
         </div>
         <ArchLines draw accent className="draw-now absolute -bottom-1 -left-24 h-28 w-[300px] max-lg:hidden" count={8} />
@@ -80,10 +83,11 @@ export function Hero() {
             </div>
             <h1
               id="hero-title"
-              className="enter-rise mt-4 text-display font-semibold lg:mt-7 lg:text-[length:clamp(3rem,5vw,4.875rem)]"
+              className="kinetic-title mt-4 text-display font-semibold lg:mt-7 lg:text-[length:clamp(3rem,5vw,4.875rem)]"
               style={delay(40)}
             >
-              Профессиональное обучение подологии<span className="text-accent">.</span>
+              <span className="kinetic-line" style={delay(40)}>Профессиональное</span>{" "}
+              <span className="kinetic-line" style={delay(125)}>обучение подологии<span className="text-accent">.</span></span>
             </h1>
             <p className="enter mt-4 max-w-[34ch] text-lead text-muted lg:mt-7 lg:max-w-xl" style={delay(110)}>
               Авторские курсы, практические знания и профессиональное развитие специалистов.
@@ -117,7 +121,9 @@ export function Hero() {
                   className="h-full w-full"
                   imgClassName="object-[50%_20%]"
                   sizes="(min-width: 1024px) 40vw, 100vw"
-                />
+                >
+                  <LiquidLight dark />
+                </Visual>
               </Parallax>
 
               {/* Caption — gradient scrim guarantees legibility over photos */}
@@ -143,6 +149,6 @@ export function Hero() {
           </div>
         </div>
       </Container>
-    </section>
+    </MotionRegion>
   );
 }

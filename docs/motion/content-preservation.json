@@ -1,0 +1,182 @@
+[
+  {
+    "path": "404/index.html",
+    "checks": {
+      "links": true,
+      "fields": true,
+      "metadata": true,
+      "json_ld": true,
+      "text": true
+    }
+  },
+  {
+    "path": "404.html",
+    "checks": {
+      "links": true,
+      "fields": true,
+      "metadata": true,
+      "json_ld": true,
+      "text": true
+    }
+  },
+  {
+    "path": "_not-found/index.html",
+    "checks": {
+      "links": true,
+      "fields": true,
+      "metadata": true,
+      "json_ld": true,
+      "text": true
+    }
+  },
+  {
+    "path": "about/index.html",
+    "checks": {
+      "links": true,
+      "fields": true,
+      "metadata": true,
+      "json_ld": true,
+      "text": true
+    }
+  },
+  {
+    "path": "center/index.html",
+    "checks": {
+      "links": true,
+      "fields": true,
+      "metadata": true,
+      "json_ld": true,
+      "text": true
+    }
+  },
+  {
+    "path": "contacts/index.html",
+    "checks": {
+      "links": true,
+      "fields": true,
+      "metadata": true,
+      "json_ld": true,
+      "text": true
+    }
+  },
+  {
+    "path": "courses/apparatnaya-obrabotka-stopy/index.html",
+    "checks": {
+      "links": true,
+      "fields": true,
+      "metadata": true,
+      "json_ld": true,
+      "text": true
+    }
+  },
+  {
+    "path": "courses/index.html",
+    "checks": {
+      "links": true,
+      "fields": true,
+      "metadata": true,
+      "json_ld": true,
+      "text": true
+    }
+  },
+  {
+    "path": "courses/korrektsiya-vrosshego-nogtya/index.html",
+    "checks": {
+      "links": true,
+      "fields": true,
+      "metadata": true,
+      "json_ld": true,
+      "text": true
+    }
+  },
+  {
+    "path": "courses/metodika-prepodavaniya/index.html",
+    "checks": {
+      "links": true,
+      "fields": true,
+      "metadata": true,
+      "json_ld": true,
+      "text": true
+    }
+  },
+  {
+    "path": "courses/ortopedicheskie-stelki/index.html",
+    "checks": {
+      "links": true,
+      "fields": true,
+      "metadata": true,
+      "json_ld": true,
+      "text": true
+    }
+  },
+  {
+    "path": "courses/podologiya-bazovyy-kurs/index.html",
+    "checks": {
+      "links": true,
+      "fields": true,
+      "metadata": true,
+      "json_ld": true,
+      "text": true
+    }
+  },
+  {
+    "path": "courses/problemnye-nogti/index.html",
+    "checks": {
+      "links": true,
+      "fields": true,
+      "metadata": true,
+      "json_ld": true,
+      "text": true
+    }
+  },
+  {
+    "path": "index.html",
+    "checks": {
+      "links": true,
+      "fields": true,
+      "metadata": true,
+      "json_ld": true,
+      "text": true
+    }
+  },
+  {
+    "path": "partners/index.html",
+    "checks": {
+      "links": true,
+      "fields": true,
+      "metadata": true,
+      "json_ld": true,
+      "text": true
+    }
+  },
+  {
+    "path": "privacy/index.html",
+    "checks": {
+      "links": true,
+      "fields": true,
+      "metadata": true,
+      "json_ld": true,
+      "text": true
+    }
+  },
+  {
+    "path": "products/index.html",
+    "checks": {
+      "links": true,
+      "fields": true,
+      "metadata": true,
+      "json_ld": true,
+      "text": true
+    }
+  },
+  {
+    "path": "reviews/index.html",
+    "checks": {
+      "links": true,
+      "fields": true,
+      "metadata": true,
+      "json_ld": true,
+      "text": true
+    }
+  }
+]

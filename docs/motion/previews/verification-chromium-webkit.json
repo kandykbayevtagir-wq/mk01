@@ -1,0 +1,42 @@
+[
+  {
+    "engine": "chromium",
+    "width": 375,
+    "checks": "layout, ambient movement/pause, focus, touch navigation, enrollment validation, menu, live reduced motion"
+  },
+  {
+    "engine": "chromium",
+    "width": 390,
+    "checks": "layout, ambient movement/pause, focus, touch navigation, enrollment validation, menu, live reduced motion"
+  },
+  {
+    "engine": "chromium",
+    "width": 430,
+    "checks": "layout, ambient movement/pause, focus, touch navigation, enrollment validation, menu, live reduced motion"
+  },
+  {
+    "engine": "chromium",
+    "reducedMotion": "static on initial load",
+    "axeViolations": 0
+  },
+  {
+    "engine": "webkit",
+    "width": 375,
+    "checks": "layout, ambient movement/pause, focus, touch navigation, enrollment validation, menu, live reduced motion"
+  },
+  {
+    "engine": "webkit",
+    "width": 390,
+    "checks": "layout, ambient movement/pause, focus, touch navigation, enrollment validation, menu, live reduced motion"
+  },
+  {
+    "engine": "webkit",
+    "width": 430,
+    "checks": "layout, ambient movement/pause, focus, touch navigation, enrollment validation, menu, live reduced motion"
+  },
+  {
+    "engine": "webkit",
+    "reducedMotion": "static on initial load",
+    "axeViolations": 0
+  }
+]

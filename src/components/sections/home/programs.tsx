@@ -10,7 +10,7 @@ import { CourseCard } from "@/components/course/course-card";
 export function ProgramsSection() {
   const courses = getFeaturedCourses();
   return (
-    <section id="programmy" aria-labelledby="programs-title" className="relative overflow-hidden bg-mist py-16 sm:py-20 lg:py-28">
+    <section id="programmy" aria-labelledby="programs-title" className="motion-programs relative overflow-hidden bg-mist py-16 sm:py-20 lg:py-28">
       <SectionDecor variant={["dots-corner", "arches-left"]} />
       <Container className="relative">
         <Reveal>
@@ -28,7 +28,7 @@ export function ProgramsSection() {
         <ul className="mt-10 grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 lg:mt-14 xl:grid-cols-3">
           {courses.map((c, i) => (
             <Reveal as="li" key={c.slug} delay={i * 70}>
-              <CourseCard course={c} />
+              <CourseCard course={c} featuredMotion={i === 0} />
             </Reveal>
           ))}
         </ul>

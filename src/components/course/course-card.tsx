@@ -1,8 +1,11 @@
-import Link from "next/link";
+import { ViewTransition } from "react";
+import { PressLink } from "@/components/ui/press-link";
 import { ArrowUpRight, Clock3, MapPin, MonitorSmartphone } from "lucide-react";
 import type { Course } from "@/data/types";
 import { audienceById, courseCity, nextSession } from "@/data/courses";
 import { cn, formatDateRange, formatKzt } from "@/lib/utils";
+import { MotionRegion } from "@/components/ui/motion-region";
+import { LightTrail } from "@/components/ui/liquid-light";
 import { Visual } from "@/components/ui/visual";
 
 /**
@@ -13,7 +16,15 @@ import { Visual } from "@/components/ui/visual";
  * hover; hover (pointer devices only) adds lift, image zoom and arrow
  * motion, touch gets an immediate press state.
  */
-export function CourseCard({ course, headingLevel = "h3" }: { course: Course; headingLevel?: "h2" | "h3" }) {
+export function CourseCard({
+  course,
+  headingLevel = "h3",
+  featuredMotion = false,
+}: {
+  course: Course;
+  headingLevel?: "h2" | "h3";
+  featuredMotion?: boolean;
+}) {
   const H = headingLevel;
   const session = nextSession(course);
   const city = courseCity(course);
@@ -24,39 +35,44 @@ export function CourseCard({ course, headingLevel = "h3" }: { course: Course; he
   ].filter(Boolean) as { icon: typeof Clock3; label: string }[];
 
   return (
-    <article
+    <MotionRegion
+      as="article"
       className={cn(
-        "group relative flex h-full flex-col overflow-hidden rounded-card border border-line bg-card",
+        "course-card group relative flex h-full flex-col overflow-hidden rounded-card border border-line bg-card",
         "transition-[transform,box-shadow,border-color] duration-[var(--dur-card)] ease-out-soft",
         "hover:-translate-y-1 hover:border-ink/10 hover:shadow-lift",
         "active:scale-[0.99] active:duration-[var(--dur-press)]",
         "focus-within:border-ink/20 focus-within:shadow-lift",
+        featuredMotion && "course-card--featured",
       )}
     >
-      <Visual
-        image={course.image}
-        seed={course.order + 3}
-        className="aspect-[16/10] sm:aspect-[16/11]"
-        imgClassName="transition-transform duration-700 ease-out-soft group-hover:scale-[1.04]"
-        sizes="(min-width: 1280px) 30vw, (min-width: 768px) 45vw, 100vw"
-        marker={false}
-      >
-        <span className="absolute left-3 top-3 inline-flex h-7 items-center rounded-full bg-card px-3 text-xs font-semibold text-ink shadow-card sm:left-4 sm:top-4 sm:h-8">
-          {course.category}
-        </span>
-      </Visual>
+      {featuredMotion && <LightTrail />}
+      <ViewTransition name={`course-visual-${course.slug}`} default="none" share="course-morph">
+        <Visual
+          image={course.image}
+          seed={course.order + 3}
+          className="course-card__visual aspect-[16/10] sm:aspect-[16/11]"
+          imgClassName="transition-transform duration-700 ease-out-soft group-hover:scale-[1.04]"
+          sizes="(min-width: 1280px) 30vw, (min-width: 768px) 45vw, 100vw"
+          marker={false}
+        >
+          <span className="absolute left-3 top-3 inline-flex h-7 items-center rounded-full bg-card px-3 text-xs font-semibold text-ink shadow-card sm:left-4 sm:top-4 sm:h-8">
+            {course.category}
+          </span>
+        </Visual>
+      </ViewTransition>
 
       <div className="flex flex-1 flex-col p-5 sm:p-6">
         <p className="text-[0.8125rem] font-medium text-muted">
           {course.audiences.map((a) => audienceById[a].short).join(" · ")}
         </p>
         <H className="mt-1.5 text-h3 font-semibold">
-          <Link
+          <PressLink
             href={`/courses/${course.slug}`}
             className="outline-none after:absolute after:inset-0 after:rounded-card focus-visible:after:outline-2 focus-visible:after:outline-offset-2 focus-visible:after:outline-accent"
           >
             {course.title}
-          </Link>
+          </PressLink>
         </H>
         <p className="mt-2.5 line-clamp-2 text-[0.9375rem] leading-relaxed text-muted sm:line-clamp-3">{course.summary}</p>
 
@@ -98,6 +114,6 @@ export function CourseCard({ course, headingLevel = "h3" }: { course: Course; he
           </div>
         </div>
       </div>
-    </article>
+    </MotionRegion>
   );
 }
