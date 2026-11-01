@@ -24,7 +24,7 @@ const paths = [
 /** Two journeys, one glance: learn podology, or book a visit to the centre. */
 export function AudiencePaths() {
   return (
-    <section aria-label="Выберите направление" className="relative z-10 pb-4 pt-2 lg:pb-8">
+    <section aria-label="Выберите направление" className="relative z-10 overflow-x-clip pb-4 pt-2 lg:pb-8">
       {/* Seam: an arch contour that starts inside the hero and settles here,
           so the two sections read as one continuous surface. */}
       <ArchLines

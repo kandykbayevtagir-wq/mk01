@@ -22,7 +22,7 @@ export function FounderSection() {
                 tone="light"
                 art="insole"
                 seed={11}
-                className="relative aspect-[4/4.4] rounded-panel shadow-card sm:aspect-[4/5]"
+                className="media-settle relative aspect-[4/4.4] rounded-panel shadow-card sm:aspect-[4/5]"
                 imgClassName="object-[50%_20%]"
                 sizes="(min-width: 1024px) 40vw, 100vw"
               />

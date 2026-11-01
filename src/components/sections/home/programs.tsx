@@ -10,7 +10,7 @@ import { CourseCard } from "@/components/course/course-card";
 export function ProgramsSection() {
   const courses = getFeaturedCourses();
   return (
-    <section id="programmy" aria-labelledby="programs-title" className="motion-programs relative overflow-hidden bg-mist py-16 sm:py-20 lg:py-28">
+    <section id="programmy" aria-labelledby="programs-title" className="motion-programs surface-mist relative overflow-hidden py-16 sm:py-20 lg:py-28">
       <SectionDecor variant={["dots-corner", "arches-left"]} />
       <Container className="relative">
         <Reveal>

@@ -15,6 +15,7 @@ import { ProductCategoryGrid } from "@/components/sections/product-categories";
 import { TestimonialGrid } from "@/components/sections/testimonials";
 import { getTestimonials } from "@/data/testimonials";
 import { AudiencePaths } from "@/components/sections/home/audience-paths";
+import { Seam } from "@/components/ui/seam";
 import { SectionDecor } from "@/components/ui/section-decor";
 import { FinalCta } from "@/components/sections/final-cta";
 
@@ -30,11 +31,13 @@ export default function HomePage() {
       <Hero />
       <AudiencePaths />
       <ProgramsSection />
+      <Seam side="left" />
       <FounderSection />
       <AdvantagesSection />
+      <Seam side="right" />
       <CenterTeaser />
 
-      <section aria-labelledby="products-title" className="relative overflow-hidden bg-mist py-16 sm:py-20 lg:py-28">
+      <section aria-labelledby="products-title" className="surface-mist relative overflow-hidden py-16 sm:py-20 lg:py-28">
         <SectionDecor variant={["arches-right"]} />
         <Container className="relative">
           <Reveal>
@@ -77,6 +80,7 @@ export default function HomePage() {
         </section>
       )}
 
+      <Seam side="left" />
       <PartnersTeaser />
       <FinalCta />
     </>

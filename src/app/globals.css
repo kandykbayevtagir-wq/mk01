@@ -21,6 +21,13 @@
     }
   }
 
+  /* Safety net: decorative layers may never widen the layout viewport
+     (which makes mobile browsers zoom out). `clip` keeps sticky working. */
+  html,
+  body {
+    overflow-x: clip;
+  }
+
   body {
     background: var(--color-paper);
     color: var(--color-ink);

@@ -13,7 +13,7 @@ export function PartnersTeaser() {
         <Reveal>
           <div
             data-tone="dark"
-            className="grain relative isolate overflow-hidden rounded-panel bg-graphite px-6 py-14 text-white sm:px-10 lg:px-16 lg:py-24"
+            className="scroll-rise grain relative isolate overflow-hidden rounded-panel bg-graphite px-6 py-14 text-white sm:px-10 lg:px-16 lg:py-24"
           >
             <div aria-hidden className="pattern-dots-dark absolute inset-0 -z-10 [mask-image:linear-gradient(to_left,black,transparent_70%)]" />
             <ContourArt

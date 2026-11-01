@@ -26,7 +26,7 @@ export function AdvantagesSection({
   if (items.length === 0) return null;
 
   return (
-    <section aria-labelledby="advantages-title" className={cn("relative overflow-hidden bg-mist py-16 sm:py-20 lg:py-32", className)}>
+    <section aria-labelledby="advantages-title" className={cn("surface-mist relative overflow-hidden py-16 sm:py-20 lg:py-32", className)}>
       <SectionDecor variant={["insole"]} />
       <Container className="relative">
         <Reveal>
