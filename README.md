@@ -39,6 +39,17 @@ All business content lives in **`src/data/`**. Components only render what is th
 | `content.ts`              | "Why us" advantages (each with a `show` switch), partner-programme copy |
 | `src/i18n/ru.ts`          | Interface strings: navigation, buttons, form labels, errors      |
 
+### Contacts, locations and payment methods
+
+All of these live in **`src/data/site.ts`**, and every link on the site is generated from there:
+
+- `channels`: phone, WhatsApp, Telegram and Instagram. Each entry has a display value, a label and a URL.
+- `whatsappLink(message)`: builds a WhatsApp link with an encoded, pre-filled message.
+- `locations`: the two Aktobe branches with their official 2GIS links. **Street addresses, opening hours and branch phones are `null` until verified.** When `null`, the cards show «Филиал 1/2» and send visitors to 2GIS. Once a street address is filled in, `/center` automatically emits `LocalBusiness` structured data for that branch.
+- `paymentMethods`: payment methods accepted at the venue. This is informational only; the site has no online checkout.
+
+**Brand marks.** WhatsApp, Telegram, Instagram, Apple Pay and Google Pay use the unmodified official SVG paths from [Simple Icons](https://simpleicons.org) (CC0; trademarks belong to their owners). Kaspi and Halyk have no verified open-source mark, so they are shown as plain text wordmarks. To use the official logos, add them with permission from the banks' brand teams.
+
 ### Placeholder rules
 
 - Every value still awaiting real data is marked **`ЗАПОЛНИТЬ`**. Run `npm run content:todo` to list them.

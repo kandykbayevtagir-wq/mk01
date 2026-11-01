@@ -51,14 +51,3 @@ export function plural(n: number, forms: [string, string, string]) {
   if (mod10 >= 2 && mod10 <= 4 && (mod100 < 10 || mod100 >= 20)) return forms[1];
   return forms[2];
 }
-
-/** Keeps only digits and a leading «+» — used for tel: links. */
-export function phoneHref(phone: string) {
-  return `tel:${phone.replace(/[^\d+]/g, "")}`;
-}
-
-export function whatsappHref(phone: string, text?: string) {
-  const digits = phone.replace(/\D/g, "");
-  const q = text ? `?text=${encodeURIComponent(text)}` : "";
-  return `https://wa.me/${digits}${q}`;
-}

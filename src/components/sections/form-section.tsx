@@ -1,5 +1,5 @@
-import { contacts } from "@/data/site";
-import { phoneHref, whatsappHref } from "@/lib/utils";
+import { channels, whatsappLink } from "@/data/site";
+import { ChannelTile } from "@/components/ui/brand-icons";
 import { Container } from "@/components/ui/container";
 import { Eyebrow } from "@/components/ui/typography";
 import { Reveal } from "@/components/ui/reveal";
@@ -8,29 +8,29 @@ import type { LeadType } from "@/lib/leads/schema";
 
 export function DirectContacts({ message }: { message?: string }) {
   const items = [
-    contacts.whatsapp && { label: "WhatsApp", value: contacts.whatsapp, href: whatsappHref(contacts.whatsapp, message) },
-    contacts.phone && { label: "Телефон", value: contacts.phone, href: phoneHref(contacts.phone) },
-    contacts.telegram && { label: "Telegram", value: `@${contacts.telegram}`, href: `https://t.me/${contacts.telegram}` },
-    contacts.email && { label: "E-mail", value: contacts.email, href: `mailto:${contacts.email}` },
-  ].filter(Boolean) as { label: string; value: string; href: string }[];
-  if (!items.length) return null;
+    { kind: "whatsapp" as const, ...channels.whatsapp, url: whatsappLink(message) },
+    { kind: "telegram" as const, ...channels.telegram },
+    { kind: "phone" as const, ...channels.phone },
+  ];
   return (
-    <dl className="mt-10 space-y-4 border-t border-line pt-6">
-      {items.map((i) => (
-        <div key={i.label} className="flex items-baseline justify-between gap-4">
-          <dt className="text-sm text-muted">{i.label}</dt>
-          <dd>
+    <div className="mt-10 border-t border-line pt-6">
+      <p className="text-sm text-muted">Удобнее написать напрямую?</p>
+      <ul className="mt-3 flex flex-wrap gap-2">
+        {items.map((i) => (
+          <li key={i.kind}>
             <a
-              href={i.href}
-              className="font-semibold underline decoration-transparent underline-offset-4 transition-colors hover:decoration-ink"
-              {...(i.href.startsWith("http") ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+              href={i.url}
+              {...(i.url.startsWith("http") ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+              className="press inline-flex h-11 items-center gap-2.5 rounded-full border border-line bg-card pl-1.5 pr-4 text-sm font-medium transition-colors duration-[var(--dur-press)] hover:border-ink/30 active:bg-mist"
             >
-              {i.value}
+              <ChannelTile kind={i.kind} className="size-8 rounded-full" />
+              {i.kind === "phone" ? i.value : i.name}
+              {i.url.startsWith("http") && <span className="sr-only"> (откроется в новой вкладке)</span>}
             </a>
-          </dd>
-        </div>
-      ))}
-    </dl>
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 }
 
@@ -45,6 +45,7 @@ export function FormSection({
   successText,
   children,
   contactMessage,
+  showDirectContacts = true,
 }: {
   id: string;
   eyebrow: string;
@@ -56,6 +57,7 @@ export function FormSection({
   successText?: string;
   children?: React.ReactNode;
   contactMessage?: string;
+  showDirectContacts?: boolean;
 }) {
   return (
     <section id={id} aria-labelledby={`${id}-title`} className="scroll-mt-[var(--header-h)] bg-mist py-20 lg:py-28">
@@ -68,7 +70,7 @@ export function FormSection({
             </h2>
             <p className="mt-5 max-w-md text-lead text-muted">{lead}</p>
             {children}
-            <DirectContacts message={contactMessage} />
+            {showDirectContacts && <DirectContacts message={contactMessage} />}
           </Reveal>
           <Reveal className="lg:col-span-6 lg:col-start-7" delay={80}>
             <div className="rounded-panel bg-card p-5 shadow-card sm:p-8 lg:p-10">
