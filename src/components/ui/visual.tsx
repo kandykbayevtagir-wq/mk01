@@ -32,6 +32,7 @@ export function Visual({
   sizes = "(min-width: 1024px) 33vw, 100vw",
   priority = false,
   marker,
+  live = false,
   children,
 }: {
   image: ImageAsset | null | undefined;
@@ -43,6 +44,8 @@ export function Visual({
   sizes?: string;
   priority?: boolean;
   marker?: boolean;
+  /** Animated pressure peak (hero only; paused offscreen by MotionRegion). */
+  live?: boolean;
   children?: React.ReactNode;
 }) {
   const kind = art ?? artCycle[seed % artCycle.length];
@@ -83,12 +86,13 @@ export function Visual({
           {kind === "pressure" && (
             <PressureFoot
               tone={artTone}
+              breathe={live}
               mirror={seed % 2 === 0}
               className="absolute left-1/2 top-1/2 h-[82%] w-auto -translate-x-1/2 -translate-y-1/2"
             />
           )}
           {kind === "feet" && (
-            <PressureFeet tone={artTone} className="absolute left-1/2 top-[43%] h-[64%] -translate-x-1/2 -translate-y-1/2" />
+            <PressureFeet tone={artTone} breathe={live} className="absolute left-1/2 top-[43%] h-[64%] -translate-x-1/2 -translate-y-1/2" />
           )}
           {kind === "insole" && (
             <>

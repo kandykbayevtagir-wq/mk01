@@ -188,3 +188,327 @@
   ::view-transition-old(*),
   ::view-transition-new(*) { animation: none !important; }
 }
+
+/* ======================================================================
+ * Phase 2 — signature layer
+ * One art direction: the foot-arch contour + pressure-map dots. Every
+ * loop is transform/opacity, opts in via MotionRegion, pauses offscreen,
+ * stops under reduced motion and on low-capability devices (.motion-lite).
+ * ==================================================================== */
+
+/* Low-memory / 2-core / data-saver devices: decoration stays, loops don't. */
+.motion-lite [data-motion-region] { --ambient-play-state: paused !important; }
+
+@layer components {
+  /* ---------- Hero ---------- */
+
+  /* Static light replaces a second liquid-light region (3 fewer loops). */
+  .hero-mist-light {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(60% 45% at 85% 15%, rgb(255 255 255 / 0.95), transparent 70%),
+      radial-gradient(55% 40% at 10% 90%, rgb(179 38 45 / 0.06), transparent 70%);
+  }
+  /* The grey panel dissolves into the next section instead of ending in an edge. */
+  .hero-mist { mask-image: linear-gradient(to bottom, black 72%, transparent); }
+
+  .hero-underline {
+    position: absolute;
+    left: -2%;
+    bottom: -0.16em;
+    width: 104%;
+    height: 0.3em;
+    overflow: visible;
+    pointer-events: none;
+    fill: none;
+    stroke: var(--color-accent);
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    vector-effect: non-scaling-stroke;
+  }
+  .hero-underline path { vector-effect: non-scaling-stroke; }
+
+  @media (prefers-reduced-motion: no-preference) {
+    /* Editorial mask reveal: the visual opens from a rounded window. */
+    .hero-reveal {
+      animation: hero-reveal 950ms var(--ease-out-soft) 120ms both;
+    }
+    .hero-underline path {
+      stroke-dasharray: 1;
+      animation: draw-line 900ms var(--ease-in-out-soft) 560ms both;
+    }
+    /* The pressure map "breathes" like a live sensor reading. */
+    .motion-hero .pressure-peak {
+      animation: pressure-breathe 5.2s ease-in-out infinite;
+      animation-play-state: var(--ambient-play-state, paused);
+    }
+    .motion-hero .pressure-foot--late .pressure-peak { animation-delay: -2.6s; }
+    .hero-chip {
+      animation: chip-float 7s ease-in-out infinite;
+      animation-play-state: var(--ambient-play-state, paused);
+    }
+    /* Seam contour drifts a little as the boundary scrolls past. */
+    @supports (animation-timeline: view()) {
+      .seam-drift {
+        animation: seam-drift linear both;
+        animation-timeline: view();
+        animation-range: entry 0% exit 60%;
+      }
+    }
+  }
+
+  @keyframes hero-reveal {
+    from {
+      clip-path: inset(9% 7% 16% 7% round 44px);
+      transform: translate3d(0, 16px, 0);
+    }
+    to {
+      clip-path: inset(0 round var(--radius-panel));
+      transform: none;
+    }
+  }
+  @keyframes pressure-breathe {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+  }
+  @keyframes chip-float {
+    0%, 100% { transform: translate3d(0, 0, 0); }
+    50% { transform: translate3d(0, -5px, 0); }
+  }
+  @keyframes seam-drift {
+    from { transform: translate3d(0, 24px, 0) rotate(-2deg); }
+    to { transform: translate3d(-24px, -12px, 0) rotate(1deg); }
+  }
+}
+
+@layer components {
+  /* ---------- Section continuity ---------- */
+
+  /* Soft-grey surfaces fade in and out of white instead of hard edges. */
+  .surface-mist {
+    background: linear-gradient(
+      to bottom,
+      var(--color-paper),
+      var(--color-mist) 80px,
+      var(--color-mist) calc(100% - 80px),
+      var(--color-paper)
+    );
+  }
+  .surface-mist-end {
+    background: linear-gradient(to bottom, var(--color-mist) calc(100% - 120px), var(--color-paper));
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: view()) {
+      /* Panels rise and settle into place as they scroll in (no scroll-jacking). */
+      .scroll-rise {
+        animation: scroll-rise linear both;
+        animation-timeline: view();
+        animation-range: entry 0% entry 70%;
+      }
+      /* Imagery settles from a slight zoom while entering the viewport. */
+      .media-settle > * {
+        animation: media-settle linear both;
+        animation-timeline: view();
+        animation-range: entry 0% cover 45%;
+      }
+      /* The footer sheet glides up over the last section. */
+      .footer-sheet {
+        animation: footer-sheet linear both;
+        animation-timeline: view();
+        animation-range: entry 0% entry 40%;
+      }
+    }
+  }
+
+  @keyframes scroll-rise {
+    from { transform: translate3d(0, 36px, 0) scale(0.955); }
+    to { transform: none; }
+  }
+  @keyframes media-settle {
+    from { transform: scale(1.09); }
+    to { transform: scale(1); }
+  }
+  @keyframes footer-sheet {
+    from { transform: translate3d(0, 28px, 0); }
+    to { transform: none; }
+  }
+}
+
+/* ---------------------------------------------------------------------
+ * Course Cards 2.0 — depth on intent, sheen on contact, meta that settles.
+ * No loops are added: every effect is a transition triggered by hover,
+ * focus or press, or a scroll-driven one-shot that finishes on entry.
+ * ------------------------------------------------------------------- */
+@layer components {
+  .card-sheen {
+    display: none;
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    padding: 1px;
+    border-radius: inherit;
+    overflow: hidden;
+    pointer-events: none;
+  }
+  @supports (mask-composite: exclude) {
+    .card-sheen {
+      display: block;
+      mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      mask-composite: exclude;
+    }
+  }
+  .card-sheen > span {
+    position: absolute;
+    inset: -1px;
+    background: linear-gradient(115deg, transparent 32%, rgb(23 23 23 / 0.35) 44%, #fff 49%, rgb(179 38 45 / 0.85) 52%, transparent 62%);
+    opacity: 0;
+    transform: translate3d(-100%, 0, 0);
+    /* leaving: fade first, then park off-card without being seen */
+    transition: opacity 220ms ease, transform 0s linear 240ms;
+  }
+  .course-card__visual > :first-child,
+  .course-card__chip {
+    transition: transform 700ms var(--ease-settle);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .course-card:focus-within .card-sheen > span,
+    .course-card:has([data-pressed="true"]) .card-sheen > span,
+    .course-card:active .card-sheen > span {
+      opacity: 1;
+      transform: translate3d(100%, 0, 0);
+      transition: opacity 160ms ease, transform 900ms var(--ease-out-soft);
+    }
+    /* Layered depth: photo/art drifts back, the category chip comes forward. */
+    .course-card:has([data-pressed="true"]) .course-card__visual > :first-child,
+    .course-card:active .course-card__visual > :first-child {
+      transform: scale(1.03);
+      transition-duration: 260ms;
+    }
+    .course-card:has([data-pressed="true"]) .course-card__chip,
+    .course-card:active .course-card__chip {
+      transform: translate3d(0, -2px, 0);
+      transition-duration: 200ms;
+    }
+    @media (hover: hover) and (pointer: fine) {
+      .course-card:hover .card-sheen > span {
+        opacity: 1;
+        transform: translate3d(100%, 0, 0);
+        transition: opacity 160ms ease, transform 900ms var(--ease-out-soft);
+      }
+      .course-card:hover .course-card__visual > :first-child {
+        transform: scale(1.055) translate3d(0, -1.5%, 0);
+      }
+      .course-card:hover .course-card__chip {
+        transform: translate3d(0, -3px, 0);
+        box-shadow: 0 10px 22px -12px rgb(23 23 23 / 0.45);
+      }
+    }
+
+    /* Meta, price/date and the action settle in as each row enters the
+       viewport. Translate-led; opacity never drops below 0.35 so nothing
+       becomes unreadable, and at rest everything is at full strength. */
+    @supports (animation-timeline: view()) {
+      .card-settle {
+        animation: card-settle linear both;
+        animation-timeline: view();
+        animation-range: entry 0% entry 100%;
+      }
+    }
+  }
+  @keyframes card-settle {
+    from { opacity: 0.35; transform: translate3d(0, var(--settle-shift, 12px), 0); }
+    to { opacity: 1; transform: none; }
+  }
+}
+
+/* ---------------------------------------------------------------------
+ * Navigation transitions (React <ViewTransition> in app/template.tsx).
+ * Old page leaves fast, new page arrives gently; header stays anchored;
+ * the desktop active dot glides; the course image morph keeps its pair.
+ * ------------------------------------------------------------------- */
+/* `:only-child` matches the specificity of the generic enter/exit rules in
+   globals.css; these load first, so the page rules must be at least as specific. */
+::view-transition-old(.page-exit):only-child {
+  animation: page-leave 150ms ease-in both;
+}
+::view-transition-new(.page-enter):only-child {
+  animation: page-arrive 340ms var(--ease-out-soft) 90ms both;
+}
+::view-transition-group(site-header) { animation: none; }
+::view-transition-old(site-header) { display: none; }
+/* Filter re-flow names exist only while the filter transition runs, so page
+   navigations never capture every course card as a separate layer. */
+html[data-vt="filter"] .vt-filter-item { view-transition-name: var(--vt-name); }
+::view-transition-new(site-header) { animation: none; }
+::view-transition-group(nav-active-dot) {
+  animation-duration: 380ms;
+  animation-timing-function: var(--ease-out-soft);
+}
+::view-transition-old(mobile-menu) { display: none; }
+::view-transition-new(mobile-menu) { animation: none; }
+@keyframes page-leave {
+  to { opacity: 0; transform: translate3d(0, -6px, 0); }
+}
+@keyframes page-arrive {
+  from { opacity: 0; transform: translate3d(0, 14px, 0); }
+}
+
+/* ---------------------------------------------------------------------
+ * Signature microinteractions
+ * ------------------------------------------------------------------- */
+@layer components {
+  /* Pressure ripple (components/ui/press-ripple.tsx animates ::after). */
+  [data-ripple] {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    --ripple-opacity: 0.16;
+  }
+  [data-ripple]::after {
+    content: "";
+    position: absolute;
+    left: var(--ripple-x, 50%);
+    top: var(--ripple-y, 50%);
+    z-index: -1;
+    width: var(--ripple-size, 200%);
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: radial-gradient(circle, currentColor 0 35%, transparent 70%);
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0);
+    pointer-events: none;
+  }
+  .bg-accent[data-ripple],
+  .bg-ink[data-ripple] { --ripple-opacity: 0.28; }
+
+  @media (prefers-reduced-motion: no-preference) {
+    /* Success: the check draws itself, one pressure ring leaves the mark. */
+    .success-mark path {
+      stroke-dasharray: 1;
+      animation: draw-line 520ms var(--ease-out-soft) 200ms both;
+    }
+    .success-mark::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      border: 1.5px solid var(--color-accent);
+      animation: success-ring 900ms var(--ease-out-soft) 520ms both;
+      pointer-events: none;
+    }
+    /* Accordion: the answer settles in as the panel opens. */
+    details[open] .faq-answer {
+      animation: faq-answer 420ms var(--ease-out-soft) 60ms both;
+    }
+  }
+  @keyframes success-ring {
+    from { opacity: 0.7; transform: scale(1); }
+    to { opacity: 0; transform: scale(1.75); }
+  }
+  @keyframes faq-answer {
+    from { opacity: 0; transform: translate3d(0, -6px, 0); }
+  }
+}

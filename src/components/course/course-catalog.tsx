@@ -57,8 +57,13 @@ export function CourseCatalog({
       setFilter(next);
       return;
     }
-    document.startViewTransition(() => {
+    const root = document.documentElement;
+    root.setAttribute("data-vt", "filter");
+    const transition = document.startViewTransition(() => {
       flushSync(() => setFilter(next));
+    });
+    transition.finished.finally(() => {
+      if (root.getAttribute("data-vt") === "filter") root.removeAttribute("data-vt");
     });
   }
 
@@ -80,6 +85,7 @@ export function CourseCatalog({
               key={o.id}
               type="button"
               onClick={(e) => select(o.id, e.currentTarget)}
+              data-ripple=""
               aria-pressed={active}
               className={cn(
                 "press relative isolate inline-flex h-11 shrink-0 snap-start items-center gap-2 rounded-full border px-4 text-sm font-medium transition-colors duration-[var(--dur-press)]",
@@ -89,8 +95,8 @@ export function CourseCatalog({
               {active && (
                 <span
                   aria-hidden
-                  className="absolute inset-[-1px] -z-10 rounded-full bg-accent"
-                  style={{ viewTransitionName: "course-filter-pill" }}
+                  className="vt-filter-item absolute inset-[-1px] -z-10 rounded-full bg-accent"
+                  style={{ "--vt-name": "course-filter-pill" } as React.CSSProperties}
                 />
               )}
               {o.short ? (
@@ -118,8 +124,8 @@ export function CourseCatalog({
           {visible.map((course, i) => (
             <li
               key={course.slug}
-              style={{ viewTransitionName: `course-${course.slug}` }}
-              className={mobileLimit !== undefined && i >= mobileLimit ? "max-md:hidden" : undefined}
+              style={{ "--vt-name": `course-${course.slug}` } as React.CSSProperties}
+              className={cn("vt-filter-item", mobileLimit !== undefined && i >= mobileLimit && "max-md:hidden")}
             >
               <CourseCard course={course} headingLevel={headingLevel} />
             </li>

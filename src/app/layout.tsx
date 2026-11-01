@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Manrope } from "next/font/google";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
+import { PressRipple } from "@/components/ui/press-ripple";
 import { channels, site, socialProfiles } from "@/data/site";
 import { defaultLocale, localeMeta } from "@/i18n/config";
 import { t } from "@/i18n";
@@ -65,7 +66,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <script
           dangerouslySetInnerHTML={{
             __html:
-              "document.documentElement.classList.add('js');setTimeout(function(){if(!window.__revealReady)document.documentElement.classList.add('reveal-fallback')},3500)",
+              "var d=document.documentElement,n=navigator,c=n.connection;d.classList.add('js');" +
+              // Low-capability or data-saving devices keep every decoration but skip ambient loops.
+              "if((n.deviceMemory&&n.deviceMemory<=2)||(n.hardwareConcurrency&&n.hardwareConcurrency<=2)||(c&&c.saveData))d.classList.add('motion-lite');" +
+              "setTimeout(function(){if(!window.__revealReady)d.classList.add('reveal-fallback')},3500)",
           }}
         />
         <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(organizationLd)} />
@@ -82,6 +86,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           {children}
         </main>
         <Footer />
+        <PressRipple />
       </body>
     </html>
   );

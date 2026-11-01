@@ -48,7 +48,7 @@ export function PaymentMethods({ className }: { className?: string }) {
         <li
           key={m.id}
           className={cn(
-            "flex min-h-28 flex-col items-center justify-center gap-3 rounded-card border border-line bg-card px-3 py-5 text-center",
+            "card-settle flex min-h-28 flex-col items-center justify-center gap-3 rounded-card border border-line bg-card px-3 py-5 text-center",
             "transition-[border-color,box-shadow,transform] duration-[var(--dur-card)] ease-out-soft hover:-translate-y-0.5 hover:border-ink/15 hover:shadow-card",
             // 5 items in 2 columns: let the last one span the row on phones
             i === paymentMethods.length - 1 && "col-span-2 sm:col-span-1",

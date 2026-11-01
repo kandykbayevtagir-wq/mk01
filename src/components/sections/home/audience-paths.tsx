@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ArrowUpRight, GraduationCap, Stethoscope } from "lucide-react";
 import { Container } from "@/components/ui/container";
 import { Reveal } from "@/components/ui/reveal";
+import { ArchLines } from "@/components/ui/podo-art";
 
 const paths = [
   {
@@ -23,7 +24,13 @@ const paths = [
 /** Two journeys, one glance: learn podology, or book a visit to the centre. */
 export function AudiencePaths() {
   return (
-    <section aria-label="Выберите направление" className="relative z-10 pb-4 pt-2 lg:pb-8">
+    <section aria-label="Выберите направление" className="relative z-10 overflow-x-clip pb-4 pt-2 lg:pb-8">
+      {/* Seam: an arch contour that starts inside the hero and settles here,
+          so the two sections read as one continuous surface. */}
+      <ArchLines
+        count={7}
+        className="seam-drift pointer-events-none absolute -top-24 right-[-120px] -z-10 h-48 w-[420px] sm:-top-32 lg:right-[-60px]"
+      />
       <Container>
         <ul className="grid grid-cols-1 gap-3 md:grid-cols-2 md:gap-6">
           {paths.map((p, i) => (

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useId, useRef, useState } from "react";
-import { AlertCircle, Check, ChevronDown, Loader2 } from "lucide-react";
+import { AlertCircle, ChevronDown, Loader2 } from "lucide-react";
 import { leadSchemas, type LeadType } from "@/lib/leads/schema";
 import { submitLead } from "@/lib/leads/client";
 import { channels, whatsappLink } from "@/data/site";
@@ -43,6 +43,15 @@ function fallbackMessage(type: LeadType, data: Record<string, string>) {
             : "у меня вопрос.";
   return `Здравствуйте! ${name ? `Меня зовут ${name}, ` : ""}${intro}`;
 }
+
+const shake: Keyframe[] = [
+  { transform: "translateX(0)" },
+  { transform: "translateX(-6px)" },
+  { transform: "translateX(5px)" },
+  { transform: "translateX(-3px)" },
+  { transform: "translateX(2px)" },
+  { transform: "translateX(0)" },
+];
 
 const fieldBase =
   "peer w-full rounded-2xl border bg-card px-4 text-base text-ink placeholder:text-muted/70 " +
@@ -116,6 +125,13 @@ export function LeadForm({
     const fieldErrors = validate(data);
     setErrors(fieldErrors);
     if (Object.keys(fieldErrors).length) {
+      // A short horizontal shake marks what needs attention (motion-safe only);
+      // the inline error text and focus move carry the meaning on their own.
+      if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        for (const name of Object.keys(fieldErrors)) {
+          form.querySelector<HTMLElement>(`[name="${name}"]`)?.animate(shake, { duration: 380, easing: "ease-out" });
+        }
+      }
       const first = fields.find((f) => fieldErrors[f.name]);
       if (first) form.querySelector<HTMLElement>(`[name="${first.name}"]`)?.focus();
       return;
@@ -157,8 +173,19 @@ export function LeadForm({
           className,
         )}
       >
-        <span className="inline-flex size-12 items-center justify-center rounded-full bg-ink text-white">
-          <Check className="size-6" strokeWidth={2} aria-hidden />
+        <span className="success-mark relative inline-flex size-12 items-center justify-center rounded-full bg-ink text-white">
+          <svg
+            aria-hidden
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth={2.25}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="size-6"
+          >
+            <path d="M5 12.5l4.5 4.5L19 7.5" pathLength={1} />
+          </svg>
         </span>
         <h3 className="mt-6 text-h3 font-semibold">{t.form.successTitle}</h3>
         <p className="mt-3 max-w-md text-muted">{successText}</p>
@@ -201,8 +228,12 @@ export function LeadForm({
         };
         const errorRing = err ? "border-danger focus:border-danger focus:shadow-[0_0_0_4px_rgb(179_38_45/0.1)]" : "border-line";
         return (
-          <div key={f.name} className={cn("flex flex-col", (f.wide || f.kind === "textarea") && "sm:col-span-2")}>
-            <label htmlFor={id} className="mb-2 text-sm font-medium text-ink">
+          <div key={f.name} className={cn("group/field flex flex-col", (f.wide || f.kind === "textarea") && "sm:col-span-2")}>
+            <label htmlFor={id} className="relative mb-2 text-sm font-medium text-ink">
+              <span
+                aria-hidden
+                className="field-dot absolute -left-3 top-1/2 size-1.5 -translate-y-1/2 scale-0 rounded-full bg-accent opacity-0 transition-[transform,opacity] duration-200 ease-out-soft group-focus-within/field:scale-100 group-focus-within/field:opacity-100"
+              />
               {f.label}
               {f.required && (
                 <span className="ml-0.5 text-accent" aria-hidden>

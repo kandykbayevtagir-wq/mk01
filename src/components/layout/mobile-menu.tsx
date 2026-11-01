@@ -16,6 +16,9 @@ import { headerCta } from "./header-cta";
 export function MobileMenu() {
   const [open, setOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
+  // Named for view transitions from opening until the close slide ends, so
+  // a navigation started from the menu keeps the sheet above the old page.
+  const [layered, setLayered] = useState(false);
   const pathname = usePathname();
   const panelId = useId();
   const cta = headerCta(pathname);
@@ -82,7 +85,10 @@ export function MobileMenu() {
       <button
         ref={toggleRef}
         type="button"
-        onClick={() => setOpen(true)}
+        onClick={() => {
+          setLayered(true);
+          setOpen(true);
+        }}
         aria-expanded={open}
         aria-controls={panelId}
         aria-label={t.common.openMenu}
@@ -101,6 +107,8 @@ export function MobileMenu() {
               "fixed inset-0 z-[60] lg:hidden",
               open ? "visible" : "invisible [transition:visibility_0s_linear_300ms]",
             )}
+            // Keeps the closing sheet above the outgoing page during navigation.
+            style={layered ? { viewTransitionName: "mobile-menu" } : undefined}
             inert={!open}
           >
             <div
@@ -117,10 +125,14 @@ export function MobileMenu() {
               role="dialog"
               aria-modal="true"
               aria-label={t.common.menu}
+              onTransitionEnd={(e) => {
+                if (e.target === e.currentTarget && !open) setLayered(false);
+              }}
               className={cn(
                 "absolute inset-x-0 top-0 flex max-h-[100dvh] flex-col overflow-y-auto overscroll-contain rounded-b-[28px] bg-paper pt-[env(safe-area-inset-top)] pb-[max(1.25rem,env(safe-area-inset-bottom))] shadow-float",
-                "transition-transform duration-300 ease-out-soft",
-                open ? "translate-y-0" : "-translate-y-full",
+                // Asymmetric: opens with a soft settle, leaves quickly.
+                "transition-transform",
+                open ? "translate-y-0 duration-[420ms] ease-out-soft" : "-translate-y-full duration-[240ms] ease-in",
               )}
             >
               <div className="flex h-[var(--header-h)] shrink-0 items-center justify-between px-4 sm:px-6">
@@ -156,7 +168,7 @@ export function MobileMenu() {
                           href={item.href}
                           onClick={() => setOpen(false)}
                           aria-current={active ? "page" : undefined}
-                          className="-mx-2 flex min-h-14 items-center justify-between rounded-xl px-2 py-3 text-[1.3125rem] font-semibold tracking-[-0.02em] transition-colors duration-[var(--dur-press)] active:bg-mist"
+                          className="group -mx-2 flex min-h-14 items-center justify-between rounded-xl px-2 py-3 text-[1.3125rem] font-semibold tracking-[-0.02em] transition-colors duration-[var(--dur-press)] active:bg-mist"
                         >
                           <span className="flex items-center gap-3">
                             <span
@@ -168,7 +180,14 @@ export function MobileMenu() {
                             />
                             {label}
                           </span>
-                          <ArrowUpRight aria-hidden className="size-5 text-muted" strokeWidth={1.5} />
+                          <ArrowUpRight
+                            aria-hidden
+                            className={cn(
+                              "size-5 transition-transform duration-[var(--dur-press)] ease-out-soft group-active:-translate-y-0.5 group-active:translate-x-0.5",
+                              active ? "text-accent" : "text-muted",
+                            )}
+                            strokeWidth={1.5}
+                          />
                         </Link>
                       </li>
                     );

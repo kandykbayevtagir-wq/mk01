@@ -1,10 +1,10 @@
 import { PressLink } from "@/components/ui/press-link";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, MapPin } from "lucide-react";
 import { getCourses, nextSession } from "@/data/courses";
 import { founder, founderDisplayName } from "@/data/founder";
-import { site } from "@/data/site";
+import { locations, site } from "@/data/site";
 import { t } from "@/i18n";
-import { cn, formatDateRange } from "@/lib/utils";
+import { cn, formatDateRange, plural } from "@/lib/utils";
 import { ButtonLink } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { Eyebrow } from "@/components/ui/typography";
@@ -27,6 +27,9 @@ function delay(ms: number) {
  *
  * Motion: short CSS-only sequence (≤300 ms of delays). The headline only
  * moves — it never fades — so it is paintable for LCP from the first frame.
+ * Ambient layer (paused offscreen via MotionRegion, skipped in motion-lite):
+ * breathing pressure peaks, two liquid-light forms, the spotlight glint and
+ * one floating fact chip — six transform/opacity loops in total.
  */
 export function Hero() {
   const courses = getCourses();
@@ -67,8 +70,8 @@ export function Hero() {
     <MotionRegion as="section" aria-labelledby="hero-title" className="motion-hero relative isolate overflow-hidden">
       {/* Backdrop: soft-gray panel (mobile: behind the visual; desktop: right third) */}
       <div aria-hidden className="pointer-events-none absolute inset-0">
-        <div className="absolute inset-x-0 bottom-0 top-[52%] bg-mist sm:top-[46%] lg:inset-y-0 lg:left-auto lg:w-[38%]">
-          <LiquidLight />
+        <div className="hero-mist absolute inset-x-0 bottom-0 top-[52%] bg-mist sm:top-[46%] lg:inset-y-0 lg:left-auto lg:w-[38%]">
+          <div className="hero-mist-light" />
           <div className="pattern-dots absolute inset-0 [mask-image:linear-gradient(to_bottom,black,transparent_85%)] lg:[mask-image:linear-gradient(to_left,black,transparent)]" />
         </div>
         <ArchLines draw accent className="draw-now absolute -bottom-1 -left-24 h-28 w-[300px] max-lg:hidden" count={8} />
@@ -87,7 +90,16 @@ export function Hero() {
               style={delay(40)}
             >
               <span className="kinetic-line" style={delay(40)}>Профессиональное</span>{" "}
-              <span className="kinetic-line" style={delay(125)}>обучение подологии<span className="text-accent">.</span></span>
+              <span className="kinetic-line" style={delay(125)}>
+                обучение{" "}
+                <span className="relative inline-block">
+                  подологии
+                  <svg aria-hidden viewBox="0 0 200 24" preserveAspectRatio="none" className="hero-underline">
+                    <path d="M3 20 C 60 2, 140 2, 197 20" pathLength={1} />
+                  </svg>
+                </span>
+                <span className="text-accent">.</span>
+              </span>
             </h1>
             <p className="enter mt-4 max-w-[34ch] text-lead text-muted lg:mt-7 lg:max-w-xl" style={delay(110)}>
               Авторские курсы, практические знания и профессиональное развитие специалистов.
@@ -107,24 +119,33 @@ export function Hero() {
             <div aria-hidden className="glow-red absolute -inset-x-10 -top-10 bottom-0 lg:-inset-16" />
             <div aria-hidden className="glow-neutral absolute -bottom-16 -left-16 size-72" />
 
-            <div className="enter-fade relative" style={delay(120)}>
+            <div className="relative">
               <Parallax
-                className="grain aspect-[4/3.3] rounded-panel bg-graphite shadow-float sm:aspect-[16/11] lg:aspect-[4/5]"
+                className="hero-reveal grain aspect-[4/3.3] rounded-panel bg-graphite shadow-float sm:aspect-[16/11] lg:aspect-[4/5]"
                 distance={24}
               >
                 <Visual
                   image={founder.portrait}
                   tone="dark"
                   art="feet"
+                  live
                   seed={7}
                   priority
                   className="h-full w-full"
                   imgClassName="object-[50%_20%]"
                   sizes="(min-width: 1024px) 40vw, 100vw"
                 >
-                  <LiquidLight dark />
+                  <LiquidLight dark lean />
                 </Visual>
               </Parallax>
+
+              {/* Floating context — factual, non-interactive, so motion never moves a control */}
+              <div className="enter pointer-events-none absolute left-4 top-4 z-10 lg:left-auto lg:right-4" style={delay(420)}>
+                <p className="hero-chip inline-flex items-center gap-1.5 rounded-full bg-black/55 px-3 py-1.5 text-xs font-medium text-white ring-1 ring-white/15 backdrop-blur-md">
+                  <MapPin aria-hidden className="size-3.5" strokeWidth={2} />
+                  Актобе · {locations.length} {plural(locations.length, ["филиал", "филиала", "филиалов"])}
+                </p>
+              </div>
 
               {/* Caption — gradient scrim guarantees legibility over photos */}
               <div className="pointer-events-none absolute inset-x-0 bottom-0 rounded-b-panel bg-gradient-to-t from-black/70 via-black/30 to-transparent px-5 pb-5 pt-14 text-white sm:px-6 sm:pb-6 max-sm:pb-14">

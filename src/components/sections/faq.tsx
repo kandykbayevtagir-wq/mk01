@@ -20,14 +20,14 @@ export function Faq({ items, withSchema = true }: { items: FaqItem[]; withSchema
         {items.map((item) => (
           <li key={item.q} className="border-b border-line">
             <details className="group">
-              <summary className="flex min-h-16 cursor-pointer items-center justify-between gap-6 py-5 text-left text-[1.0625rem] font-semibold transition-colors hover:text-ink/80">
+              <summary className="flex min-h-16 cursor-pointer items-center justify-between gap-6 py-5 text-left text-[1.0625rem] font-semibold transition-colors hover:text-ink/80 [&:active>span]:scale-90">
                 {item.q}
                 <span className="inline-flex size-9 shrink-0 items-center justify-center rounded-full border border-line transition-[transform,background-color,border-color,color] duration-300 ease-out-soft group-open:rotate-45 group-open:border-ink group-open:bg-ink group-open:text-white">
                   <Plus aria-hidden className="size-4" strokeWidth={1.75} />
                 </span>
               </summary>
               <div className="grid grid-rows-[0fr] transition-[grid-template-rows] duration-300 ease-out-soft group-open:grid-rows-[1fr]">
-                <p className="overflow-hidden pb-6 pr-12 leading-relaxed text-muted">{item.a}</p>
+                <p className="faq-answer overflow-hidden pb-6 pr-12 leading-relaxed text-muted">{item.a}</p>
               </div>
             </details>
           </li>

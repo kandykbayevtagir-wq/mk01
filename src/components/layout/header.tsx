@@ -37,6 +37,8 @@ export function Header() {
     <div ref={sentinel} aria-hidden className="pointer-events-none absolute left-0 top-0 h-3 w-px" />
     <header
       data-scrolled={scrolled}
+      // Anchor: the header stays put while page content transitions under it.
+      style={{ viewTransitionName: "site-header" }}
       className={cn(
         "header-glass sticky top-0 z-50 h-[var(--header-h)] border-b",
         "transition-[background-color,border-color,box-shadow] duration-[var(--dur-nav)] ease-out-soft",
@@ -63,6 +65,8 @@ export function Header() {
                     {t.nav[item.key]}
                     <span
                       aria-hidden
+                      // The active dot glides to the new item during navigation.
+                      style={active ? { viewTransitionName: "nav-active-dot" } : undefined}
                       className={cn(
                         "absolute bottom-1 left-1/2 size-1 -translate-x-1/2 rounded-full bg-accent transition-[opacity,transform] duration-[var(--dur-nav)] ease-out-soft",
                         active ? "scale-100 opacity-100" : "scale-0 opacity-0",

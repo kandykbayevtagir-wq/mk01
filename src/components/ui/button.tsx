@@ -33,7 +33,7 @@ function Arrow() {
   return (
     <span
       aria-hidden
-      className="-mr-1 inline-flex size-5 items-center justify-center overflow-hidden transition-transform duration-300 ease-out-soft group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5"
+      className="-mr-1 inline-flex size-5 items-center justify-center overflow-hidden transition-transform duration-300 ease-out-soft group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 group-active/btn:translate-x-0.5 group-active/btn:-translate-y-0.5"
     >
       <ArrowUpRight className="size-[18px]" strokeWidth={1.75} />
     </span>
@@ -67,6 +67,7 @@ export function ButtonLink({
       <a
         href={href}
         className={cls}
+        data-ripple=""
         {...(href.startsWith("http") ? { target: "_blank", rel: "noopener noreferrer" } : {})}
         {...rest}
       >
@@ -76,7 +77,7 @@ export function ButtonLink({
     );
   }
   return (
-    <Link href={href} className={cls} {...rest}>
+    <Link href={href} className={cls} data-ripple="" {...rest}>
       {children}
       {arrow && <Arrow />}
     </Link>
@@ -92,7 +93,7 @@ export function Button({
   ...rest
 }: CommonProps & Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "className" | "children">) {
   return (
-    <button className={buttonClasses(variant, size, className)} {...rest}>
+    <button className={buttonClasses(variant, size, className)} data-ripple="" {...rest}>
       {children}
       {arrow && <Arrow />}
     </button>
