@@ -91,8 +91,8 @@
   .spotlight-card[data-pressed="true"],
   .course-card:has([data-pressed="true"]),
   .course-card:active {
-    transform: scale(0.985);
-    transition-duration: 120ms;
+    transform: scale(0.972);
+    transition-duration: 110ms;
   }
   /* No perpetual motion while someone is reading or pressing a course. */
   .course-card:focus-within,
@@ -115,10 +115,6 @@
     .liquid-light__form--red { animation-duration: 17s; animation-delay: -5s; }
     .light-trail > span {
       animation: light-pass 11s ease-in-out infinite;
-      animation-play-state: var(--ambient-play-state, paused);
-    }
-    .course-card--featured .course-card__visual > :first-child {
-      animation: image-float 9s ease-in-out infinite;
       animation-play-state: var(--ambient-play-state, paused);
     }
     .final-cta-motion .light-trail > span { animation-duration: 14s; }
@@ -153,10 +149,6 @@
     0%, 12% { transform: translate3d(-100%, 0, 0); opacity: 0; }
     28%, 65% { opacity: 0.8; }
     88%, 100% { transform: translate3d(100%, 0, 0); opacity: 0; }
-  }
-  @keyframes image-float {
-    0%, 100% { translate: 0 0; }
-    50% { translate: 0 -3px; }
   }
   @keyframes kinetic-line {
     from { transform: translate3d(0, 18px, 0) scaleX(0.985); }
@@ -238,10 +230,6 @@
       stroke-dasharray: 1;
       animation: draw-line 900ms var(--ease-in-out-soft) 560ms both;
     }
-    .hero-chip {
-      animation: chip-float 7s ease-in-out infinite;
-      animation-play-state: var(--ambient-play-state, paused);
-    }
     /* Seam contour drifts a little as the boundary scrolls past. */
     @supports (animation-timeline: view()) {
       .seam-drift {
@@ -261,10 +249,6 @@
       clip-path: inset(0 round var(--radius-panel));
       transform: none;
     }
-  }
-  @keyframes chip-float {
-    0%, 100% { transform: translate3d(0, 0, 0); }
-    50% { transform: translate3d(0, -5px, 0); }
   }
   @keyframes seam-drift {
     from { transform: translate3d(0, 24px, 0) rotate(-2deg); }
@@ -358,10 +342,6 @@
     /* leaving: fade first, then park off-card without being seen */
     transition: opacity 220ms ease, transform 0s linear 240ms;
   }
-  .course-card__visual > :first-child,
-  .course-card__chip {
-    transition: transform 700ms var(--ease-settle);
-  }
 
   @media (prefers-reduced-motion: no-preference) {
     .course-card:focus-within .card-sheen > span,
@@ -371,29 +351,11 @@
       transform: translate3d(100%, 0, 0);
       transition: opacity 160ms ease, transform 900ms var(--ease-out-soft);
     }
-    /* Layered depth: photo/art drifts back, the category chip comes forward. */
-    .course-card:has([data-pressed="true"]) .course-card__visual > :first-child,
-    .course-card:active .course-card__visual > :first-child {
-      transform: scale(1.03);
-      transition-duration: 260ms;
-    }
-    .course-card:has([data-pressed="true"]) .course-card__chip,
-    .course-card:active .course-card__chip {
-      transform: translate3d(0, -2px, 0);
-      transition-duration: 200ms;
-    }
     @media (hover: hover) and (pointer: fine) {
       .course-card:hover .card-sheen > span {
         opacity: 1;
         transform: translate3d(100%, 0, 0);
         transition: opacity 160ms ease, transform 900ms var(--ease-out-soft);
-      }
-      .course-card:hover .course-card__visual > :first-child {
-        transform: scale(1.055) translate3d(0, -1.5%, 0);
-      }
-      .course-card:hover .course-card__chip {
-        transform: translate3d(0, -3px, 0);
-        box-shadow: 0 10px 22px -12px rgb(23 23 23 / 0.45);
       }
     }
 
@@ -500,5 +462,82 @@ html[data-vt="filter"] .vt-filter-item { view-transition-name: var(--vt-name); }
   }
   @keyframes faq-answer {
     from { opacity: 0; transform: translate3d(0, -6px, 0); }
+  }
+}
+
+/* ---------------------------------------------------------------------
+ * Course Cards 3.0 — sensor plate, living pressure field, card stack.
+ * ------------------------------------------------------------------- */
+@layer components {
+  /* Pressure field: the static file shows until the canvas has drawn the
+     identical resting frame, then the canvas takes over. */
+  .pressure-field__live { opacity: 0; }
+  .pressure-field[data-live="true"] .pressure-field__live { opacity: 1; }
+  .pressure-field[data-live="true"] .pressure-field__still { opacity: 0; }
+
+  .course-plate__glow {
+    background:
+      radial-gradient(70% 90% at 82% 8%, rgb(255 255 255 / 0.09), transparent 60%),
+      radial-gradient(60% 70% at 18% 100%, rgb(179 38 45 / 0.22), transparent 70%);
+  }
+  /* `transform` for the press lift; the scroll reveal owns `translate`. */
+  .course-plate__readout { transition: transform 520ms var(--ease-settle); }
+
+  /* CTA: ink at rest; the light accent arrives on press (and desktop hover). */
+  .course-cta {
+    background-color: var(--color-ink);
+    transition: background-color 180ms ease, color 180ms ease;
+  }
+  .course-cta__arrow { transition: transform 520ms var(--ease-settle), background-color 180ms ease; }
+  .course-card:has([data-pressed="true"]) .course-cta,
+  .course-card:active .course-cta { background-color: var(--color-accent); transition-duration: 90ms; }
+  .course-card:has([data-pressed="true"]) .course-cta__arrow,
+  .course-card:active .course-cta__arrow { transform: translate3d(2px, -2px, 0); transition-duration: 140ms; }
+  @media (hover: hover) and (pointer: fine) {
+    .course-card:hover .course-cta { background-color: var(--color-accent); }
+    .course-card:hover .course-cta__arrow { transform: translate3d(2px, -2px, 0); }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    /* On press the plate's readouts lift a hair while the canvas ripples. */
+    .course-card:has([data-pressed="true"]) .course-plate__readout,
+    .course-card:active .course-plate__readout { transform: translate3d(0, -2px, 0); transition-duration: 160ms; }
+
+    @supports (animation-timeline: view()) {
+      /* Controlled image scaling: the map settles from 1.14 to 1 as the
+         plate travels into view; `scale` only, so presses still compose. */
+      .course-plate .pressure-field {
+        animation: plate-zoom linear both;
+        animation-timeline: view();
+        animation-range: entry 10% cover 45%;
+      }
+      .course-plate__readout {
+        animation: plate-readout linear both;
+        animation-timeline: view();
+        animation-range: entry 30% cover 40%;
+      }
+    }
+  }
+  @keyframes plate-zoom {
+    from { scale: 1.14; }
+    to { scale: 1; }
+  }
+  @keyframes plate-readout {
+    from { opacity: 0.3; translate: 0 6px; }
+    to { opacity: 1; translate: 0 0; }
+  }
+
+  /* Card layering (phones): each card holds just under the header while the
+     next one slides over it. Native scrolling, no scroll capture, nothing
+     reflows — just position: sticky. */
+  @media (max-width: 767px) {
+    .course-stack > li {
+      position: sticky;
+      top: calc(var(--header-h) + 10px + var(--stack-i, 0) * 9px);
+    }
+    .course-stack > li + li > .course-card,
+    .course-stack > li + li > [data-reveal] > .course-card {
+      box-shadow: 0 -14px 34px -22px rgb(23 23 23 / 0.45);
+    }
   }
 }

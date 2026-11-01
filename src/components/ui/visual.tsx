@@ -4,6 +4,7 @@ import { cn } from "@/lib/utils";
 import { assetPath } from "@/lib/seo";
 import { ContourArt } from "./contour-art";
 import { ArchLines, Insole, PressureFeet, PressureFoot } from "./podo-art";
+import { PressureField } from "./pressure-field";
 
 const tones = {
   light: "bg-mist",
@@ -83,7 +84,18 @@ export function Visual({
             )}
           />
 
-          {kind === "pressure" && (
+          {live && (kind === "pressure" || kind === "feet") && (
+            <PressureField
+              view={kind === "feet" ? "pair-v" : "foot-v"}
+              tone={artTone}
+              eager={priority}
+              className={cn(
+                "absolute left-1/2 top-[43%] -translate-x-1/2 -translate-y-1/2",
+                kind === "feet" ? "aspect-[424/508] h-[70%]" : "aspect-[200/480] h-[82%]",
+              )}
+            />
+          )}
+          {!live && kind === "pressure" && (
             <PressureFoot
               tone={artTone}
               eager={priority}
@@ -91,7 +103,7 @@ export function Visual({
               className="absolute left-1/2 top-1/2 h-[82%] w-auto -translate-x-1/2 -translate-y-1/2"
             />
           )}
-          {kind === "feet" && (
+          {!live && kind === "feet" && (
             <PressureFeet tone={artTone} eager={priority} className="absolute left-1/2 top-[43%] h-[64%] -translate-x-1/2 -translate-y-1/2" />
           )}
           {kind === "insole" && (

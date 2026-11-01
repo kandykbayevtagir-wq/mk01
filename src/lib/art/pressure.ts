@@ -7,7 +7,7 @@
  */
 
 export type ArtTone = "light" | "dark";
-export type PressureView = "foot-v" | "pair-v" | "foot-h" | "forefoot-h" | "stride-h";
+export type PressureView = "foot-v" | "pair-v" | "foot-h" | "foot-hl" | "toes-v";
 
 type Ellipse = { cx: number; cy: number; rx: number; ry: number };
 
@@ -94,17 +94,23 @@ export const views: Record<PressureView, { box: [number, number, number, number]
   },
   // single foot lying on its side, toes pointing right (walking forward)
   "foot-h": { box: [0, 0, 480, 200], feet: [{ mirror: false, horizontal: true, dx: 0, dy: 0, phase: 0 }] },
-  // close-up of the forefoot and toes (nail courses)
-  "forefoot-h": { box: [236, 4, 236, 196], feet: [{ mirror: false, horizontal: true, dx: 0, dy: 0, phase: 0 }] },
-  // a step: left foot above, right foot below and ahead
-  "stride-h": {
-    box: [0, 0, 600, 412],
+  // the left foot, same orientation
+  "foot-hl": { box: [0, 0, 480, 200], feet: [{ mirror: true, horizontal: true, dx: 0, dy: 0, phase: 0.25 }] },
+  // both forefeet and toes, heels cropped away (nail courses)
+  "toes-v": {
+    box: [0, 26, 424, 196],
     feet: [
-      { mirror: true, horizontal: true, dx: 0, dy: 0, phase: 0.5 },
-      { mirror: false, horizontal: true, dx: 120, dy: 212, phase: 0 },
+      { mirror: true, horizontal: false, dx: 0, dy: 0, phase: 0.5 },
+      { mirror: false, horizontal: false, dx: 224, dy: 0, phase: 0 },
     ],
   },
 };
+
+/** Static-dot culling shared by the SVG and the canvas, so both crop alike. */
+export function inBox(box: [number, number, number, number], x: number, y: number, r: number) {
+  const [bx, by, bw, bh] = box;
+  return !(x + r < bx || x - r > bx + bw || y + r < by || y - r > by + bh);
+}
 
 /** Foot space → view space. */
 export function place(p: Placement, fx: number, fy: number): [number, number] {
@@ -116,13 +122,12 @@ const r1 = (n: number) => Math.round(n * 10) / 10;
 
 export function pressureSvg(view: PressureView, tone: ArtTone) {
   const { box, feet } = views[view];
-  const [bx, by, bw, bh] = box;
   const buckets: string[][] = [[], [], [], [], [], []];
   for (const foot of feet) {
     for (const d of FOOT_DOTS) {
       const [x, y] = place(foot, d.x, d.y);
       const r = radiusOf(d.v);
-      if (x + r < bx || x - r > bx + bw || y + r < by || y - r > by + bh) continue;
+      if (!inBox(box, x, y, r)) continue;
       buckets[levelOf(d.v)].push(`M${r1(x - r)} ${r1(y)}a${r1(r)} ${r1(r)} 0 1 0 ${r1(2 * r)} 0a${r1(r)} ${r1(r)} 0 1 0 ${r1(-2 * r)} 0`);
     }
   }
