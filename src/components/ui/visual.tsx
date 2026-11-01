@@ -53,7 +53,7 @@ export function Visual({
   const artTone = dark ? "dark" : "light";
 
   return (
-    <div className={cn("relative isolate overflow-hidden", tones[tone], className)}>
+    <div data-pressure-host={live ? "" : undefined} className={cn("relative isolate overflow-hidden", tones[tone], className)}>
       {image ? (
         <Image
           src={assetPath(image.src)}
@@ -86,13 +86,13 @@ export function Visual({
           {kind === "pressure" && (
             <PressureFoot
               tone={artTone}
-              breathe={live}
+              eager={priority}
               mirror={seed % 2 === 0}
               className="absolute left-1/2 top-1/2 h-[82%] w-auto -translate-x-1/2 -translate-y-1/2"
             />
           )}
           {kind === "feet" && (
-            <PressureFeet tone={artTone} breathe={live} className="absolute left-1/2 top-[43%] h-[64%] -translate-x-1/2 -translate-y-1/2" />
+            <PressureFeet tone={artTone} eager={priority} className="absolute left-1/2 top-[43%] h-[64%] -translate-x-1/2 -translate-y-1/2" />
           )}
           {kind === "insole" && (
             <>
@@ -107,7 +107,7 @@ export function Visual({
             </>
           )}
           {kind === "contour" && (
-            <ContourArt seed={seed} tone={artTone} marker={marker ?? true} className="absolute inset-0 h-full w-full" />
+            <ContourArt seed={seed} tone={artTone} marker={marker ?? true} eager={priority} className="absolute inset-0 h-full w-full" />
           )}
         </div>
       )}

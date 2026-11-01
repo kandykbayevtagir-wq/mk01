@@ -238,12 +238,6 @@
       stroke-dasharray: 1;
       animation: draw-line 900ms var(--ease-in-out-soft) 560ms both;
     }
-    /* The pressure map "breathes" like a live sensor reading. */
-    .motion-hero .pressure-peak {
-      animation: pressure-breathe 5.2s ease-in-out infinite;
-      animation-play-state: var(--ambient-play-state, paused);
-    }
-    .motion-hero .pressure-foot--late .pressure-peak { animation-delay: -2.6s; }
     .hero-chip {
       animation: chip-float 7s ease-in-out infinite;
       animation-play-state: var(--ambient-play-state, paused);
@@ -267,10 +261,6 @@
       clip-path: inset(0 round var(--radius-panel));
       transform: none;
     }
-  }
-  @keyframes pressure-breathe {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.5; }
   }
   @keyframes chip-float {
     0%, 100% { transform: translate3d(0, 0, 0); }
