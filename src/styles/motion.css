@@ -1,0 +1,190 @@
+/* A quiet motion vocabulary: rise once, drift slowly, respond immediately.
+ * All looping layers are transform/opacity only and opt in through MotionRegion.
+ */
+:root {
+  --ease-settle: cubic-bezier(0.2, 0.8, 0.2, 1.08);
+  --dur-settle: 520ms;
+}
+
+@layer components {
+  [data-motion-region] { --ambient-play-state: paused; }
+  [data-motion-active="true"] { --ambient-play-state: running; }
+
+  .liquid-light {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    contain: paint;
+    mask-image: linear-gradient(to bottom, transparent, black 20%, black 80%, transparent);
+  }
+  .liquid-light__form {
+    position: absolute;
+    width: min(90vw, 480px);
+    aspect-ratio: 1.25;
+  }
+  .liquid-light__form--graphite {
+    right: -28%;
+    top: 3%;
+    background: radial-gradient(ellipse closest-side at 40% 38%, #fff 2%, #b8b8b8 24%, #454545 50%, transparent 100%);
+    opacity: 0.19;
+  }
+  .liquid-light__form--silver {
+    left: -35%;
+    bottom: 0;
+    background: radial-gradient(ellipse closest-side at 60% 40%, #fff 5%, #c5c5c5 35%, #777 55%, transparent 100%);
+    opacity: 0.25;
+  }
+  .liquid-light__form--red {
+    right: -20%;
+    bottom: -6%;
+    width: min(65vw, 300px);
+    background: radial-gradient(ellipse, rgb(179 38 45 / 0.16), transparent 67%);
+  }
+  .liquid-light--dark {
+    mask-image: linear-gradient(to bottom, black, black 70%, transparent);
+  }
+  .liquid-light--dark .liquid-light__form--graphite {
+    right: -35%;
+    top: -28%;
+    opacity: 0.35;
+  }
+  .liquid-light--dark .liquid-light__form--silver {
+    left: -48%;
+    bottom: -8%;
+    opacity: 0.2;
+  }
+  .liquid-light--dark .liquid-light__form--red { opacity: 0.7; }
+
+  /* The mask only exposes a 1px edge. No animated gradient positions or filters. */
+  .light-trail {
+    display: none;
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    padding: 1px;
+    border-radius: inherit;
+    overflow: hidden;
+    pointer-events: none;
+  }
+  @supports (mask-composite: exclude) {
+    .light-trail {
+      display: block;
+      mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      mask-composite: exclude;
+    }
+  }
+  .light-trail > span {
+    display: block;
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(115deg, transparent 30%, rgb(23 23 23 / 0.2) 43%, #fff 48%, rgb(179 38 45 / 0.65) 50%, transparent 59%);
+    opacity: 0.7;
+  }
+  .kinetic-line { display: block; transform-origin: left center; }
+  .spotlight-card,
+  .course-card {
+    transition-timing-function: var(--ease-settle);
+    transition-duration: var(--dur-settle);
+  }
+  .spotlight-card:active,
+  .spotlight-card[data-pressed="true"],
+  .course-card:has([data-pressed="true"]),
+  .course-card:active {
+    transform: scale(0.985);
+    transition-duration: 120ms;
+  }
+  /* No perpetual motion while someone is reading or pressing a course. */
+  .course-card:focus-within,
+  .course-card:has([data-pressed="true"]),
+  .spotlight-card[data-pressed="true"],
+  .course-card:active,
+  .spotlight-card:focus-visible,
+  .spotlight-card:active { --ambient-play-state: paused; }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .kinetic-line {
+      animation: kinetic-line 760ms var(--ease-out-soft) both;
+      animation-delay: var(--enter-delay, 0ms);
+    }
+    .liquid-light__form {
+      animation: liquid-flow 19s ease-in-out infinite;
+      animation-play-state: var(--ambient-play-state, paused);
+    }
+    .liquid-light__form--silver { animation-duration: 23s; animation-delay: -8s; animation-direction: reverse; }
+    .liquid-light__form--red { animation-duration: 17s; animation-delay: -5s; }
+    .light-trail > span {
+      animation: light-pass 11s ease-in-out infinite;
+      animation-play-state: var(--ambient-play-state, paused);
+    }
+    .course-card--featured .course-card__visual > :first-child {
+      animation: image-float 9s ease-in-out infinite;
+      animation-play-state: var(--ambient-play-state, paused);
+    }
+    .final-cta-motion .light-trail > span { animation-duration: 14s; }
+
+    @supports (animation-timeline: view()) {
+      .motion-hero { view-timeline-name: --hero-exit; }
+      .kinetic-title {
+        animation: title-recede linear both;
+        animation-timeline: --hero-exit;
+        animation-range: exit 0% exit 75%;
+        transform-origin: left top;
+      }
+      .motion-programs > [aria-hidden="true"] {
+        animation: decor-travel linear both;
+        animation-timeline: view();
+      }
+      /* Only the heading settles; essential body text remains still. */
+      .motion-programs [data-reveal] h2 {
+        animation: heading-settle linear both;
+        animation-timeline: view();
+        animation-range: entry 0% entry 100%;
+        transform-origin: left center;
+      }
+    }
+  }
+  @keyframes liquid-flow {
+    0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+    36% { transform: translate3d(-18px, 14px, 0) scale(1.06, 0.95); }
+    70% { transform: translate3d(12px, -12px, 0) scale(0.97, 1.04); }
+  }
+  @keyframes light-pass {
+    0%, 12% { transform: translate3d(-100%, 0, 0); opacity: 0; }
+    28%, 65% { opacity: 0.8; }
+    88%, 100% { transform: translate3d(100%, 0, 0); opacity: 0; }
+  }
+  @keyframes image-float {
+    0%, 100% { translate: 0 0; }
+    50% { translate: 0 -3px; }
+  }
+  @keyframes kinetic-line {
+    from { transform: translate3d(0, 18px, 0) scaleX(0.985); }
+    to { transform: translate3d(0, 0, 0) scaleX(1); }
+  }
+  @keyframes title-recede {
+    from { transform: translate3d(0, 0, 0) scale(1); }
+    to { transform: translate3d(0, 18px, 0) scale(0.985); }
+  }
+  @keyframes decor-travel {
+    from { transform: translate3d(0, 18px, 0); }
+    to { transform: translate3d(0, -18px, 0); }
+  }
+  @keyframes heading-settle {
+    from { transform: translate3d(0, 10px, 0) scale(0.985); }
+    to { transform: translate3d(0, 0, 0) scale(1); }
+  }
+}
+
+/* React's native shared-element transition is supported by this Next/React
+ * version. Navigation still works normally when the browser cannot animate it.
+ */
+::view-transition-group(.course-morph) {
+  animation-duration: 420ms;
+  animation-timing-function: var(--ease-out-soft);
+}
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) { animation: none !important; }
+}

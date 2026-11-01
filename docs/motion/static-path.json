@@ -1,0 +1,68 @@
+[
+  {
+    "engine": "chromium",
+    "basePath": "/mk01",
+    "homepage": true,
+    "courseNavigation": true,
+    "enrollmentForm": true,
+    "httpOrResourceErrors": [],
+    "browserErrors": [],
+    "canceledFetches": [
+      {
+        "url": "http://localhost:4175/mk01/",
+        "type": "fetch",
+        "reason": "net::ERR_ABORTED"
+      },
+      {
+        "url": "http://localhost:4175/mk01/courses/",
+        "type": "fetch",
+        "reason": "net::ERR_ABORTED"
+      },
+      {
+        "url": "http://localhost:4175/mk01/about/",
+        "type": "fetch",
+        "reason": "net::ERR_ABORTED"
+      },
+      {
+        "url": "http://localhost:4175/mk01/courses/podologiya-bazovyy-kurs/",
+        "type": "fetch",
+        "reason": "net::ERR_ABORTED"
+      },
+      {
+        "url": "http://localhost:4175/mk01/products/",
+        "type": "fetch",
+        "reason": "net::ERR_ABORTED"
+      },
+      {
+        "url": "http://localhost:4175/mk01/partners/",
+        "type": "fetch",
+        "reason": "net::ERR_ABORTED"
+      },
+      {
+        "url": "http://localhost:4175/mk01/reviews/",
+        "type": "fetch",
+        "reason": "net::ERR_ABORTED"
+      },
+      {
+        "url": "http://localhost:4175/mk01/center/",
+        "type": "fetch",
+        "reason": "net::ERR_ABORTED"
+      },
+      {
+        "url": "http://localhost:4175/mk01/courses/korrektsiya-vrosshego-nogtya/",
+        "type": "fetch",
+        "reason": "net::ERR_ABORTED"
+      }
+    ]
+  },
+  {
+    "engine": "webkit",
+    "basePath": "/mk01",
+    "homepage": true,
+    "courseNavigation": true,
+    "enrollmentForm": true,
+    "httpOrResourceErrors": [],
+    "browserErrors": [],
+    "canceledFetches": []
+  }
+]

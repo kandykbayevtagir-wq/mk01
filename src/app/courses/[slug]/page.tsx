@@ -1,3 +1,4 @@
+import { ViewTransition } from "react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -162,14 +163,16 @@ export default async function CoursePage({ params }: Props) {
               </div>
             </div>
             <div className="enter-fade lg:col-span-5" style={{ "--enter-delay": "120ms" } as React.CSSProperties}>
-              <Visual
-                image={course.image}
-                seed={course.order + 3}
-                priority
-                tone="sand"
-                className="aspect-[4/3] rounded-panel shadow-card lg:aspect-[4/4.2]"
-                sizes="(min-width: 1024px) 40vw, 100vw"
-              />
+              <ViewTransition name={`course-visual-${course.slug}`} default="none" share="course-morph">
+                <Visual
+                  image={course.image}
+                  seed={course.order + 3}
+                  priority
+                  tone="sand"
+                  className="aspect-[4/3] rounded-panel shadow-card lg:aspect-[4/4.2]"
+                  sizes="(min-width: 1024px) 40vw, 100vw"
+                />
+              </ViewTransition>
             </div>
           </div>
         </Container>
