@@ -65,7 +65,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <script
           dangerouslySetInnerHTML={{
             __html:
-              "document.documentElement.classList.add('js');setTimeout(function(){if(!window.__revealReady)document.documentElement.classList.add('reveal-fallback')},3500)",
+              "var d=document.documentElement,n=navigator,c=n.connection;d.classList.add('js');" +
+              // Low-capability or data-saving devices keep every decoration but skip ambient loops.
+              "if((n.deviceMemory&&n.deviceMemory<=2)||(n.hardwareConcurrency&&n.hardwareConcurrency<=2)||(c&&c.saveData))d.classList.add('motion-lite');" +
+              "setTimeout(function(){if(!window.__revealReady)d.classList.add('reveal-fallback')},3500)",
           }}
         />
         <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(organizationLd)} />

@@ -188,3 +188,96 @@
   ::view-transition-old(*),
   ::view-transition-new(*) { animation: none !important; }
 }
+
+/* ======================================================================
+ * Phase 2 — signature layer
+ * One art direction: the foot-arch contour + pressure-map dots. Every
+ * loop is transform/opacity, opts in via MotionRegion, pauses offscreen,
+ * stops under reduced motion and on low-capability devices (.motion-lite).
+ * ==================================================================== */
+
+/* Low-memory / 2-core / data-saver devices: decoration stays, loops don't. */
+.motion-lite [data-motion-region] { --ambient-play-state: paused !important; }
+
+@layer components {
+  /* ---------- Hero ---------- */
+
+  /* Static light replaces a second liquid-light region (3 fewer loops). */
+  .hero-mist-light {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(60% 45% at 85% 15%, rgb(255 255 255 / 0.95), transparent 70%),
+      radial-gradient(55% 40% at 10% 90%, rgb(179 38 45 / 0.06), transparent 70%);
+  }
+  /* The grey panel dissolves into the next section instead of ending in an edge. */
+  .hero-mist { mask-image: linear-gradient(to bottom, black 72%, transparent); }
+
+  .hero-underline {
+    position: absolute;
+    left: -2%;
+    bottom: -0.16em;
+    width: 104%;
+    height: 0.3em;
+    overflow: visible;
+    pointer-events: none;
+    fill: none;
+    stroke: var(--color-accent);
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    vector-effect: non-scaling-stroke;
+  }
+  .hero-underline path { vector-effect: non-scaling-stroke; }
+
+  @media (prefers-reduced-motion: no-preference) {
+    /* Editorial mask reveal: the visual opens from a rounded window. */
+    .hero-reveal {
+      animation: hero-reveal 950ms var(--ease-out-soft) 120ms both;
+    }
+    .hero-underline path {
+      stroke-dasharray: 1;
+      animation: draw-line 900ms var(--ease-in-out-soft) 560ms both;
+    }
+    /* The pressure map "breathes" like a live sensor reading. */
+    .motion-hero .pressure-peak {
+      animation: pressure-breathe 5.2s ease-in-out infinite;
+      animation-play-state: var(--ambient-play-state, paused);
+    }
+    .motion-hero svg + svg .pressure-peak { animation-delay: -2.6s; }
+    .hero-chip {
+      animation: chip-float 7s ease-in-out infinite;
+      animation-play-state: var(--ambient-play-state, paused);
+    }
+    /* Seam contour drifts a little as the boundary scrolls past. */
+    @supports (animation-timeline: view()) {
+      .seam-drift {
+        animation: seam-drift linear both;
+        animation-timeline: view();
+        animation-range: entry 0% exit 60%;
+      }
+    }
+  }
+
+  @keyframes hero-reveal {
+    from {
+      clip-path: inset(9% 7% 16% 7% round 44px);
+      transform: translate3d(0, 16px, 0);
+    }
+    to {
+      clip-path: inset(0 round var(--radius-panel));
+      transform: none;
+    }
+  }
+  @keyframes pressure-breathe {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+  }
+  @keyframes chip-float {
+    0%, 100% { transform: translate3d(0, 0, 0); }
+    50% { transform: translate3d(0, -5px, 0); }
+  }
+  @keyframes seam-drift {
+    from { transform: translate3d(0, 24px, 0) rotate(-2deg); }
+    to { transform: translate3d(-24px, -12px, 0) rotate(1deg); }
+  }
+}

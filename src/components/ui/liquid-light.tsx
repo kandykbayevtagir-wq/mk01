@@ -1,9 +1,10 @@
 /** Static gradients rasterize once; only their small layers move. No blur or canvas. */
-export function LiquidLight({ dark = false }: { dark?: boolean }) {
+export function LiquidLight({ dark = false, lean = false }: { dark?: boolean; lean?: boolean }) {
   return (
     <div aria-hidden="true" className={`liquid-light${dark ? " liquid-light--dark" : ""}`}>
       <span className="liquid-light__form liquid-light__form--graphite" />
-      <span className="liquid-light__form liquid-light__form--silver" />
+      {/* `lean` drops the third loop where another ambient layer already moves */}
+      {!lean && <span className="liquid-light__form liquid-light__form--silver" />}
       <span className="liquid-light__form liquid-light__form--red" />
     </div>
   );

@@ -88,7 +88,7 @@ export function PressureFoot({
     <svg viewBox="0 0 200 480" className={className} aria-hidden focusable="false">
       <g transform={mirror ? "translate(200 0) scale(-1 1)" : undefined}>
         {footBuckets.map((d, i) => (
-          <path key={i} d={d} style={{ fill: ramp[i] }} />
+          <path key={i} d={d} className={i === 5 ? "pressure-peak" : undefined} style={{ fill: ramp[i] }} />
         ))}
       </g>
     </svg>
