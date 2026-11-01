@@ -5,9 +5,10 @@ import { useId, useRef, useState } from "react";
 import { AlertCircle, Check, ChevronDown, Loader2 } from "lucide-react";
 import { leadSchemas, type LeadType } from "@/lib/leads/schema";
 import { submitLead } from "@/lib/leads/client";
-import { contacts } from "@/data/site";
+import { channels, whatsappLink } from "@/data/site";
 import { t } from "@/i18n";
-import { cn, phoneHref, whatsappHref } from "@/lib/utils";
+import { cn } from "@/lib/utils";
+import { ChannelTile } from "@/components/ui/brand-icons";
 import { Button, ButtonLink } from "@/components/ui/button";
 
 export type FieldDef = {
@@ -25,6 +26,23 @@ export type FieldDef = {
 };
 
 type Status = "idle" | "submitting" | "success" | "error";
+
+/** Short, polite WhatsApp message built from what the visitor already typed. */
+function fallbackMessage(type: LeadType, data: Record<string, string>) {
+  const clip = (v?: string) => (v ?? "").trim().replace(/\s+/g, " ").slice(0, 120);
+  const name = clip(data.name);
+  const intro =
+    type === "course" && clip(data.course)
+      ? `хочу записаться на курс «${clip(data.course)}».`
+      : type === "partner"
+        ? `хочу организовать обучение${clip(data.city) ? ` в городе ${clip(data.city)}` : ""}.`
+        : type === "appointment"
+          ? `хочу записаться в центр${clip(data.service) ? `: ${clip(data.service)}` : ""}.`
+          : type === "product"
+            ? `интересует продукция${clip(data.product) ? `: ${clip(data.product)}` : ""}.`
+            : "у меня вопрос.";
+  return `Здравствуйте! ${name ? `Меня зовут ${name}, ` : ""}${intro}`;
+}
 
 const fieldBase =
   "peer w-full rounded-2xl border bg-card px-4 text-base text-ink placeholder:text-muted/70 " +
@@ -53,6 +71,7 @@ export function LeadForm({
   const [errorCode, setErrorCode] = useState<string | null>(null);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [attempted, setAttempted] = useState(false);
+  const [lastData, setLastData] = useState<Record<string, string>>({});
 
   const schema = leadSchemas[type];
 
@@ -102,6 +121,7 @@ export function LeadForm({
       return;
     }
 
+    setLastData(data);
     setStatus("submitting");
     setErrorCode(null);
     try {
@@ -261,21 +281,23 @@ export function LeadForm({
             {t.form.errorTitle}
           </p>
           <p className="mt-1.5 text-ink/80">{errorMessage}</p>
-          {(errorCode === "not_configured" || errorCode === "delivery_failed" || errorCode === "network") &&
-            (contacts.whatsapp || contacts.phone) && (
-              <div className="mt-3 flex flex-wrap gap-2">
-                {contacts.whatsapp && (
-                  <ButtonLink href={whatsappHref(contacts.whatsapp)} variant="primary" size="sm">
-                    Написать в WhatsApp
-                  </ButtonLink>
-                )}
-                {contacts.phone && (
-                  <ButtonLink href={phoneHref(contacts.phone)} variant="outline" size="sm">
-                    {contacts.phone}
-                  </ButtonLink>
-                )}
-              </div>
-            )}
+          {(errorCode === "not_configured" || errorCode === "delivery_failed" || errorCode === "network") && (
+            <div className="mt-3 flex flex-wrap gap-2">
+              <a
+                href={whatsappLink(fallbackMessage(type, lastData))}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="press inline-flex h-11 items-center gap-2.5 rounded-full bg-ink pl-1.5 pr-4 text-sm font-medium text-white transition-colors duration-[var(--dur-press)] hover:bg-graphite-2"
+              >
+                <ChannelTile kind="whatsapp" className="size-8 rounded-full" />
+                {channels.whatsapp.label}
+                <span className="sr-only"> (откроется в новой вкладке)</span>
+              </a>
+              <ButtonLink href={channels.phone.url} variant="outline" size="sm" className="h-11">
+                {channels.phone.value}
+              </ButtonLink>
+            </div>
+          )}
         </div>
       )}
 

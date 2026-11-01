@@ -109,6 +109,11 @@
   --art-fill-dark: rgb(255 255 255 / 0.05);
   --art-dot-dark: rgb(255 255 255 / 0.08);
 
+  /* Third-party brand accents — icons and small tints only */
+  --brand-whatsapp: #25d366;
+  --brand-telegram: #26a5e4;
+  --brand-instagram: linear-gradient(45deg, #feda75 0%, #fa7e1e 25%, #d62976 50%, #962fbf 75%, #4f5bd5 100%);
+
   /* Ambient glow */
   --glow-neutral: rgb(23 23 23 / 0.08);
   --glow-red: rgb(179 38 45 / 0.1);

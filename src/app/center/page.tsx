@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { MapPin, Clock3, ShieldCheck } from "lucide-react";
 import { center, services, specialists } from "@/data/center";
-import { contacts, site } from "@/data/site";
+import { channels, locations, socialProfiles } from "@/data/site";
 import { absoluteUrl, jsonLd, pageMetadata } from "@/lib/seo";
 import { formatKzt } from "@/lib/utils";
 import { ButtonLink } from "@/components/ui/button";
@@ -20,27 +20,31 @@ export const metadata: Metadata = pageMetadata({
 });
 
 export default function CenterPage() {
-  // LocalBusiness data is emitted only when the address is verified/filled in.
-  const businessLd = contacts.address
-    ? {
-        "@context": "https://schema.org",
-        "@type": "HealthAndBeautyBusiness",
-        name: center.name,
-        url: absoluteUrl("/center"),
-        parentOrganization: { "@type": "EducationalOrganization", name: site.name },
-        ...(contacts.phone ? { telephone: contacts.phone } : {}),
-        address: {
-          "@type": "PostalAddress",
-          streetAddress: contacts.address,
-          ...(contacts.city ? { addressLocality: contacts.city } : {}),
-          addressCountry: "KZ",
-        },
-      }
-    : null;
+  // LocalBusiness data per branch — emitted only for branches whose street
+  // address has been verified (no invented addresses or coordinates).
+  const businessLd = locations
+    .filter((l) => l.address)
+    .map((l) => ({
+      "@context": "https://schema.org",
+      "@type": "HealthAndBeautyBusiness",
+      "@id": `${absoluteUrl("/center")}#${l.id}`,
+      name: `${l.name} — ${l.label}`,
+      url: absoluteUrl("/center"),
+      telephone: l.phone ?? channels.phone.value,
+      hasMap: l.twoGisUrl,
+      sameAs: socialProfiles,
+      ...(l.hours ? { openingHours: l.hours } : {}),
+      address: {
+        "@type": "PostalAddress",
+        streetAddress: l.address,
+        addressLocality: l.city,
+        addressCountry: "KZ",
+      },
+    }));
 
   return (
     <>
-      {businessLd && <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(businessLd)} />}
+      {businessLd.length > 0 && <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(businessLd)} />}
       <PageHero
         crumbs={[{ href: "/center", label: "Центр" }]}
         eyebrow="Центр подологии"
@@ -154,39 +158,32 @@ export default function CenterPage() {
         successText="Спасибо! Администратор свяжется с вами, чтобы согласовать время визита."
         contactMessage="Здравствуйте! Хочу записаться в центр подологии."
       >
-        {(contacts.address || contacts.hours) && (
-          <ul className="mt-10 space-y-3">
-            {contacts.address && (
-              <li className="flex gap-3">
-                <MapPin aria-hidden className="mt-0.5 size-5 shrink-0 text-accent" strokeWidth={1.5} />
-                <span>
-                  {contacts.city ? `${contacts.city}, ` : ""}
-                  {contacts.address}
-                  {contacts.mapUrl && (
-                    <>
-                      {" "}
-                      ·{" "}
-                      <a
-                        href={contacts.mapUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="underline decoration-line underline-offset-4 hover:decoration-ink"
-                      >
-                        На карте
-                      </a>
-                    </>
+        <ul className="mt-10 border-t border-line">
+          {locations.map((l) => (
+            <li key={l.id} className="border-b border-line">
+              <a
+                href={l.twoGisUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group flex min-h-14 items-center gap-3 py-3"
+              >
+                <MapPin aria-hidden className="size-5 shrink-0 text-accent" strokeWidth={1.5} />
+                <span className="flex-1">
+                  <span className="block font-medium">{l.address ? `${l.city}, ${l.address}` : `${l.label} · ${l.city}`}</span>
+                  {l.hours && (
+                    <span className="mt-0.5 flex items-center gap-1.5 text-sm text-muted">
+                      <Clock3 aria-hidden className="size-3.5" strokeWidth={1.75} />
+                      {l.hours}
+                    </span>
                   )}
                 </span>
-              </li>
-            )}
-            {contacts.hours && (
-              <li className="flex gap-3">
-                <Clock3 aria-hidden className="mt-0.5 size-5 shrink-0 text-accent" strokeWidth={1.5} />
-                {contacts.hours}
-              </li>
-            )}
-          </ul>
-        )}
+                <span className="text-sm text-muted transition-colors group-hover:text-ink">
+                  2ГИС<span className="sr-only"> (откроется в новой вкладке)</span>
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
       </FormSection>
     </>
   );

@@ -132,3 +132,29 @@ export type Testimonial = {
   videoUrl: string | null;
   consent: boolean;
 };
+
+export type BusinessLocation = {
+  id: string;
+  /** Neutral label until the street address is verified, e.g. «Филиал 1». */
+  label: string;
+  name: string;
+  city: string;
+  /** Street + building — only once verified against the 2GIS listing. */
+  address: string | null;
+  /** Branch-specific hours — only if verified. */
+  hours: string | null;
+  /** Branch-specific phone — only if verified (otherwise the main number applies). */
+  phone: string | null;
+  /** Official 2GIS listing. */
+  twoGisUrl: string;
+};
+
+export type PaymentMethodId = "kaspi" | "halyk" | "applepay" | "googlepay" | "cash";
+
+export type PaymentMethod = {
+  id: PaymentMethodId;
+  /** Accessible / text name. */
+  name: string;
+  /** Short supporting line under the mark. */
+  note: string;
+};

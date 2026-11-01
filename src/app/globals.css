@@ -93,6 +93,12 @@
     transform: none;
   }
 
+  /* Safety net: scripts never started → show everything statically. */
+  .js.reveal-fallback [data-reveal] {
+    opacity: 1;
+    transform: none;
+  }
+
   /* ---------------------------------------------------------------- */
   /*  Above-the-fold entrances — pure CSS, short delays               */
   /* ---------------------------------------------------------------- */

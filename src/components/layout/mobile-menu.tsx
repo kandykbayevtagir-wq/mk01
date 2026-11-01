@@ -5,9 +5,10 @@ import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useId, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { ArrowUpRight } from "lucide-react";
-import { contacts, navigation } from "@/data/site";
+import { channels, navigation } from "@/data/site";
+import { SocialIconRow } from "@/components/contact/contact-channels";
 import { t } from "@/i18n";
-import { cn, phoneHref, whatsappHref } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import { ButtonLink } from "@/components/ui/button";
 import { Logo } from "./logo";
 
@@ -73,12 +74,6 @@ export function MobileMenu() {
     };
   }, [open, close]);
 
-  const quickLinks = [
-    contacts.phone && { label: "Позвонить", href: phoneHref(contacts.phone) },
-    contacts.whatsapp && { label: "WhatsApp", href: whatsappHref(contacts.whatsapp) },
-    contacts.telegram && { label: "Telegram", href: `https://t.me/${contacts.telegram}` },
-    contacts.instagram && { label: "Instagram", href: `https://instagram.com/${contacts.instagram}` },
-  ].filter(Boolean) as { label: string; href: string }[];
 
   return (
     <>
@@ -188,21 +183,16 @@ export function MobileMenu() {
                   open ? "translate-y-0 opacity-100 delay-[260ms]" : "translate-y-2 opacity-0",
                 )}
               >
-                {quickLinks.length > 0 && (
-                  <ul className="flex flex-wrap gap-2">
-                    {quickLinks.map((l) => (
-                      <li key={l.label}>
-                        <a
-                          href={l.href}
-                          className="inline-flex h-10 items-center rounded-full border border-line px-4 text-sm font-medium"
-                          {...(l.href.startsWith("http") ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-                        >
-                          {l.label}
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                )}
+                <div className="flex items-center justify-between gap-3">
+                  <a
+                    href={channels.phone.url}
+                    className="press inline-flex min-h-11 flex-col justify-center rounded-xl px-1 transition-colors duration-[var(--dur-press)] active:bg-mist"
+                  >
+                    <span className="text-xs text-muted">Телефон и WhatsApp</span>
+                    <span className="text-[0.9375rem] font-semibold">{channels.phone.value}</span>
+                  </a>
+                  <SocialIconRow tone="light" />
+                </div>
                 <ButtonLink href="/courses" variant="accent" size="lg" arrow className="w-full">
                   {t.common.chooseCourse}
                 </ButtonLink>

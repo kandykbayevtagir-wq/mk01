@@ -13,17 +13,18 @@ import {
   upcomingSessions,
 } from "@/data/courses";
 import { founder, founderDisplayName } from "@/data/founder";
-import { contacts, site } from "@/data/site";
+import { channels, site, whatsappLink } from "@/data/site";
 import type { Course } from "@/data/types";
 import { t } from "@/i18n";
 import { absoluteUrl, jsonLd, pageMetadata } from "@/lib/seo";
-import { formatDateRange, formatKzt, plural, whatsappHref } from "@/lib/utils";
+import { formatDateRange, formatKzt, plural } from "@/lib/utils";
 import { ButtonLink } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { Eyebrow } from "@/components/ui/typography";
 import { Reveal } from "@/components/ui/reveal";
 import { Visual } from "@/components/ui/visual";
 import { SectionDecor } from "@/components/ui/section-decor";
+import { ChannelTile } from "@/components/ui/brand-icons";
 import { Breadcrumbs } from "@/components/sections/page-hero";
 import { Faq } from "@/components/sections/faq";
 import { CourseCard } from "@/components/course/course-card";
@@ -356,16 +357,16 @@ export default async function CoursePage({ params }: Props) {
               <ButtonLink href="#zapis" variant="accent" size="lg" arrow className="mt-8 w-full">
                 {t.common.enroll}
               </ButtonLink>
-              {contacts.whatsapp && (
-                <ButtonLink
-                  href={whatsappHref(contacts.whatsapp, `Здравствуйте! Интересует курс «${course.title}».`)}
-                  variant="outline"
-                  size="md"
-                  className="mt-3 w-full"
-                >
-                  Задать вопрос в WhatsApp
-                </ButtonLink>
-              )}
+              <a
+                href={whatsappLink(`Здравствуйте! Интересует курс «${course.title}».`)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="press mt-3 inline-flex h-12 w-full items-center justify-center gap-2.5 rounded-full border border-ink/15 bg-card text-[0.9375rem] font-medium transition-colors duration-[var(--dur-press)] hover:border-ink/40 active:bg-mist"
+              >
+                <ChannelTile kind="whatsapp" className="size-7 rounded-full" />
+                Задать вопрос в WhatsApp
+                <span className="sr-only"> (откроется в новой вкладке)</span>
+              </a>
               <p className="mt-6 text-[0.8125rem] leading-relaxed text-muted">
                 После заявки мы свяжемся с вами, ответим на вопросы и подтвердим участие.
               </p>
@@ -396,6 +397,21 @@ export default async function CoursePage({ params }: Props) {
                   <dd className="text-right font-semibold">{dateLabel}</dd>
                 </div>
               </dl>
+              <a
+                href={whatsappLink(`Здравствуйте! Хочу записаться на курс «${course.title}».`)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group press mt-8 flex items-center gap-3 rounded-card border border-line bg-card p-3 pr-4 transition-[border-color,box-shadow] duration-[var(--dur-card)] hover:border-ink/15 hover:shadow-card"
+              >
+                <ChannelTile kind="whatsapp" />
+                <span className="flex-1">
+                  <span className="block text-[0.9375rem] font-semibold">Удобнее в WhatsApp?</span>
+                  <span className="block text-[0.8125rem] text-muted">{channels.whatsapp.value}</span>
+                </span>
+                <span className="text-sm font-medium text-muted transition-colors group-hover:text-ink">
+                  Написать<span className="sr-only"> в WhatsApp (откроется в новой вкладке)</span>
+                </span>
+              </a>
             </Reveal>
             <Reveal className="lg:col-span-6 lg:col-start-7" delay={80}>
               <div className="rounded-panel bg-card p-5 shadow-card sm:p-8 lg:p-10">

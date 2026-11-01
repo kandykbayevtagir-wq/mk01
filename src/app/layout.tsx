@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Manrope } from "next/font/google";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
-import { contacts, site } from "@/data/site";
+import { channels, site, socialProfiles } from "@/data/site";
 import { defaultLocale, localeMeta } from "@/i18n/config";
 import { t } from "@/i18n";
 import { jsonLd } from "@/lib/seo";
@@ -43,30 +43,31 @@ const organizationLd = {
   name: site.name,
   url: site.url,
   description: site.description,
-  ...(contacts.phone ? { telephone: contacts.phone } : {}),
-  ...(contacts.email ? { email: contacts.email } : {}),
-  ...(contacts.address
-    ? {
-        address: {
-          "@type": "PostalAddress",
-          streetAddress: contacts.address,
-          ...(contacts.city ? { addressLocality: contacts.city } : {}),
-          addressCountry: "KZ",
-        },
-      }
-    : {}),
-  sameAs: [
-    contacts.instagram && `https://instagram.com/${contacts.instagram}`,
-    contacts.telegram && `https://t.me/${contacts.telegram}`,
-  ].filter(Boolean),
+  telephone: channels.phone.value,
+  areaServed: { "@type": "City", name: "Актобе" },
+  contactPoint: {
+    "@type": "ContactPoint",
+    telephone: channels.phone.value,
+    contactType: "customer service",
+    availableLanguage: ["ru"],
+  },
+  sameAs: socialProfiles,
+  // Branch addresses are added as LocalBusiness on /center once verified.
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang={localeMeta[defaultLocale].htmlLang} className={manrope.variable} suppressHydrationWarning>
       <head>
-        {/* Enables scroll-reveal styles only when JS is running. */}
-        <script dangerouslySetInnerHTML={{ __html: "document.documentElement.classList.add('js')" }} />
+        {/* Enables scroll-reveal styles only when JS runs; if the app's scripts
+            fail to load (flaky network, blocked JS), reveal everything after
+            3.5 s so content is never left invisible. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              "document.documentElement.classList.add('js');setTimeout(function(){if(!window.__revealReady)document.documentElement.classList.add('reveal-fallback')},3500)",
+          }}
+        />
         <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(organizationLd)} />
       </head>
       <body className="flex min-h-dvh flex-col">

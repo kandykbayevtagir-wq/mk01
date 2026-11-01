@@ -24,6 +24,8 @@ export function Reveal({
   const ref = useRef<HTMLElement>(null);
 
   useEffect(() => {
+    // Tell the inline fallback timer (layout.tsx) that reveals are live.
+    (window as Window & { __revealReady?: boolean }).__revealReady = true;
     const el = ref.current;
     if (!el) return;
     if (!("IntersectionObserver" in window)) {

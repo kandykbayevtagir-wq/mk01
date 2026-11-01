@@ -1,28 +1,20 @@
 import Link from "next/link";
-import { contacts, navigation, site } from "@/data/site";
-import { center } from "@/data/center";
+import { MapPin } from "lucide-react";
+import { channels, locations, navigation, site } from "@/data/site";
 import { t } from "@/i18n";
-import { phoneHref, whatsappHref } from "@/lib/utils";
+import { SocialIconRow } from "@/components/contact/contact-channels";
+import { PaymentStrip } from "@/components/contact/payment-methods";
 import { Container } from "@/components/ui/container";
-import { ArchLines, Footprints } from "@/components/ui/podo-art";
+import { ArchLines } from "@/components/ui/podo-art";
 import { Logo } from "./logo";
 
 export function Footer() {
-  const contactItems = [
-    contacts.phone && { label: contacts.phone, href: phoneHref(contacts.phone) },
-    contacts.whatsapp && { label: "WhatsApp", href: whatsappHref(contacts.whatsapp) },
-    contacts.telegram && { label: "Telegram", href: `https://t.me/${contacts.telegram}` },
-    contacts.instagram && { label: "Instagram", href: `https://instagram.com/${contacts.instagram}` },
-    contacts.email && { label: contacts.email, href: `mailto:${contacts.email}` },
-  ].filter(Boolean) as { label: string; href: string }[];
-
   const year = new Date().getFullYear();
 
   return (
     <footer data-tone="dark" className="grain relative mt-auto overflow-hidden bg-graphite text-white">
       <div aria-hidden className="pattern-dots-dark pointer-events-none absolute inset-0 [mask-image:linear-gradient(to_bottom,transparent,black)]" />
       <ArchLines tone="dark" count={9} className="pointer-events-none absolute -bottom-1 -right-32 h-64 w-[620px] max-md:hidden" />
-      <Footprints tone="dark" steps={4} className="pointer-events-none absolute left-[38%] top-10 hidden h-64 w-auto rotate-[30deg] lg:block" />
       <Container className="relative py-14 lg:py-20">
         <div className="grid grid-cols-1 gap-12 md:grid-cols-2 lg:grid-cols-12">
           <div className="lg:col-span-5">
@@ -48,51 +40,42 @@ export function Footer() {
 
           <div className="lg:col-span-4">
             <p className="text-eyebrow font-semibold uppercase text-muted-dark">Связаться</p>
-            {contactItems.length > 0 ? (
-              <ul className="mt-5 space-y-3">
-                {contactItems.map((c) => (
-                  <li key={c.href}>
-                    <a
-                      href={c.href}
-                      className="text-[0.9375rem] text-white/85 transition-colors hover:text-white"
-                      {...(c.href.startsWith("http") ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-                    >
-                      {c.label}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <p className="mt-5 text-[0.9375rem] text-white/85">
-                Оставьте заявку на странице{" "}
-                <Link href="/contacts" className="underline decoration-white/30 underline-offset-4 hover:decoration-white">
-                  «Контакты»
-                </Link>{" "}
-                — мы свяжемся с вами.
-              </p>
-            )}
-            {(contacts.address || contacts.hours) && (
-              <p className="mt-6 text-[0.9375rem] leading-relaxed text-muted-dark">
-                {center.name}
-                {contacts.address && (
-                  <>
-                    <br />
-                    {contacts.city ? `${contacts.city}, ` : ""}
-                    {contacts.address}
-                  </>
-                )}
-                {contacts.hours && (
-                  <>
-                    <br />
-                    {contacts.hours}
-                  </>
-                )}
-              </p>
-            )}
+            <a
+              href={channels.phone.url}
+              className="mt-3 inline-flex min-h-11 items-center text-xl font-semibold tracking-tight text-white transition-colors hover:text-white/80"
+            >
+              {channels.phone.value}
+            </a>
+            <p className="mt-1 text-[0.8125rem] text-muted-dark">Телефон и WhatsApp · {channels.telegram.value}</p>
+            <SocialIconRow className="mt-4" />
+
+            <p className="mt-8 text-eyebrow font-semibold uppercase text-muted-dark">Адреса · Актобе</p>
+            <ul className="mt-3 space-y-1">
+              {locations.map((l) => (
+                <li key={l.id}>
+                  <a
+                    href={l.twoGisUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex min-h-11 items-center gap-2 text-[0.9375rem] text-white/85 transition-colors hover:text-white"
+                  >
+                    <MapPin aria-hidden className="size-4 text-muted-dark" strokeWidth={1.75} />
+                    {l.address ? `${l.label} — ${l.address}` : l.label}
+                    <span className="text-muted-dark">· 2ГИС</span>
+                    <span className="sr-only">(откроется в новой вкладке)</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
 
-        <div className="mt-14 flex flex-col gap-4 border-t border-line-dark pt-6 text-sm text-muted-dark sm:flex-row sm:items-center sm:justify-between">
+        <div className="mt-12 border-t border-line-dark pt-6">
+          <p className="text-eyebrow font-semibold uppercase text-muted-dark">Способы оплаты</p>
+          <PaymentStrip className="mt-3" />
+        </div>
+
+        <div className="mt-8 flex flex-col gap-4 border-t border-line-dark pt-6 text-sm text-muted-dark sm:flex-row sm:items-center sm:justify-between">
           <p>
             © {year} {site.name}
           </p>
