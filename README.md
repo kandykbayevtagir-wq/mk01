@@ -39,13 +39,18 @@ All business content lives in **`src/data/`**. Components only render what is th
 | `content.ts`              | "Why us" advantages (each with a `show` switch), partner-programme copy |
 | `src/i18n/ru.ts`          | Interface strings: navigation, buttons, form labels, errors      |
 
+### Site structure
+
+Primary navigation (header and menu): **Обучение** `/courses` · **Центр** `/center` · **О Марине** `/about` · **Контакты** `/contacts`, plus one contextual CTA. Secondary pages **Продукция** `/products`, **Партнёрам** `/partners` and **Отзывы** `/reviews` are reached from the footer and from related pages (`ContextLinks`). The navigation is defined in `navigation` / `secondaryNavigation` in `src/data/site.ts`, and the CTA rules in `src/components/layout/header-cta.ts`.
+
 ### Contacts, locations and payment methods
 
 All of these live in **`src/data/site.ts`**, and every link on the site is generated from there:
 
 - `channels`: phone, WhatsApp, Telegram and Instagram. Each entry has a display value, a label and a URL.
 - `whatsappLink(message)`: builds a WhatsApp link with an encoded, pre-filled message.
-- `locations`: the two Aktobe branches with their official 2GIS links. **Street addresses, opening hours and branch phones are `null` until verified.** When `null`, the cards show «Филиал 1/2» and send visitors to 2GIS. Once a street address is filled in, `/center` automatically emits `LocalBusiness` structured data for that branch.
+- `locations`: the two Aktobe branches with their verified street address, floor or landmark and optional hours or phone. A branch gets a map button only when its `mapUrl` is set. A branch's structured data (`LocalBusiness`) is generated from the same record.
+- `unmappedTwoGisRecords`: the two official 2GIS records. **Which record belongs to which address is not yet verified**, so they are shown neutrally on `/contacts` and attached to neither branch. Once confirmed, move each URL into `locations[i].mapUrl` and set `mapLabel` to «Открыть в 2ГИС».
 - `paymentMethods`: payment methods accepted at the venue. This is informational only; the site has no online checkout.
 
 **Brand marks.** WhatsApp, Telegram, Instagram, Apple Pay and Google Pay use the unmodified official SVG paths from [Simple Icons](https://simpleicons.org) (CC0; trademarks belong to their owners). Kaspi and Halyk have no verified open-source mark, so they are shown as plain text wordmarks. To use the official logos, add them with permission from the banks' brand teams.

@@ -8,7 +8,7 @@ import { Reveal } from "@/components/ui/reveal";
 
 export function PartnersTeaser() {
   return (
-    <section aria-labelledby="partners-title" className="py-4 lg:py-8">
+    <section aria-labelledby="partners-title" className="py-10 sm:py-14 lg:py-20">
       <Container>
         <Reveal>
           <div

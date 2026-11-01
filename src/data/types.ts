@@ -135,19 +135,29 @@ export type Testimonial = {
 
 export type BusinessLocation = {
   id: string;
-  /** Neutral label until the street address is verified, e.g. «Филиал 1». */
+  /** Short area name shown on cards, e.g. «Батыс-2». */
   label: string;
   name: string;
   city: string;
-  /** Street + building — only once verified against the 2GIS listing. */
-  address: string | null;
+  /** Street + building, as shown to visitors. */
+  address: string;
+  /** Floor / entrance / landmark. */
+  detail: string | null;
   /** Branch-specific hours — only if verified. */
   hours: string | null;
   /** Branch-specific phone — only if verified (otherwise the main number applies). */
   phone: string | null;
-  /** Official 2GIS listing. */
-  twoGisUrl: string;
+  /**
+   * Map destination for THIS branch — set only when its mapping is verified.
+   * `null` → no map button is rendered.
+   */
+  mapUrl: string | null;
+  /** Label of the map action (depends on the service behind `mapUrl`). */
+  mapLabel: string | null;
 };
+
+/** An official 2GIS record whose branch mapping is not yet established. */
+export type UnmappedMapRecord = { id: string; url: string };
 
 export type PaymentMethodId = "kaspi" | "halyk" | "applepay" | "googlepay" | "cash";
 

@@ -1,4 +1,4 @@
-import type { BusinessLocation, Contacts, PaymentMethod } from "./types";
+import type { BusinessLocation, Contacts, PaymentMethod, UnmappedMapRecord } from "./types";
 
 /**
  * Global brand & contact configuration.
@@ -86,33 +86,59 @@ export const contacts: Contacts = {
 };
 
 /* ------------------------------------------------------------------ */
-/*  Locations — two separate official 2GIS records in Aktobe           */
+/*  Locations — two branches in Aktobe                                  */
 /* ------------------------------------------------------------------ */
 
+/**
+ * Addresses are corroborated by two independent sources:
+ *  • PodiaFarm partner directory — https://podiafarm.pro/archons/aktobe
+ *  • Yandex Maps (Moldagulova branch) —
+ *    https://yandex.kz/maps/ru/org/podology_mk/218261749751/
+ * Hours and branch phones are not published in those sources → null.
+ */
 export const locations: BusinessLocation[] = [
   {
-    id: "branch-1",
-    label: "Филиал 1",
+    id: "batys-2",
+    label: "Батыс-2",
     name: "Podology MK",
     city: "Актобе",
-    // ЗАПОЛНИТЬ: улица и дом из карточки 2ГИС (не удалось проверить автоматически).
-    address: null,
+    address: "проспект Алии Молдагуловой, 54А",
+    detail: "1 этаж",
     hours: null,
     phone: null,
-    twoGisUrl: "https://2gis.kz/aktobe/geo/70000001049714001",
+    // Yandex Maps listing for the Moldagulova location (owner-supplied source).
+    mapUrl: "https://yandex.kz/maps/ru/org/podology_mk/218261749751/",
+    mapLabel: "Открыть на Яндекс Картах",
   },
   {
-    id: "branch-2",
-    label: "Филиал 2",
+    id: "akatsiya",
+    label: "Район Акации",
     name: "Podology MK",
     city: "Актобе",
-    // ЗАПОЛНИТЬ: улица и дом из карточки 2ГИС (не удалось проверить автоматически).
-    address: null,
+    address: "улица Кобланды, 12",
+    detail: "Район Акации, вход со сквера Финансистов",
     hours: null,
     phone: null,
-    twoGisUrl: "https://2gis.kz/aktobe/geo/70000001089583894",
+    // ЗАПОЛНИТЬ: ссылка на карту этого филиала (2ГИС), когда соответствие подтверждено.
+    mapUrl: null,
+    mapLabel: null,
   },
 ];
+
+/**
+ * Official 2GIS records of Podology MK in Aktobe.
+ * ⚠️ UNRESOLVED: which record belongs to which address is NOT verified
+ * (2gis.kz could not be opened). Do not attach either URL to a branch until
+ * confirmed — then move it into `locations[i].mapUrl`.
+ */
+export const unmappedTwoGisRecords: UnmappedMapRecord[] = [
+  { id: "2gis-1", url: "https://2gis.kz/aktobe/geo/70000001049714001" },
+  { id: "2gis-2", url: "https://2gis.kz/aktobe/geo/70000001089583894" },
+];
+
+export function formatAddress(l: Pick<BusinessLocation, "city" | "address">) {
+  return `${l.city}, ${l.address}`;
+}
 
 /* ------------------------------------------------------------------ */
 /*  Accepted payment methods (offline/at the venue — no online checkout) */
@@ -132,14 +158,19 @@ export const legal = {
   bin: null as string | null,
 };
 
+/** Primary navigation — the two customer journeys plus trust and contact. */
 export const navigation = [
   { href: "/courses", key: "courses" },
-  { href: "/about", key: "about" },
   { href: "/center", key: "center" },
-  { href: "/products", key: "products" },
-  { href: "/reviews", key: "reviews" },
-  { href: "/partners", key: "partners" },
+  { href: "/about", key: "about" },
   { href: "/contacts", key: "contacts" },
+] as const;
+
+/** Secondary pages: kept out of the header, surfaced contextually and in the footer. */
+export const secondaryNavigation = [
+  { href: "/products", key: "products" },
+  { href: "/partners", key: "partners" },
+  { href: "/reviews", key: "reviews" },
 ] as const;
 
 export function hasAnyContact() {

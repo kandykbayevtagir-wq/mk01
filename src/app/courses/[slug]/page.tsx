@@ -27,6 +27,7 @@ import { SectionDecor } from "@/components/ui/section-decor";
 import { ChannelTile } from "@/components/ui/brand-icons";
 import { Breadcrumbs } from "@/components/sections/page-hero";
 import { Faq } from "@/components/sections/faq";
+import { ContextLinks } from "@/components/sections/context-links";
 import { CourseCard } from "@/components/course/course-card";
 import { MobileEnrollBar } from "@/components/course/mobile-enroll-bar";
 import { LeadForm } from "@/components/forms/lead-form";
@@ -415,7 +416,7 @@ export default async function CoursePage({ params }: Props) {
             </Reveal>
             <Reveal className="lg:col-span-6 lg:col-start-7" delay={80}>
               <div className="rounded-panel bg-card p-5 shadow-card sm:p-8 lg:p-10">
-                <LeadForm type="course" fields={courseEnrollFields(course)} submitLabel="Записаться на курс" tone="mist" />
+                <LeadForm type="course" fields={courseEnrollFields(course)} submitLabel={t.common.enroll} tone="mist" />
               </div>
             </Reveal>
           </div>
@@ -443,6 +444,14 @@ export default async function CoursePage({ params }: Props) {
           </Container>
         </section>
       )}
+
+      <ContextLinks
+        label="Дополнительно"
+        items={[
+          { href: "/reviews", title: "Отзывы выпускников", text: "Что говорят участники обучения." },
+          { href: "/partners", title: "Обучение в вашем городе", text: "Для организаторов из других городов." },
+        ]}
+      />
 
       <MobileEnrollBar priceLabel={priceLabel} dateLabel={dateLabel} targetId="zapis" heroId="course-hero" />
     </>

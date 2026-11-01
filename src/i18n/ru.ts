@@ -4,16 +4,17 @@
  */
 export const ru = {
   nav: {
-    courses: "Курсы",
-    about: "О преподавателе",
+    courses: "Обучение",
     center: "Центр",
-    products: "Продукция",
-    reviews: "Отзывы",
-    partners: "Организаторам",
+    about: "О Марине",
     contacts: "Контакты",
+    // secondary
+    products: "Продукция",
+    partners: "Партнёрам",
+    reviews: "Отзывы",
   },
   common: {
-    enroll: "Записаться",
+    enroll: "Записаться на обучение",
     chooseCourse: "Выбрать курс",
     allCourses: "Все курсы",
     details: "Подробнее",

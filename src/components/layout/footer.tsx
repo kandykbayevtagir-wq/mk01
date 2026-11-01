@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { MapPin } from "lucide-react";
-import { channels, locations, navigation, site } from "@/data/site";
+import { channels, locations, navigation, secondaryNavigation, site } from "@/data/site";
 import { t } from "@/i18n";
 import { SocialIconRow } from "@/components/contact/contact-channels";
 import { PaymentStrip } from "@/components/contact/payment-methods";
@@ -24,12 +24,25 @@ export function Footer() {
 
           <nav aria-label="Навигация в подвале" className="lg:col-span-3">
             <p className="text-eyebrow font-semibold uppercase text-muted-dark">Разделы</p>
-            <ul className="mt-5 grid grid-cols-2 gap-x-6 gap-y-3 lg:grid-cols-1">
+            <ul className="mt-4 grid grid-cols-2 gap-x-6 lg:grid-cols-1">
               {navigation.map((item) => (
                 <li key={item.href}>
                   <Link
                     href={item.href}
-                    className="text-[0.9375rem] text-white/85 transition-colors hover:text-white"
+                    className="inline-flex min-h-11 items-center text-[0.9375rem] text-white/90 transition-colors hover:text-white"
+                  >
+                    {t.nav[item.key]}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+            <p className="mt-6 text-eyebrow font-semibold uppercase text-muted-dark">Ещё</p>
+            <ul className="mt-2 flex flex-wrap gap-x-5 lg:flex-col">
+              {secondaryNavigation.map((item) => (
+                <li key={item.href}>
+                  <Link
+                    href={item.href}
+                    className="inline-flex min-h-11 items-center text-[0.9375rem] text-muted-dark transition-colors hover:text-white"
                   >
                     {t.nav[item.key]}
                   </Link>
@@ -50,20 +63,17 @@ export function Footer() {
             <SocialIconRow className="mt-4" />
 
             <p className="mt-8 text-eyebrow font-semibold uppercase text-muted-dark">Адреса · Актобе</p>
-            <ul className="mt-3 space-y-1">
+            <ul className="mt-3 space-y-3">
               {locations.map((l) => (
-                <li key={l.id}>
-                  <a
-                    href={l.twoGisUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex min-h-11 items-center gap-2 text-[0.9375rem] text-white/85 transition-colors hover:text-white"
-                  >
-                    <MapPin aria-hidden className="size-4 text-muted-dark" strokeWidth={1.75} />
-                    {l.address ? `${l.label} — ${l.address}` : l.label}
-                    <span className="text-muted-dark">· 2ГИС</span>
-                    <span className="sr-only">(откроется в новой вкладке)</span>
-                  </a>
+                <li key={l.id} className="flex gap-2.5 text-[0.9375rem] leading-snug">
+                  <MapPin aria-hidden className="mt-0.5 size-4 shrink-0 text-muted-dark" strokeWidth={1.75} />
+                  <span>
+                    <span className="block text-white/90">{l.address}</span>
+                    <span className="block text-[0.8125rem] text-muted-dark">
+                      {l.label}
+                      {l.detail && l.detail !== l.label ? ` · ${l.detail}` : ""}
+                    </span>
+                  </span>
                 </li>
               ))}
             </ul>

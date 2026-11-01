@@ -8,6 +8,7 @@ import { Reveal } from "@/components/ui/reveal";
 import { CourseCatalog } from "@/components/course/course-catalog";
 import { PageHero } from "@/components/sections/page-hero";
 import { Faq } from "@/components/sections/faq";
+import { ContextLinks } from "@/components/sections/context-links";
 import { LeadForm } from "@/components/forms/lead-form";
 import { courseEnrollFields } from "@/components/forms/presets";
 
@@ -65,6 +66,12 @@ export default function CoursesPage() {
           </div>
         </Container>
       </section>
+    <ContextLinks
+        items={[
+          { href: "/partners", title: "Организуйте обучение в своём городе", text: "Для организаторов и партнёров." },
+          { href: "/reviews", title: "Отзывы выпускников", text: "Что говорят участники обучения." },
+        ]}
+      />
     </>
   );
 }

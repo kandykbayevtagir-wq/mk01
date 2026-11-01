@@ -3,9 +3,10 @@ import type { BusinessLocation } from "@/data/types";
 import { cn } from "@/lib/utils";
 
 /**
- * Lightweight branch card that links to the official 2GIS listing.
- * No embedded map (keeps mobile fast). Only verified fields are shown;
- * unverified ones are simply omitted — nothing is guessed.
+ * Branch card: verified street address first, then floor / landmark.
+ * A map button is rendered only when this branch has a confirmed map
+ * destination (`mapUrl`) — an unverified link is never attached. No embedded
+ * map, which keeps mobile fast.
  */
 export function LocationCard({ location, className }: { location: BusinessLocation; className?: string }) {
   return (
@@ -16,7 +17,7 @@ export function LocationCard({ location, className }: { location: BusinessLocati
         className,
       )}
     >
-      {/* Map-plate texture + pin — decorative */}
+      {/* Map-plate texture — decorative */}
       <div aria-hidden className="pattern-dots pointer-events-none absolute -right-8 -top-8 size-40 rounded-full [mask-image:radial-gradient(circle,black,transparent_70%)]" />
 
       <div className="relative flex items-start gap-4">
@@ -30,57 +31,53 @@ export function LocationCard({ location, className }: { location: BusinessLocati
         </div>
       </div>
 
-      <dl className="relative mt-5 space-y-2.5 text-[0.9375rem]">
-        <div className="flex gap-3">
-          <dt className="sr-only">Адрес</dt>
-          <dd>
-            {location.address ? (
-              <>
-                {location.city}, {location.address}
-              </>
-            ) : (
-              <>
-                {location.city}
-                <span className="block text-[0.8125rem] text-muted">Точный адрес и маршрут — в карточке 2ГИС</span>
-              </>
-            )}
-          </dd>
-        </div>
-        {location.hours && (
-          <div className="flex items-center gap-2 text-muted">
-            <dt className="sr-only">Часы работы</dt>
-            <Clock3 aria-hidden className="size-4" strokeWidth={1.75} />
-            <dd>{location.hours}</dd>
-          </div>
-        )}
-        {location.phone && (
-          <div className="flex items-center gap-2 text-muted">
-            <dt className="sr-only">Телефон филиала</dt>
-            <Phone aria-hidden className="size-4" strokeWidth={1.75} />
-            <dd>
-              <a href={`tel:${location.phone.replace(/[^\d+]/g, "")}`} className="underline-offset-4 hover:underline">
-                {location.phone}
-              </a>
-            </dd>
-          </div>
-        )}
-      </dl>
+      <address className="relative mt-5 text-[1.0625rem] font-medium not-italic leading-snug">
+        <span className="sr-only">Адрес: </span>
+        {location.city}, {location.address}
+        {location.detail && <span className="mt-1.5 block text-[0.9375rem] font-normal text-muted">{location.detail}</span>}
+      </address>
 
-      <div className="relative mt-auto pt-6">
-        <a
-          href={location.twoGisUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="press inline-flex h-12 w-full items-center justify-between gap-3 rounded-full border border-ink/15 bg-card pl-5 pr-1.5 text-[0.9375rem] font-medium transition-colors duration-[var(--dur-press)] hover:border-ink/40 active:bg-mist sm:w-auto sm:min-w-56"
-        >
-          <span>
-            Открыть в 2ГИС<span className="sr-only">: {location.label} (откроется в новой вкладке)</span>
-          </span>
-          <span aria-hidden className="inline-flex size-9 items-center justify-center rounded-full bg-mist transition-colors duration-[var(--dur-press)] group-hover:bg-ink group-hover:text-white">
-            <ArrowUpRight className="size-[18px]" strokeWidth={1.75} />
-          </span>
-        </a>
-      </div>
+      {(location.hours || location.phone) && (
+        <dl className="relative mt-4 space-y-2 text-[0.9375rem] text-muted">
+          {location.hours && (
+            <div className="flex items-center gap-2">
+              <dt className="sr-only">Часы работы</dt>
+              <Clock3 aria-hidden className="size-4" strokeWidth={1.75} />
+              <dd>{location.hours}</dd>
+            </div>
+          )}
+          {location.phone && (
+            <div className="flex items-center gap-2">
+              <dt className="sr-only">Телефон филиала</dt>
+              <Phone aria-hidden className="size-4" strokeWidth={1.75} />
+              <dd>
+                <a href={`tel:${location.phone.replace(/[^\d+]/g, "")}`} className="underline-offset-4 hover:underline">
+                  {location.phone}
+                </a>
+              </dd>
+            </div>
+          )}
+        </dl>
+      )}
+
+      {location.mapUrl && (
+        <div className="relative mt-auto pt-6">
+          <a
+            href={location.mapUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="press inline-flex h-12 w-full items-center justify-between gap-3 rounded-full border border-ink/15 bg-card pl-5 pr-1.5 text-[0.9375rem] font-medium transition-colors duration-[var(--dur-press)] hover:border-ink/40 active:bg-mist sm:w-auto sm:min-w-64"
+          >
+            <span>
+              {location.mapLabel ?? "Открыть на карте"}
+              <span className="sr-only">: {location.label} (откроется в новой вкладке)</span>
+            </span>
+            <span aria-hidden className="inline-flex size-9 items-center justify-center rounded-full bg-mist transition-colors duration-[var(--dur-press)] group-hover:bg-ink group-hover:text-white">
+              <ArrowUpRight className="size-[18px]" strokeWidth={1.75} />
+            </span>
+          </a>
+        </div>
+      )}
     </article>
   );
 }
