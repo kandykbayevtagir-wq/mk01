@@ -5,7 +5,6 @@ import { notFound } from "next/navigation";
 import { ArrowUpRight, CalendarDays, Check, Plus } from "lucide-react";
 import {
   audienceById,
-  commonCourseFaq,
   courseCity,
   getCourse,
   getCourses,
@@ -97,15 +96,16 @@ export default async function CoursePage({ params }: Props) {
   const sessions = upcomingSessions(course);
   const session = nextSession(course);
   const city = courseCity(course);
-  const faq = [...course.faq, ...commonCourseFaq];
-  const related = relatedCourses(course);
+  const faq = course.faq; // course-specific questions only; process answers live on /courses
+  const related = relatedCourses(course, 2);
 
+  // Verified facts only: an unknown value is not shown (and not repeated as «уточняется»).
   const facts = [
     { label: "Формат", value: course.format },
     { label: "Длительность", value: course.duration },
     { label: "Город", value: city },
     { label: "Ближайший поток", value: session ? formatDateRange(session.start, session.end) : null },
-  ];
+  ].filter((f): f is { label: string; value: string } => Boolean(f.value));
 
   return (
     <>
@@ -140,19 +140,19 @@ export default async function CoursePage({ params }: Props) {
               <p className="enter mt-6 max-w-2xl text-lead text-muted" style={{ "--enter-delay": "150ms" } as React.CSSProperties}>
                 {course.summary}
               </p>
-              <dl
-                className="enter mt-10 grid grid-cols-2 gap-px overflow-hidden rounded-card border border-line bg-line sm:grid-cols-4"
-                style={{ "--enter-delay": "210ms" } as React.CSSProperties}
-              >
-                {facts.map((f) => (
-                  <div key={f.label} className="bg-card p-4 sm:p-5">
-                    <dt className="text-xs text-muted">{f.label}</dt>
-                    <dd className={f.value ? "mt-1.5 text-[0.9375rem] font-semibold" : "mt-1.5 text-[0.9375rem] text-muted"}>
-                      {f.value ?? "Уточняется"}
-                    </dd>
-                  </div>
-                ))}
-              </dl>
+              {facts.length > 0 && (
+                <dl
+                  className="enter mt-8 flex flex-wrap gap-x-10 gap-y-4 border-t border-line pt-6"
+                  style={{ "--enter-delay": "210ms" } as React.CSSProperties}
+                >
+                  {facts.map((f) => (
+                    <div key={f.label}>
+                      <dt className="text-xs text-muted">{f.label}</dt>
+                      <dd className="mt-1 text-[1rem] font-semibold">{f.value}</dd>
+                    </div>
+                  ))}
+                </dl>
+              )}
             </div>
             <div className="enter-fade lg:col-span-5" style={{ "--enter-delay": "120ms" } as React.CSSProperties}>
               <ViewTransition name={`course-visual-${course.slug}`} default="none" share="course-morph">
@@ -238,10 +238,10 @@ export default async function CoursePage({ params }: Props) {
               </section>
             </Reveal>
 
-            <Reveal>
-              <section aria-labelledby="schedule-title">
-                <SectionTitle id="schedule-title">Расписание</SectionTitle>
-                {sessions.length > 0 ? (
+            {sessions.length > 0 && (
+              <Reveal>
+                <section aria-labelledby="schedule-title">
+                  <SectionTitle id="schedule-title">Расписание</SectionTitle>
                   <ul className="mt-8 space-y-3">
                     {sessions.map((s) => (
                       <li
@@ -259,14 +259,9 @@ export default async function CoursePage({ params }: Props) {
                       </li>
                     ))}
                   </ul>
-                ) : (
-                  <p className="mt-6 max-w-xl leading-relaxed text-muted">
-                    Даты ближайших потоков уточняются. Оставьте заявку — мы сообщим о старте группы в вашем городе или
-                    предложим ближайший вариант.
-                  </p>
-                )}
-              </section>
-            </Reveal>
+                </section>
+              </Reveal>
+            )}
 
             {(course.includes.length > 0 || course.certificate) && (
               <Reveal>
@@ -324,14 +319,16 @@ export default async function CoursePage({ params }: Props) {
               </Reveal>
             )}
 
-            <Reveal>
-              <section aria-labelledby="faq-title">
-                <SectionTitle id="faq-title">Вопросы и ответы</SectionTitle>
-                <div className="mt-8">
-                  <Faq items={faq} />
-                </div>
-              </section>
-            </Reveal>
+            {faq.length > 0 && (
+              <Reveal>
+                <section aria-labelledby="faq-title">
+                  <SectionTitle id="faq-title">Вопросы и ответы</SectionTitle>
+                  <div className="mt-8">
+                    <Faq items={faq} />
+                  </div>
+                </section>
+              </Reveal>
+            )}
           </div>
 
         </div>
@@ -371,9 +368,9 @@ export default async function CoursePage({ params }: Props) {
                 {t.common.allCourses}
               </ButtonLink>
             </div>
-            <ul className="mt-10 grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-3">
+            <ul className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6">
               {related.map((c, i) => (
-                <Reveal as="li" key={c.slug} delay={i * 70} className={i === 2 ? "md:max-xl:hidden" : undefined}>
+                <Reveal as="li" key={c.slug} delay={i * 70}>
                   <CourseCard course={c} />
                 </Reveal>
               ))}

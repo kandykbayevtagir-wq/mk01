@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Plus } from "lucide-react";
 import type { FaqItem } from "@/data/types";
 import { jsonLd } from "@/lib/seo";
@@ -27,7 +28,17 @@ export function Faq({ items, withSchema = true }: { items: FaqItem[]; withSchema
                 </span>
               </summary>
               <div className="grid grid-rows-[0fr] transition-[grid-template-rows] duration-300 ease-out-soft group-open:grid-rows-[1fr]">
-                <p className="faq-answer overflow-hidden pb-6 pr-12 leading-relaxed text-muted">{item.a}</p>
+                <div className="faq-answer overflow-hidden pb-6 pr-12 leading-relaxed text-muted">
+                  <p>{item.a}</p>
+                  {item.link && (
+                    <Link
+                      href={item.link.href}
+                      className="mt-2 inline-flex min-h-11 items-center font-medium text-ink underline decoration-line underline-offset-4 hover:decoration-ink"
+                    >
+                      {item.link.label}
+                    </Link>
+                  )}
+                </div>
               </div>
             </details>
           </li>
