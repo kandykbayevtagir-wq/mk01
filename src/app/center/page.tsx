@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { ShieldCheck } from "lucide-react";
 import { center, services, specialists } from "@/data/center";
-import { channels, locations, socialProfiles } from "@/data/site";
+import { channels, locations, site, socialProfiles } from "@/data/site";
 import { absoluteUrl, jsonLd, pageMetadata } from "@/lib/seo";
 import { formatKzt } from "@/lib/utils";
 import { Container } from "@/components/ui/container";
@@ -48,7 +48,7 @@ export default function CenterPage() {
       {businessLd.length > 0 && <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(businessLd)} />}
       <PageHero
         crumbs={[{ href: "/center", label: "Центр" }]}
-        eyebrow="Центр подологии"
+        eyebrow={`${site.name} · Актобе`}
         title={center.name}
         lead={center.intro}
         aside={
@@ -62,27 +62,19 @@ export default function CenterPage() {
         }
       />
 
-      <section aria-labelledby="services-title" className="py-20 lg:py-28">
+      <section aria-labelledby="services-title" className="py-14 lg:py-24">
         <Container>
           <Reveal>
-            <SectionHeader
-              eyebrow="Направления"
-              title={<span id="services-title">Услуги центра</span>}
-              lead="Специалист проводит осмотр и предлагает решение, подходящее именно вашей ситуации."
-            />
+            <SectionHeader eyebrow="Направления" title={<span id="services-title">Услуги центра</span>} />
           </Reveal>
-          <ul className="mt-12 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
+          <ul className="mt-8 grid grid-cols-1 gap-x-10 border-t border-line md:grid-cols-2 lg:mt-12">
             {services.map((s, i) => (
-              <Reveal
-                as="li"
-                key={s.id}
-                delay={(i % 3) * 70}
-                className="group flex flex-col rounded-card border border-line p-6 transition-[border-color,box-shadow] duration-500 ease-out-soft hover:border-transparent hover:shadow-lift sm:p-8"
-              >
-                <span className="text-sm font-semibold tabular-nums text-accent">{String(i + 1).padStart(2, "0")}</span>
-                <h3 className="mt-8 text-xl font-semibold tracking-tight">{s.title}</h3>
-                <p className="mt-3 flex-1 text-[0.9375rem] leading-relaxed text-muted">{s.description}</p>
-                {s.priceFrom && <p className="mt-6 font-semibold">от {formatKzt(s.priceFrom)}</p>}
+              <Reveal as="li" key={s.id} delay={(i % 2) * 60} className="flex items-baseline justify-between gap-4 border-b border-line py-4">
+                <span className="flex items-baseline gap-4">
+                  <span className="text-xs font-semibold tabular-nums text-accent">{String(i + 1).padStart(2, "0")}</span>
+                  <span className="text-[1.0625rem] font-medium">{s.title}</span>
+                </span>
+                {s.priceFrom && <span className="shrink-0 font-semibold">от {formatKzt(s.priceFrom)}</span>}
               </Reveal>
             ))}
           </ul>
@@ -162,11 +154,11 @@ export default function CenterPage() {
         id="zapis"
         eyebrow="Запись"
         title="Записаться в центр"
-        lead="Оставьте контакты — администратор свяжется с вами, чтобы подобрать удобное время визита."
+        lead="Оставьте контакты — мы свяжемся с вами и согласуем время визита."
         type="appointment"
         fields={appointmentFields}
         submitLabel="Записаться"
-        successText="Спасибо! Администратор свяжется с вами, чтобы согласовать время визита."
+        successText="Спасибо! Мы свяжемся с вами, чтобы согласовать время визита."
         contactMessage="Здравствуйте! Хочу записаться в центр подологии."
       />
 
