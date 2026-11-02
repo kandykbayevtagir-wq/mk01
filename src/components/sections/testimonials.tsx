@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { Play, Quote } from "lucide-react";
 import { getCourse } from "@/data/courses";
 import { getTestimonials } from "@/data/testimonials";
@@ -39,30 +38,10 @@ export function TestimonialCard({ item }: { item: Testimonial }) {
   );
 }
 
-/** Grid of verified testimonials, or an honest empty state. */
+/** Grid of verified testimonials; renders nothing when there are none. */
 export function TestimonialGrid({ limit }: { limit?: number }) {
   const items = getTestimonials().slice(0, limit);
-  if (items.length === 0) {
-    return (
-      <div className="grid grid-cols-1 gap-8 rounded-panel border border-line bg-card p-6 sm:p-10 lg:grid-cols-12 lg:items-end lg:gap-6">
-        <div className="lg:col-span-7">
-          <Quote aria-hidden className="size-8 text-accent" strokeWidth={1.5} />
-          <p className="mt-6 max-w-2xl text-h3 font-medium">
-            Мы публикуем только реальные отзывы выпускников — с их согласия, с указанием курса и города.
-          </p>
-          <p className="mt-4 max-w-xl text-muted">Раздел пополняется после каждого потока обучения.</p>
-        </div>
-        <div className="lg:col-span-4 lg:col-start-9 lg:text-right">
-          <Link
-            href="/contacts"
-            className="inline-flex items-center gap-1.5 text-[0.9375rem] font-semibold underline decoration-line underline-offset-4 transition-colors hover:decoration-ink"
-          >
-            Вы выпускник? Поделитесь отзывом
-          </Link>
-        </div>
-      </div>
-    );
-  }
+  if (items.length === 0) return null;
   return (
     <ul className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-3">
       {items.map((item, i) => (

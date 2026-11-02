@@ -6,11 +6,9 @@ import { useEffect, useRef, useState } from "react";
 import { navigation } from "@/data/site";
 import { t } from "@/i18n";
 import { cn } from "@/lib/utils";
-import { ButtonLink } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { Logo } from "./logo";
 import { MobileMenu } from "./mobile-menu";
-import { headerCta } from "./header-cta";
 
 export function isActive(pathname: string, href: string) {
   return pathname === href || pathname.startsWith(`${href}/`);
@@ -20,7 +18,6 @@ export function Header() {
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const sentinel = useRef<HTMLDivElement>(null);
-  const cta = headerCta(pathname);
 
   // One IntersectionObserver on a sentinel at the top of the page instead
   // of a global scroll listener.
@@ -79,12 +76,7 @@ export function Header() {
           </ul>
         </nav>
 
-        <div className="flex items-center gap-2">
-          <ButtonLink href={cta.href} external={cta.external} variant="accent" size="sm" className="hidden sm:inline-flex">
-            {cta.label}
-          </ButtonLink>
-          <MobileMenu />
-        </div>
+        <MobileMenu />
       </Container>
     </header>
     </>

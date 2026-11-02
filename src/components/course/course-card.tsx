@@ -4,7 +4,7 @@ import type { Course } from "@/data/types";
 import { audienceById, nextSession } from "@/data/courses";
 import { cn, formatDateRange, formatKzt } from "@/lib/utils";
 import { PressLink } from "@/components/ui/press-link";
-import { CardSheen } from "@/components/ui/liquid-light";
+import { CardSheen } from "@/components/ui/card-sheen";
 import { CoursePlate } from "./course-plate";
 
 /**
@@ -29,6 +29,11 @@ export function CourseCard({
 }) {
   const H = headingLevel;
   const session = nextSession(course);
+  // Only verified values are shown: an unknown price or intake is simply absent.
+  const facts = [
+    course.price && { label: "Стоимость", value: formatKzt(course.price), dot: false },
+    session && { label: "Ближайший поток", value: formatDateRange(session.start, session.end), dot: true },
+  ].filter(Boolean) as { label: string; value: string; dot: boolean }[];
 
   return (
     <article
@@ -60,24 +65,22 @@ export function CourseCard({
         <p className="mt-2 line-clamp-2 text-[0.9375rem] leading-snug text-muted">{course.summary}</p>
 
         <div className="card-settle mt-auto pt-4">
-          <dl className="grid grid-cols-2 gap-3 border-t border-dashed border-ink/15 pt-3">
-            <div>
-              <dt className="text-[0.6875rem] font-medium uppercase tracking-[0.1em] text-muted">Стоимость</dt>
-              <dd className="mt-0.5 text-[1rem] font-semibold tracking-tight">
-                {course.price ? formatKzt(course.price) : "Уточняется"}
-              </dd>
-            </div>
-            <div>
-              <dt className="text-[0.6875rem] font-medium uppercase tracking-[0.1em] text-muted">Ближайший поток</dt>
-              <dd className="mt-0.5 flex items-center gap-1.5 text-[1rem] font-semibold tracking-tight">
-                <span aria-hidden className={cn("size-1.5 shrink-0 rounded-full", session ? "bg-accent" : "bg-ink/25")} />
-                {session ? formatDateRange(session.start, session.end) : "По запросу"}
-              </dd>
-            </div>
-          </dl>
+          {facts.length > 0 && (
+            <dl className={cn("grid gap-3 border-t border-dashed border-ink/15 pt-3", facts.length > 1 ? "grid-cols-2" : "grid-cols-1")}>
+              {facts.map((f) => (
+                <div key={f.label}>
+                  <dt className="text-[0.6875rem] font-medium uppercase tracking-[0.1em] text-muted">{f.label}</dt>
+                  <dd className="mt-0.5 flex items-center gap-1.5 text-[1rem] font-semibold tracking-tight">
+                    {f.dot && <span aria-hidden className="size-1.5 shrink-0 rounded-full bg-accent" />}
+                    {f.value}
+                  </dd>
+                </div>
+              ))}
+            </dl>
+          )}
           <div
             aria-hidden
-            className="course-cta mt-3.5 flex h-12 items-center justify-between rounded-full pl-5 pr-1.5 text-white"
+            className={cn("course-cta flex h-12 items-center justify-between rounded-full pl-5 pr-1.5 text-white", facts.length > 0 && "mt-3.5")}
           >
             <span className="text-[0.9375rem] font-semibold">Подробнее о курсе</span>
             <span className="course-cta__arrow inline-flex size-9 items-center justify-center rounded-full bg-white text-ink">

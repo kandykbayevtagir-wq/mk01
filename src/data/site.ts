@@ -1,3 +1,4 @@
+import { getTestimonials } from "./testimonials";
 import type { BusinessLocation, Contacts, PaymentMethod, UnmappedMapRecord } from "./types";
 
 /**
@@ -167,11 +168,12 @@ export const navigation = [
 ] as const;
 
 /** Secondary pages: kept out of the header, surfaced contextually and in the footer. */
-export const secondaryNavigation = [
+export const secondaryNavigation: { href: string; key: "products" | "partners" | "reviews" }[] = [
   { href: "/products", key: "products" },
   { href: "/partners", key: "partners" },
-  { href: "/reviews", key: "reviews" },
-] as const;
+  // Listed only once there are published testimonials.
+  ...(getTestimonials().length > 0 ? [{ href: "/reviews", key: "reviews" as const }] : []),
+];
 
 export function hasAnyContact() {
   return Boolean(

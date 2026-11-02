@@ -1,17 +1,12 @@
-import { PressLink } from "@/components/ui/press-link";
-import { ArrowUpRight, MapPin } from "lucide-react";
-import { getCourses, nextSession } from "@/data/courses";
-import { founder, founderDisplayName } from "@/data/founder";
+import { MapPin } from "lucide-react";
+import { founder } from "@/data/founder";
 import { locations, site } from "@/data/site";
-import { t } from "@/i18n";
-import { cn, formatDateRange, plural } from "@/lib/utils";
-import { ButtonLink } from "@/components/ui/button";
+import { plural } from "@/lib/utils";
 import { Container } from "@/components/ui/container";
 import { Eyebrow } from "@/components/ui/typography";
 import { Parallax } from "@/components/ui/parallax";
 import { Visual } from "@/components/ui/visual";
 import { MotionRegion } from "@/components/ui/motion-region";
-import { LightTrail } from "@/components/ui/liquid-light";
 import { ArchLines } from "@/components/ui/podo-art";
 
 function delay(ms: number) {
@@ -19,53 +14,15 @@ function delay(ms: number) {
 }
 
 /**
- * Mobile-first hero.
+ * Hero: identity and a one-line introduction — no buttons. The two ways in
+ * (learn / visit the centre) are the very next section, so nothing is
+ * offered twice.
  *
- * Phone order: eyebrow → headline → description → CTAs → visual (with the
- * upcoming-course card docked to it). On desktop the visual moves
- * into the right column and the course card floats over its edge.
- *
- * Motion: short CSS-only sequence (≤300 ms of delays). The headline only
- * moves — it never fades — so it is paintable for LCP from the first frame.
- * Ambient layer (paused offscreen via MotionRegion, skipped in motion-lite):
- * breathing pressure peaks, two liquid-light forms, the spotlight glint and
- * one floating fact chip — six transform/opacity loops in total.
+ * Motion: short CSS-only entrance; the headline only moves, it never fades
+ * (LCP-safe). The single ambient layer is the live pressure map (canvas,
+ * paused offscreen, off with reduced motion and on low-capability devices).
  */
 export function Hero() {
-  const courses = getCourses();
-  const upcoming = courses
-    .map((c) => ({ c, s: nextSession(c) }))
-    .filter((x) => x.s)
-    .sort((a, b) => a.s!.start.localeCompare(b.s!.start))[0];
-  const spotlight = upcoming?.c ?? courses.find((c) => c.featured) ?? courses[0];
-
-  const spotlightCard = spotlight && (
-    <PressLink
-      href={`/courses/${spotlight.slug}`}
-      className={cn(
-        "spotlight-card group press relative isolate flex items-center gap-4 rounded-card border border-line bg-card p-4 shadow-float",
-        "transition-[transform,border-color] duration-[var(--dur-card)] ease-out-soft hover:-translate-y-0.5 hover:border-ink/20",
-      )}
-    >
-      <LightTrail />
-      <div className="min-w-0 flex-1">
-        <p className="flex items-center gap-2 text-xs font-medium text-muted">
-          <span className="relative flex size-2">
-            <span className="relative inline-flex size-2 rounded-full bg-accent" />
-          </span>
-          {upcoming ? "Ближайший старт" : "Рекомендуем начать"}
-        </p>
-        <p className="mt-1.5 truncate text-[0.9375rem] font-semibold">{spotlight.title}</p>
-        <p className="mt-0.5 truncate text-[0.8125rem] text-muted">
-          {upcoming?.s ? `${formatDateRange(upcoming.s.start, upcoming.s.end)} · ${upcoming.s.city}` : "Набор по заявкам"}
-        </p>
-      </div>
-      <span className="inline-flex size-10 shrink-0 items-center justify-center rounded-full bg-mist transition-colors duration-[var(--dur-press)] group-hover:bg-ink group-hover:text-white">
-        <ArrowUpRight aria-hidden className="size-[18px]" strokeWidth={1.75} />
-      </span>
-    </PressLink>
-  );
-
   return (
     <MotionRegion as="section" aria-labelledby="hero-title" className="motion-hero relative isolate overflow-hidden">
       {/* Backdrop: soft-gray panel (mobile: behind the visual; desktop: right third) */}
@@ -77,10 +34,10 @@ export function Hero() {
         <ArchLines draw accent className="draw-now absolute -bottom-1 -left-24 h-28 w-[300px] max-lg:hidden" count={8} />
       </div>
 
-      <Container className="relative pb-12 pt-7 sm:pt-10 lg:pb-24 lg:pt-14">
-        <div className="grid grid-cols-1 gap-9 lg:grid-cols-12 lg:gap-6">
+      <Container className="relative pb-10 pt-7 sm:pt-10 lg:pb-24 lg:pt-14">
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-12 lg:items-center lg:gap-6">
           {/* Copy */}
-          <div className="flex flex-col lg:col-span-7 lg:pr-8 lg:pt-6">
+          <div className="flex flex-col lg:col-span-7 lg:pr-8">
             <div className="enter-soft" style={delay(0)}>
               <Eyebrow>{site.name} · Актобе</Eyebrow>
             </div>
@@ -102,16 +59,8 @@ export function Hero() {
               </span>
             </h1>
             <p className="enter mt-4 max-w-[34ch] text-lead text-muted lg:mt-7 lg:max-w-xl" style={delay(110)}>
-              Авторские курсы, практические знания и профессиональное развитие специалистов.
+              Курсы подологии для специалистов и центр подологии в Актобе.
             </p>
-            <div className="mt-7 flex flex-col gap-2.5 sm:flex-row sm:gap-3 lg:mt-10">
-              <ButtonLink href="/courses" variant="accent" size="lg" arrow className="enter" style={delay(170)}>
-                {t.common.chooseCourse}
-              </ButtonLink>
-              <ButtonLink href="/about" variant="outline" size="lg" className="enter" style={delay(220)}>
-                О Марине
-              </ButtonLink>
-            </div>
           </div>
 
           {/* Visual */}
@@ -121,7 +70,7 @@ export function Hero() {
 
             <div className="relative">
               <Parallax
-                className="hero-reveal grain aspect-[4/3.3] rounded-panel bg-graphite shadow-float sm:aspect-[16/11] lg:aspect-[4/5]"
+                className="hero-reveal grain aspect-[4/3.2] rounded-panel bg-graphite shadow-float sm:aspect-[16/11] lg:aspect-[4/5]"
                 distance={24}
               >
                 <Visual
@@ -140,34 +89,14 @@ export function Hero() {
                 </Visual>
               </Parallax>
 
-              {/* Floating context — factual, non-interactive, so motion never moves a control */}
+              {/* Factual, non-interactive context — motion never moves a control */}
               <div className="enter pointer-events-none absolute left-4 top-4 z-10 lg:left-auto lg:right-4" style={delay(420)}>
                 <p className="hero-chip inline-flex items-center gap-1.5 rounded-full bg-black/55 px-3 py-1.5 text-xs font-medium text-white ring-1 ring-white/15 backdrop-blur-md">
                   <MapPin aria-hidden className="size-3.5" strokeWidth={2} />
                   Актобе · {locations.length} {plural(locations.length, ["филиал", "филиала", "филиалов"])}
                 </p>
               </div>
-
-              {/* Caption — gradient scrim guarantees legibility over photos */}
-              <div className="pointer-events-none absolute inset-x-0 bottom-0 rounded-b-panel bg-gradient-to-t from-black/70 via-black/30 to-transparent px-5 pb-5 pt-14 text-white sm:px-6 sm:pb-6 max-sm:pb-14">
-                <p className="text-[0.9375rem] font-semibold">{founderDisplayName()}</p>
-                <p className="mt-0.5 line-clamp-1 max-w-[34ch] text-[0.8125rem] leading-snug text-white/80 sm:line-clamp-none">{founder.role}</p>
-              </div>
-
-              {/* Desktop/tablet floating course card */}
-              {spotlight && (
-                <div className="absolute right-4 top-4 hidden w-[290px] sm:block lg:-left-12 lg:right-auto lg:top-10">
-                  {spotlightCard}
-                </div>
-              )}
             </div>
-
-            {/* Mobile: course card docked under the visual */}
-            {spotlight && (
-              <div className="enter relative -mt-10 px-3 sm:hidden" style={delay(260)}>
-                {spotlightCard}
-              </div>
-            )}
           </div>
         </div>
       </Container>

@@ -38,7 +38,12 @@ export type CourseModule = {
   topics: string[];
 };
 
-export type FaqItem = { q: string; a: string };
+export type FaqItem = {
+  q: string;
+  a: string;
+  /** Optional follow-up link shown after the answer (not part of the FAQPage schema text). */
+  link?: { href: string; label: string };
+};
 
 export type Course = {
   slug: string;

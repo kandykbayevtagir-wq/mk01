@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
-import Link from "next/link";
-import { ArrowRight, ArrowUpRight } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import { locations, site, unmappedTwoGisRecords } from "@/data/site";
 import { pageMetadata } from "@/lib/seo";
 import { Container } from "@/components/ui/container";
@@ -19,13 +18,6 @@ export const metadata: Metadata = pageMetadata({
   path: "/contacts",
 });
 
-const routes = [
-  { href: "/courses", title: "Записаться на обучение" },
-  { href: "/partners#zayavka", title: "Организовать обучение в своём городе" },
-  { href: "/center#zapis", title: "Записаться в центр" },
-  { href: "/products#zapros", title: "Подобрать продукцию" },
-];
-
 export default function ContactsPage() {
   return (
     <>
@@ -33,18 +25,13 @@ export default function ContactsPage() {
         crumbs={[{ href: "/contacts", label: "Контакты" }]}
         eyebrow={`${site.name} · Актобе`}
         title="Контакты"
-        lead="Быстрее всего ответим в WhatsApp. Также на связи в Telegram и Instagram."
         aside={<ContactChannels layout="stack" whatsappMessage="Здравствуйте! У меня вопрос." />}
       />
 
       <section id="adresa" aria-labelledby="locations-title" className="scroll-mt-[var(--header-h)] py-16 lg:py-24">
         <Container>
           <Reveal>
-            <SectionHeader
-              eyebrow="Адреса"
-              title={<span id="locations-title">Два филиала в Актобе</span>}
-              lead="Приём специалистов центра подологии."
-            />
+            <SectionHeader eyebrow="Адреса" title={<span id="locations-title">Два филиала в Актобе</span>} />
           </Reveal>
           <ul className="mt-10 grid grid-cols-1 gap-3 md:grid-cols-2 md:gap-6 lg:mt-12">
             {locations.map((l, i) => (
@@ -75,11 +62,7 @@ export default function ContactsPage() {
       <section aria-labelledby="payment-title" className="border-t border-line py-16 lg:py-24">
         <Container>
           <Reveal>
-            <SectionHeader
-              eyebrow="Оплата"
-              title={<span id="payment-title">Способы оплаты</span>}
-              lead="Доступные способы оплаты услуг и обучения."
-            />
+            <SectionHeader eyebrow="Оплата" title={<span id="payment-title">Способы оплаты</span>} />
           </Reveal>
           <Reveal className="mt-10 lg:mt-12" delay={60}>
             <PaymentMethods />
@@ -94,32 +77,12 @@ export default function ContactsPage() {
         id="napisat"
         eyebrow="Обратная связь"
         title="Написать нам"
-        lead="Оставьте вопрос — мы ответим в рабочее время."
+        lead="Оставьте вопрос — мы свяжемся с вами."
         type="contact"
         fields={contactFields}
         submitLabel="Отправить"
         showDirectContacts={false}
-      >
-        <nav aria-label="Быстрые ссылки" className="mt-8">
-          <ul className="border-t border-line">
-            {routes.map((r) => (
-              <li key={r.href} className="border-b border-line">
-                <Link
-                  href={r.href}
-                  className="group flex min-h-12 items-center justify-between gap-4 py-3 text-[0.9375rem] font-medium"
-                >
-                  {r.title}
-                  <ArrowRight
-                    aria-hidden
-                    className="size-4 text-muted transition-transform duration-[var(--dur-press)] group-hover:translate-x-0.5 group-hover:text-ink"
-                    strokeWidth={1.75}
-                  />
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </nav>
-      </FormSection>
+      />
     </>
   );
 }

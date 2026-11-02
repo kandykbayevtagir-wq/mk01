@@ -1,29 +1,23 @@
 import type { Metadata } from "next";
 import { Award, BookOpenCheck, Sparkles } from "lucide-react";
-import { getFeaturedCourses } from "@/data/courses";
 import { founder, founderDisplayName } from "@/data/founder";
 import { site } from "@/data/site";
 import { jsonLd, pageMetadata, absoluteUrl } from "@/lib/seo";
 import { plural } from "@/lib/utils";
-import { ButtonLink } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { Eyebrow, SectionHeader } from "@/components/ui/typography";
 import { Reveal } from "@/components/ui/reveal";
 import { Visual } from "@/components/ui/visual";
 import { PageHero } from "@/components/sections/page-hero";
-import { CourseCard } from "@/components/course/course-card";
-import { FinalCta } from "@/components/sections/final-cta";
-import { ContextLinks } from "@/components/sections/context-links";
 
 export const metadata: Metadata = pageMetadata({
   title: "О Марине",
-  description: `${founderDisplayName()} — ${founder.role.toLowerCase()}. Профессиональный путь, подход к обучению и квалификация.`,
+  description: `${founderDisplayName()} — ${founder.role.toLowerCase()}. Подход к обучению.`,
   path: "/about",
   image: founder.portrait?.src,
 });
 
 export default function AboutPage() {
-  const courses = getFeaturedCourses();
   const personLd = founder.name
     ? {
         "@context": "https://schema.org",
@@ -48,16 +42,10 @@ export default function AboutPage() {
       <PageHero
         crumbs={[{ href: "/about", label: "О Марине" }]}
         eyebrow="О Марине"
-        title={founder.name ?? "Преподаватель-практик и основатель центра подологии"}
-        lead={founder.intro}
-        actions={
+        title={founderDisplayName()}
+        lead={
           <>
-            <ButtonLink href="/courses" variant="accent" size="lg" arrow>
-              Выбрать курс
-            </ButtonLink>
-            <ButtonLink href="/center" variant="outline" size="lg">
-              Центр подологии
-            </ButtonLink>
+            {founder.role}. {founder.intro}
           </>
         }
         aside={
@@ -70,10 +58,6 @@ export default function AboutPage() {
               className="aspect-[4/5] rounded-panel"
               sizes="(min-width: 1024px) 40vw, 100vw"
             />
-            <div className="absolute inset-x-4 bottom-4 rounded-2xl bg-white/10 px-4 py-3 text-white backdrop-blur-md sm:inset-x-6 sm:bottom-6">
-              <p className="font-semibold">{founderDisplayName()}</p>
-              <p className="mt-0.5 text-[0.8125rem] text-white/75">{founder.role}</p>
-            </div>
           </div>
         }
       />
@@ -184,37 +168,6 @@ export default function AboutPage() {
           </Container>
         </section>
       )}
-
-      <section aria-labelledby="author-courses-title" className="border-t border-line py-20 lg:py-28">
-        <Container>
-          <Reveal>
-            <SectionHeader
-              eyebrow="Обучение"
-              title={<span id="author-courses-title">Авторские программы</span>}
-              action={
-                <ButtonLink href="/courses" variant="outline" arrow>
-                  Все курсы
-                </ButtonLink>
-              }
-            />
-          </Reveal>
-          <ul className="mt-12 grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-3">
-            {courses.map((c, i) => (
-              <Reveal as="li" key={c.slug} delay={i * 70}>
-                <CourseCard course={c} />
-              </Reveal>
-            ))}
-          </ul>
-        </Container>
-      </section>
-
-      <ContextLinks
-        items={[
-          { href: "/reviews", title: "Отзывы", text: "Что говорят выпускники и клиенты." },
-          { href: "/center", title: "Центр подологии", text: "Приём специалистов в Актобе." },
-        ]}
-      />
-      <FinalCta />
     </>
   );
 }

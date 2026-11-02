@@ -8,7 +8,7 @@ import { Reveal } from "@/components/ui/reveal";
 import { CourseCatalog } from "@/components/course/course-catalog";
 import { PageHero } from "@/components/sections/page-hero";
 import { Faq } from "@/components/sections/faq";
-import { ContextLinks } from "@/components/sections/context-links";
+import { WhatsAppAlt } from "@/components/sections/form-section";
 import { LeadForm } from "@/components/forms/lead-form";
 import { courseEnrollFields } from "@/components/forms/presets";
 
@@ -36,42 +36,36 @@ export default function CoursesPage() {
         </Container>
       </section>
 
-      <section aria-labelledby="consult-title" className="border-t border-line bg-mist py-20 lg:py-28">
+      <section aria-labelledby="consult-title" className="border-t border-line bg-mist py-16 lg:py-24">
         <Container>
-          <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-6">
+          <div className="grid grid-cols-1 gap-10 lg:grid-cols-12 lg:gap-6">
             <Reveal className="lg:col-span-5">
               <SectionHeader
-                eyebrow="Консультация"
-                title={<span id="consult-title">Поможем выбрать программу</span>}
-                lead="Расскажите о своём опыте — мы предложим курс, который подходит вашему уровню и задачам."
+                eyebrow="Запись"
+                title={<span id="consult-title">Записаться на курс</span>}
+                lead="Выберите программу в списке или укажите в комментарии, что вам подходит."
               />
-              <div className="mt-12 hidden lg:block">
-                <h3 className="text-sm font-semibold text-muted">Частые вопросы</h3>
-                <div className="mt-4">
-                  <Faq items={commonCourseFaq} />
-                </div>
-              </div>
+              <WhatsAppAlt message="Здравствуйте! Хочу записаться на курс." />
             </Reveal>
             <Reveal className="lg:col-span-6 lg:col-start-7" delay={80}>
               <div className="rounded-panel bg-card p-5 shadow-card sm:p-8 lg:p-10">
                 <LeadForm type="course" fields={courseEnrollFields()} tone="mist" />
               </div>
             </Reveal>
-            <div className="lg:hidden">
-              <h3 className="text-sm font-semibold text-muted">Частые вопросы</h3>
-              <div className="mt-4">
-                <Faq items={commonCourseFaq} withSchema={false} />
-              </div>
-            </div>
           </div>
         </Container>
       </section>
-    <ContextLinks
-        items={[
-          { href: "/partners", title: "Организуйте обучение в своём городе", text: "Для организаторов и партнёров." },
-          { href: "/reviews", title: "Отзывы выпускников", text: "Что говорят участники обучения." },
-        ]}
-      />
+
+      <section aria-labelledby="catalog-faq-title" className="py-14 lg:py-20">
+        <Container>
+          <h2 id="catalog-faq-title" className="text-h3 font-semibold">
+            Вопросы и ответы
+          </h2>
+          <div className="mt-6 max-w-3xl">
+            <Faq items={commonCourseFaq} />
+          </div>
+        </Container>
+      </section>
     </>
   );
 }

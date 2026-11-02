@@ -1,12 +1,7 @@
 import type { Metadata } from "next";
-import Link from "next/link";
-import { Building2, GraduationCap, Store } from "lucide-react";
 import { partnerContent } from "@/data/content";
-import { getCourses } from "@/data/courses";
 import { pageMetadata } from "@/lib/seo";
-import { ButtonLink } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
-import { ContourArt } from "@/components/ui/contour-art";
 import { Eyebrow, SectionHeader } from "@/components/ui/typography";
 import { Reveal } from "@/components/ui/reveal";
 import { PageHero } from "@/components/sections/page-hero";
@@ -20,10 +15,7 @@ export const metadata: Metadata = pageMetadata({
   path: "/partners",
 });
 
-const whoIcons = [Building2, GraduationCap, Store];
-
 export default function PartnersPage() {
-  const courses = getCourses();
   return (
     <>
       <PageHero
@@ -31,52 +23,9 @@ export default function PartnersPage() {
         eyebrow="Партнёрство"
         title="Организуйте профессиональное обучение в вашем городе"
         lead="Мы предоставляем авторские образовательные программы и проводим или координируем обучение. Местный организатор помогает собрать группу и подобрать подходящую площадку."
-        actions={
-          <ButtonLink href="#zayavka" variant="accent" size="lg" arrow>
-            Стать организатором
-          </ButtonLink>
-        }
-        aside={
-          <div data-tone="dark" className="relative isolate overflow-hidden rounded-panel bg-graphite p-6 text-white sm:p-8">
-            <ContourArt seed={9} tone="dark" className="absolute inset-0 -z-10 h-full w-full opacity-70" marker={false} />
-            <p className="text-eyebrow font-semibold uppercase text-muted-dark">Модель сотрудничества</p>
-            <div className="mt-8 grid grid-cols-1 gap-3 xs:grid-cols-2">
-              <div className="rounded-2xl bg-white/[0.06] p-5 backdrop-blur-sm">
-                <p className="text-sm text-muted-dark">Организатор</p>
-                <p className="mt-2 font-semibold leading-snug">Группа участников и площадка</p>
-              </div>
-              <div className="rounded-2xl bg-white/[0.06] p-5 backdrop-blur-sm">
-                <p className="text-sm text-muted-dark">Школа</p>
-                <p className="mt-2 font-semibold leading-snug">Программа и проведение обучения</p>
-              </div>
-            </div>
-            <p className="mt-6 text-sm leading-relaxed text-muted-dark">
-              Условия сотрудничества обсуждаются индивидуально для каждого города и формата.
-            </p>
-          </div>
-        }
       />
 
-      <section aria-labelledby="who-title" className="py-20 lg:py-28">
-        <Container>
-          <Reveal>
-            <SectionHeader eyebrow="Кому подходит" title={<span id="who-title">Кто может стать организатором</span>} />
-          </Reveal>
-          <ul className="mt-12 grid grid-cols-1 gap-4 md:grid-cols-3 md:gap-6">
-            {partnerContent.who.map((w, i) => {
-              const Icon = whoIcons[i % whoIcons.length];
-              return (
-                <Reveal as="li" key={w} delay={i * 70} className="rounded-card border border-line p-6 sm:p-8">
-                  <Icon aria-hidden className="size-6 text-accent" strokeWidth={1.5} />
-                  <p className="mt-8 text-lg font-semibold leading-snug tracking-tight">{w}</p>
-                </Reveal>
-              );
-            })}
-          </ul>
-        </Container>
-      </section>
-
-      <section aria-label="Роли сторон" className="pb-20 lg:pb-28">
+      <section aria-label="Роли сторон" className="py-14 lg:py-20">
         <Container>
           <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-6">
             <Reveal className="rounded-panel bg-mist p-6 sm:p-10 lg:p-12">
@@ -107,7 +56,7 @@ export default function PartnersPage() {
         </Container>
       </section>
 
-      <section aria-labelledby="steps-title" className="border-t border-line py-20 lg:py-28">
+      <section aria-labelledby="steps-title" className="border-t border-line py-14 lg:py-20">
         <Container>
           <Reveal>
             <SectionHeader eyebrow="Процесс" title={<span id="steps-title">Как начинается сотрудничество</span>} />
@@ -126,21 +75,6 @@ export default function PartnersPage() {
             ))}
           </ol>
 
-          <Reveal className="mt-16 rounded-card border border-line p-6 sm:p-8">
-            <p className="text-sm font-semibold text-muted">Программы, доступные для выездного обучения</p>
-            <ul className="mt-4 flex flex-wrap gap-2">
-              {courses.map((c) => (
-                <li key={c.slug}>
-                  <Link
-                    href={`/courses/${c.slug}`}
-                    className="inline-flex h-10 items-center rounded-full border border-line px-4 text-sm font-medium transition-colors hover:border-ink"
-                  >
-                    {c.title}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </Reveal>
         </Container>
       </section>
 

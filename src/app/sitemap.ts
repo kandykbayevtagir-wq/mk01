@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { getCourses } from "@/data/courses";
+import { indexable } from "@/lib/indexing";
 import { absoluteUrl } from "@/lib/seo";
 
 export const dynamic = "force-static";
@@ -12,8 +13,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: "/partners", priority: 0.7, changeFrequency: "monthly" },
     { path: "/about", priority: 0.7, changeFrequency: "monthly" },
     { path: "/center", priority: 0.7, changeFrequency: "monthly" },
-    { path: "/products", priority: 0.6, changeFrequency: "monthly" },
-    { path: "/reviews", priority: 0.6, changeFrequency: "weekly" },
+    ...(indexable.products ? [{ path: "/products", priority: 0.6, changeFrequency: "monthly" as const }] : []),
+    ...(indexable.reviews ? [{ path: "/reviews", priority: 0.6, changeFrequency: "weekly" as const }] : []),
     { path: "/contacts", priority: 0.5, changeFrequency: "yearly" },
     { path: "/privacy", priority: 0.1, changeFrequency: "yearly" },
   ];

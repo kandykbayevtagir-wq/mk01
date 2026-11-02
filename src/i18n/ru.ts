@@ -15,12 +15,9 @@ export const ru = {
   },
   common: {
     enroll: "Записаться на обучение",
-    chooseCourse: "Выбрать курс",
     allCourses: "Все курсы",
     details: "Подробнее",
     courseDetails: "Подробнее о курсе",
-    priceOnRequest: "Стоимость уточняется",
-    datesOnRequest: "Даты уточняются",
     menu: "Меню",
     closeMenu: "Закрыть меню",
     openMenu: "Открыть меню",
