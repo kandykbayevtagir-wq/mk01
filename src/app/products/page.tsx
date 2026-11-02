@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { productCategories, products, productsByCategory } from "@/data/products";
+import { indexable } from "@/lib/indexing";
 import { pageMetadata } from "@/lib/seo";
 import { formatKzt } from "@/lib/utils";
 import { Container } from "@/components/ui/container";
@@ -13,6 +14,7 @@ export const metadata: Metadata = pageMetadata({
   title: "Профессиональная продукция",
   description: "Ортопедические стельки, подологические материалы и средства ухода за стопами.",
   path: "/products",
+  noIndex: !indexable.products,
 });
 
 /**

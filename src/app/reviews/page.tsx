@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { getTestimonials, trainingPhotos } from "@/data/testimonials";
+import { indexable } from "@/lib/indexing";
 import { pageMetadata } from "@/lib/seo";
 import { Container } from "@/components/ui/container";
 import { SectionHeader } from "@/components/ui/typography";
@@ -13,6 +14,7 @@ export const metadata: Metadata = pageMetadata({
   title: "Отзывы",
   description: "Отзывы выпускников курсов подологии.",
   path: "/reviews",
+  noIndex: !indexable.reviews,
 });
 
 export default function ReviewsPage() {
