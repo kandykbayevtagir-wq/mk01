@@ -9,9 +9,7 @@ import { channels, navigation, secondaryNavigation } from "@/data/site";
 import { SocialIconRow } from "@/components/contact/contact-channels";
 import { t } from "@/i18n";
 import { cn } from "@/lib/utils";
-import { ButtonLink } from "@/components/ui/button";
 import { Logo } from "./logo";
-import { headerCta } from "./header-cta";
 
 export function MobileMenu() {
   const [open, setOpen] = useState(false);
@@ -21,7 +19,6 @@ export function MobileMenu() {
   const [layered, setLayered] = useState(false);
   const pathname = usePathname();
   const panelId = useId();
-  const cta = headerCta(pathname);
   const toggleRef = useRef<HTMLButtonElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
 
@@ -224,17 +221,6 @@ export function MobileMenu() {
                   </a>
                   <SocialIconRow tone="light" />
                 </div>
-                <ButtonLink
-                  href={cta.href}
-                  external={cta.external}
-                  onClick={() => setOpen(false)}
-                  variant="accent"
-                  size="lg"
-                  arrow
-                  className="w-full"
-                >
-                  {cta.label}
-                </ButtonLink>
               </div>
             </div>
           </div>,

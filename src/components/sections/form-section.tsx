@@ -6,31 +6,24 @@ import { Reveal } from "@/components/ui/reveal";
 import { LeadForm, type FieldDef } from "@/components/forms/lead-form";
 import type { LeadType } from "@/lib/leads/schema";
 
-export function DirectContacts({ message }: { message?: string }) {
-  const items = [
-    { kind: "whatsapp" as const, ...channels.whatsapp, url: whatsappLink(message) },
-    { kind: "telegram" as const, ...channels.telegram },
-    { kind: "phone" as const, ...channels.phone },
-  ];
+/** Quiet alternative next to a form: one WhatsApp link, never a button. */
+export function WhatsAppAlt({ message, className }: { message?: string; className?: string }) {
   return (
-    <div className="mt-10 border-t border-line pt-6">
-      <p className="text-sm text-muted">Удобнее написать напрямую?</p>
-      <ul className="mt-3 flex flex-wrap gap-2">
-        {items.map((i) => (
-          <li key={i.kind}>
-            <a
-              href={i.url}
-              {...(i.url.startsWith("http") ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-              className="press inline-flex h-11 items-center gap-2.5 rounded-full border border-line bg-card pl-1.5 pr-4 text-sm font-medium transition-colors duration-[var(--dur-press)] hover:border-ink/30 active:bg-mist"
-            >
-              <ChannelTile kind={i.kind} className="size-8 rounded-full" />
-              {i.kind === "phone" ? i.value : i.name}
-              {i.url.startsWith("http") && <span className="sr-only"> (откроется в новой вкладке)</span>}
-            </a>
-          </li>
-        ))}
-      </ul>
-    </div>
+    <p className={className ?? "mt-8"}>
+      <a
+        href={whatsappLink(message)}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="press group inline-flex min-h-11 items-center gap-2.5 text-[0.9375rem] text-muted transition-colors duration-[var(--dur-press)] hover:text-ink"
+      >
+        <ChannelTile kind="whatsapp" className="size-7 rounded-full" />
+        <span>
+          Или напишите в WhatsApp{" "}
+          <span className="font-medium text-ink underline decoration-line underline-offset-4 group-hover:decoration-ink">{channels.whatsapp.value}</span>
+        </span>
+        <span className="sr-only"> (откроется в новой вкладке)</span>
+      </a>
+    </p>
   );
 }
 
@@ -70,7 +63,7 @@ export function FormSection({
             </h2>
             <p className="mt-5 max-w-md text-lead text-muted">{lead}</p>
             {children}
-            {showDirectContacts && <DirectContacts message={contactMessage} />}
+            {showDirectContacts && <WhatsAppAlt message={contactMessage} />}
           </Reveal>
           <Reveal className="lg:col-span-6 lg:col-start-7" delay={80}>
             <div className="rounded-panel bg-card p-5 shadow-card sm:p-8 lg:p-10">

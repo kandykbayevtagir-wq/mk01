@@ -4,14 +4,12 @@ import { center, services, specialists } from "@/data/center";
 import { channels, locations, socialProfiles } from "@/data/site";
 import { absoluteUrl, jsonLd, pageMetadata } from "@/lib/seo";
 import { formatKzt } from "@/lib/utils";
-import { ButtonLink } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { SectionHeader } from "@/components/ui/typography";
 import { Reveal } from "@/components/ui/reveal";
 import { Visual } from "@/components/ui/visual";
 import { PageHero } from "@/components/sections/page-hero";
 import { FormSection } from "@/components/sections/form-section";
-import { ContextLinks } from "@/components/sections/context-links";
 import { LocationCard } from "@/components/contact/location-card";
 import { appointmentFields } from "@/components/forms/presets";
 
@@ -53,16 +51,6 @@ export default function CenterPage() {
         eyebrow="Центр подологии"
         title={center.name}
         lead={center.intro}
-        actions={
-          <>
-            <ButtonLink href="#zapis" variant="accent" size="lg" arrow>
-              Записаться на приём
-            </ButtonLink>
-            <ButtonLink href="/courses" variant="ghost" size="lg">
-              Обучение для специалистов
-            </ButtonLink>
-          </>
-        }
         aside={
           <Visual
             image={center.gallery[0]}
@@ -182,12 +170,6 @@ export default function CenterPage() {
         contactMessage="Здравствуйте! Хочу записаться в центр подологии."
       />
 
-      <ContextLinks
-        items={[
-          { href: "/products", title: "Профессиональная продукция", text: "Стельки, материалы и средства ухода." },
-          { href: "/reviews", title: "Отзывы", text: "Что говорят клиенты и выпускники." },
-        ]}
-      />
     </>
   );
 }

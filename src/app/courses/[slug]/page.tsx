@@ -14,24 +14,22 @@ import {
   upcomingSessions,
 } from "@/data/courses";
 import { founder, founderDisplayName } from "@/data/founder";
-import { channels, site, whatsappLink } from "@/data/site";
+import { site } from "@/data/site";
 import type { Course } from "@/data/types";
 import { t } from "@/i18n";
 import { absoluteUrl, jsonLd, pageMetadata } from "@/lib/seo";
-import { formatDateRange, formatKzt, plural } from "@/lib/utils";
+import { formatDateRange, plural } from "@/lib/utils";
 import { ButtonLink } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { Eyebrow } from "@/components/ui/typography";
 import { Reveal } from "@/components/ui/reveal";
 import { Visual } from "@/components/ui/visual";
 import { SectionDecor } from "@/components/ui/section-decor";
-import { ChannelTile } from "@/components/ui/brand-icons";
 import { Breadcrumbs } from "@/components/sections/page-hero";
 import { Faq } from "@/components/sections/faq";
-import { ContextLinks } from "@/components/sections/context-links";
+import { WhatsAppAlt } from "@/components/sections/form-section";
 import { CourseCard } from "@/components/course/course-card";
 import { CoursePlate } from "@/components/course/course-plate";
-import { MobileEnrollBar } from "@/components/course/mobile-enroll-bar";
 import { LeadForm } from "@/components/forms/lead-form";
 import { courseEnrollFields } from "@/components/forms/presets";
 
@@ -99,8 +97,6 @@ export default async function CoursePage({ params }: Props) {
   const sessions = upcomingSessions(course);
   const session = nextSession(course);
   const city = courseCity(course);
-  const priceLabel = course.price ? formatKzt(course.price) : t.common.priceOnRequest;
-  const dateLabel = session ? `${formatDateRange(session.start, session.end)} · ${session.city}` : "Даты — по запросу";
   const faq = [...course.faq, ...commonCourseFaq];
   const related = relatedCourses(course);
 
@@ -157,11 +153,6 @@ export default async function CoursePage({ params }: Props) {
                   </div>
                 ))}
               </dl>
-              <div className="enter mt-8 flex flex-col gap-3 sm:flex-row lg:hidden" style={{ "--enter-delay": "260ms" } as React.CSSProperties}>
-                <ButtonLink href="#zapis" variant="accent" size="lg" arrow>
-                  {t.common.enroll}
-                </ButtonLink>
-              </div>
             </div>
             <div className="enter-fade lg:col-span-5" style={{ "--enter-delay": "120ms" } as React.CSSProperties}>
               <ViewTransition name={`course-visual-${course.slug}`} default="none" share="course-morph">
@@ -180,7 +171,7 @@ export default async function CoursePage({ params }: Props) {
       {/* Body + sticky enrolment panel */}
       <Container className="py-14 lg:py-24">
         <div className="grid grid-cols-1 gap-14 lg:grid-cols-12 lg:gap-6">
-          <div className="space-y-16 lg:col-span-7 lg:space-y-24">
+          <div className="space-y-16 lg:col-span-8 lg:space-y-24">
             <Reveal>
               <Eyebrow>О курсе</Eyebrow>
               <p className="mt-5 text-lead text-ink/85">{course.description}</p>
@@ -343,38 +334,6 @@ export default async function CoursePage({ params }: Props) {
             </Reveal>
           </div>
 
-          {/* Sticky enrolment panel (desktop) */}
-          <aside aria-label="Запись на курс" className="hidden lg:col-span-4 lg:col-start-9 lg:block">
-            <div className="sticky top-[calc(var(--header-h)+24px)] rounded-panel border border-line bg-card p-8 shadow-card">
-              <p className="text-xs text-muted">Стоимость</p>
-              <p className="mt-1.5 text-[1.75rem] font-semibold tracking-tight">{priceLabel}</p>
-              {course.priceNote && <p className="mt-1 text-sm text-muted">{course.priceNote}</p>}
-              <div className="mt-6 border-t border-line pt-6">
-                <p className="text-xs text-muted">Ближайший поток</p>
-                <p className="mt-1.5 inline-flex items-center gap-2 font-semibold">
-                  <CalendarDays aria-hidden className="size-4 text-accent" strokeWidth={1.75} />
-                  {dateLabel}
-                </p>
-                {sessions.length > 1 && <p className="mt-1 text-sm text-muted">и ещё {sessions.length - 1} в расписании</p>}
-              </div>
-              <ButtonLink href="#zapis" variant="accent" size="lg" arrow className="mt-8 w-full">
-                {t.common.enroll}
-              </ButtonLink>
-              <a
-                href={whatsappLink(`Здравствуйте! Интересует курс «${course.title}».`)}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="press mt-3 inline-flex h-12 w-full items-center justify-center gap-2.5 rounded-full border border-ink/15 bg-card text-[0.9375rem] font-medium transition-colors duration-[var(--dur-press)] hover:border-ink/40 active:bg-mist"
-              >
-                <ChannelTile kind="whatsapp" className="size-7 rounded-full" />
-                Задать вопрос в WhatsApp
-                <span className="sr-only"> (откроется в новой вкладке)</span>
-              </a>
-              <p className="mt-6 text-[0.8125rem] leading-relaxed text-muted">
-                После заявки мы свяжемся с вами, ответим на вопросы и подтвердим участие.
-              </p>
-            </div>
-          </aside>
         </div>
       </Container>
 
@@ -390,31 +349,7 @@ export default async function CoursePage({ params }: Props) {
               <p className="mt-5 max-w-md text-lead text-muted">
                 «{course.title}». Оставьте контакты — мы уточним детали и подтвердим место в группе.
               </p>
-              <dl className="mt-10 hidden space-y-4 border-t border-line pt-6 lg:block">
-                <div className="flex justify-between gap-4">
-                  <dt className="text-muted">Стоимость</dt>
-                  <dd className="font-semibold">{priceLabel}</dd>
-                </div>
-                <div className="flex justify-between gap-4">
-                  <dt className="text-muted">Ближайший поток</dt>
-                  <dd className="text-right font-semibold">{dateLabel}</dd>
-                </div>
-              </dl>
-              <a
-                href={whatsappLink(`Здравствуйте! Хочу записаться на курс «${course.title}».`)}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group press mt-8 flex items-center gap-3 rounded-card border border-line bg-card p-3 pr-4 transition-[border-color,box-shadow] duration-[var(--dur-card)] hover:border-ink/15 hover:shadow-card"
-              >
-                <ChannelTile kind="whatsapp" />
-                <span className="flex-1">
-                  <span className="block text-[0.9375rem] font-semibold">Удобнее в WhatsApp?</span>
-                  <span className="block text-[0.8125rem] text-muted">{channels.whatsapp.value}</span>
-                </span>
-                <span className="text-sm font-medium text-muted transition-colors group-hover:text-ink">
-                  Написать<span className="sr-only"> в WhatsApp (откроется в новой вкладке)</span>
-                </span>
-              </a>
+              <WhatsAppAlt message={`Здравствуйте! Хочу записаться на курс «${course.title}».`} />
             </Reveal>
             <Reveal className="lg:col-span-6 lg:col-start-7" delay={80}>
               <div className="rounded-panel bg-card p-5 shadow-card sm:p-8 lg:p-10">
@@ -447,15 +382,7 @@ export default async function CoursePage({ params }: Props) {
         </section>
       )}
 
-      <ContextLinks
-        label="Дополнительно"
-        items={[
-          { href: "/reviews", title: "Отзывы выпускников", text: "Что говорят участники обучения." },
-          { href: "/partners", title: "Обучение в вашем городе", text: "Для организаторов из других городов." },
-        ]}
-      />
 
-      <MobileEnrollBar priceLabel={priceLabel} dateLabel={dateLabel} targetId="zapis" heroId="course-hero" />
     </>
   );
 }

@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
-import Link from "next/link";
-import { ArrowRight, ArrowUpRight } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import { locations, site, unmappedTwoGisRecords } from "@/data/site";
 import { pageMetadata } from "@/lib/seo";
 import { Container } from "@/components/ui/container";
@@ -18,13 +17,6 @@ export const metadata: Metadata = pageMetadata({
   description: `${site.name}, Актобе: проспект Алии Молдагуловой, 54А и улица Кобланды, 12. WhatsApp и телефон +7 778 056 9356, Telegram, Instagram и способы оплаты.`,
   path: "/contacts",
 });
-
-const routes = [
-  { href: "/courses", title: "Записаться на обучение" },
-  { href: "/partners#zayavka", title: "Организовать обучение в своём городе" },
-  { href: "/center#zapis", title: "Записаться в центр" },
-  { href: "/products#zapros", title: "Подобрать продукцию" },
-];
 
 export default function ContactsPage() {
   return (
@@ -99,27 +91,7 @@ export default function ContactsPage() {
         fields={contactFields}
         submitLabel="Отправить"
         showDirectContacts={false}
-      >
-        <nav aria-label="Быстрые ссылки" className="mt-8">
-          <ul className="border-t border-line">
-            {routes.map((r) => (
-              <li key={r.href} className="border-b border-line">
-                <Link
-                  href={r.href}
-                  className="group flex min-h-12 items-center justify-between gap-4 py-3 text-[0.9375rem] font-medium"
-                >
-                  {r.title}
-                  <ArrowRight
-                    aria-hidden
-                    className="size-4 text-muted transition-transform duration-[var(--dur-press)] group-hover:translate-x-0.5 group-hover:text-ink"
-                    strokeWidth={1.75}
-                  />
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </nav>
-      </FormSection>
+      />
     </>
   );
 }

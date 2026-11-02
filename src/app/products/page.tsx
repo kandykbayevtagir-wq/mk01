@@ -3,14 +3,12 @@ import { Check } from "lucide-react";
 import { productCategories, productsByCategory } from "@/data/products";
 import { pageMetadata } from "@/lib/seo";
 import { formatKzt } from "@/lib/utils";
-import { ButtonLink } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { Eyebrow } from "@/components/ui/typography";
 import { Reveal } from "@/components/ui/reveal";
 import { Visual } from "@/components/ui/visual";
 import { PageHero } from "@/components/sections/page-hero";
 import { FormSection } from "@/components/sections/form-section";
-import { ContextLinks } from "@/components/sections/context-links";
 import { productFields } from "@/components/forms/presets";
 
 export const metadata: Metadata = pageMetadata({
@@ -28,11 +26,6 @@ export default function ProductsPage() {
         eyebrow="Продукция"
         title="Профессиональная продукция"
         lead="Решения, которые специалисты используют в работе и рекомендуют клиентам. Поможем подобрать продукт под задачу."
-        actions={
-          <ButtonLink href="#zapros" variant="accent" size="lg" arrow>
-            Уточнить наличие
-          </ButtonLink>
-        }
       />
 
       <nav aria-label="Категории продукции" className="sticky top-[var(--header-h)] z-30 border-b border-line bg-paper/90 backdrop-blur-xl">
@@ -142,12 +135,6 @@ export default function ProductsPage() {
         contactMessage="Здравствуйте! Интересует профессиональная продукция."
       />
 
-      <ContextLinks
-        items={[
-          { href: "/center", title: "Центр подологии", text: "Консультация специалиста в Актобе." },
-          { href: "/courses", title: "Обучение", text: "Курсы для специалистов." },
-        ]}
-      />
     </>
   );
 }

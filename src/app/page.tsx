@@ -17,7 +17,6 @@ import { getTestimonials } from "@/data/testimonials";
 import { AudiencePaths } from "@/components/sections/home/audience-paths";
 import { Seam } from "@/components/ui/seam";
 import { SectionDecor } from "@/components/ui/section-decor";
-import { FinalCta } from "@/components/sections/final-cta";
 
 export const metadata: Metadata = pageMetadata({
   description: site.description,
@@ -82,7 +81,6 @@ export default function HomePage() {
 
       <Seam side="left" />
       <PartnersTeaser />
-      <FinalCta />
     </>
   );
 }

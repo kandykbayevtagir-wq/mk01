@@ -12,8 +12,6 @@ import { Reveal } from "@/components/ui/reveal";
 import { Visual } from "@/components/ui/visual";
 import { PageHero } from "@/components/sections/page-hero";
 import { CourseCard } from "@/components/course/course-card";
-import { FinalCta } from "@/components/sections/final-cta";
-import { ContextLinks } from "@/components/sections/context-links";
 
 export const metadata: Metadata = pageMetadata({
   title: "О Марине",
@@ -50,16 +48,6 @@ export default function AboutPage() {
         eyebrow="О Марине"
         title={founder.name ?? "Преподаватель-практик и основатель центра подологии"}
         lead={founder.intro}
-        actions={
-          <>
-            <ButtonLink href="/courses" variant="accent" size="lg" arrow>
-              Выбрать курс
-            </ButtonLink>
-            <ButtonLink href="/center" variant="outline" size="lg">
-              Центр подологии
-            </ButtonLink>
-          </>
-        }
         aside={
           <div className="relative">
             <Visual
@@ -208,13 +196,6 @@ export default function AboutPage() {
         </Container>
       </section>
 
-      <ContextLinks
-        items={[
-          { href: "/reviews", title: "Отзывы", text: "Что говорят выпускники и клиенты." },
-          { href: "/center", title: "Центр подологии", text: "Приём специалистов в Актобе." },
-        ]}
-      />
-      <FinalCta />
     </>
   );
 }

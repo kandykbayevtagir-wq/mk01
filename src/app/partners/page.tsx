@@ -4,7 +4,6 @@ import { Building2, GraduationCap, Store } from "lucide-react";
 import { partnerContent } from "@/data/content";
 import { getCourses } from "@/data/courses";
 import { pageMetadata } from "@/lib/seo";
-import { ButtonLink } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { ContourArt } from "@/components/ui/contour-art";
 import { Eyebrow, SectionHeader } from "@/components/ui/typography";
@@ -31,11 +30,6 @@ export default function PartnersPage() {
         eyebrow="Партнёрство"
         title="Организуйте профессиональное обучение в вашем городе"
         lead="Мы предоставляем авторские образовательные программы и проводим или координируем обучение. Местный организатор помогает собрать группу и подобрать подходящую площадку."
-        actions={
-          <ButtonLink href="#zayavka" variant="accent" size="lg" arrow>
-            Стать организатором
-          </ButtonLink>
-        }
         aside={
           <div data-tone="dark" className="relative isolate overflow-hidden rounded-panel bg-graphite p-6 text-white sm:p-8">
             <ContourArt seed={9} tone="dark" className="absolute inset-0 -z-10 h-full w-full opacity-70" marker={false} />

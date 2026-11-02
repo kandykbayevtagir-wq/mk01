@@ -1,14 +1,12 @@
 import type { Metadata } from "next";
 import { getTestimonials, trainingPhotos } from "@/data/testimonials";
 import { pageMetadata } from "@/lib/seo";
-import { ButtonLink } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { SectionHeader } from "@/components/ui/typography";
 import { Reveal } from "@/components/ui/reveal";
 import { Visual } from "@/components/ui/visual";
 import { PageHero } from "@/components/sections/page-hero";
 import { TestimonialGrid } from "@/components/sections/testimonials";
-import { FinalCta } from "@/components/sections/final-cta";
 
 export const metadata: Metadata = pageMetadata({
   title: "Отзывы и результаты",
@@ -25,11 +23,6 @@ export default function ReviewsPage() {
         eyebrow="Отзывы и результаты"
         title="Отзывы выпускников"
         lead="Реальные впечатления участников обучения — публикуются с их согласия, с указанием курса и города."
-        actions={
-          <ButtonLink href="/courses" variant="accent" size="lg" arrow>
-            Выбрать курс
-          </ButtonLink>
-        }
       />
 
       <section aria-label="Отзывы" className="py-16 lg:py-24">
@@ -56,7 +49,6 @@ export default function ReviewsPage() {
         </section>
       )}
 
-      <FinalCta />
     </>
   );
 }
