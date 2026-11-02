@@ -63,33 +63,3 @@ export function PaymentMethods({ className }: { className?: string }) {
     </ul>
   );
 }
-
-/** Minimal strip for the footer. */
-export function PaymentStrip({ className }: { className?: string }) {
-  return (
-    <ul className={cn("flex flex-wrap items-center gap-2", className)} aria-label="Способы оплаты">
-      {paymentMethods.map((m) => (
-        <li
-          key={m.id}
-          className="inline-flex h-9 items-center rounded-lg border border-line-dark px-3 text-white/85"
-        >
-          {m.id === "applepay" || m.id === "googlepay" ? (
-            <SimpleIconSvg
-              icon={brandMarks[m.id]}
-              viewBox={markViewBox[m.id]}
-              title={m.name}
-              className={m.id === "applepay" ? "h-5 w-auto" : "h-3.5 w-auto"}
-            />
-          ) : m.id === "cash" ? (
-            <span className="inline-flex items-center gap-1.5 text-[0.8125rem] font-medium">
-              <Banknote aria-hidden className="size-4" strokeWidth={1.6} />
-              {m.name}
-            </span>
-          ) : (
-            <span className="text-[0.875rem] font-extrabold tracking-[-0.02em]">{m.name}</span>
-          )}
-        </li>
-      ))}
-    </ul>
-  );
-}

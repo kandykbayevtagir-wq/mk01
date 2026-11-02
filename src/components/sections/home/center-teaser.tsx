@@ -34,10 +34,9 @@ export function CenterTeaser() {
               <h2 id="center-title" className="mt-4 text-h2 font-semibold">
                 Приём в Актобе
               </h2>
-              <p className="mt-4 text-lead text-muted">{center.intro}</p>
             </Reveal>
 
-            <ul className="mt-7 border-t border-line">
+            <ul className="mt-6 border-t border-line">
               {services.slice(0, 5).map((s, i) => (
                 <Reveal as="li" key={s.id} delay={i * 50} className="border-b border-line py-3 text-[1rem] font-medium">
                   {s.title}

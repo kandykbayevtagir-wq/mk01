@@ -25,18 +25,13 @@ export default function ContactsPage() {
         crumbs={[{ href: "/contacts", label: "Контакты" }]}
         eyebrow={`${site.name} · Актобе`}
         title="Контакты"
-        lead="Быстрее всего ответим в WhatsApp. Также на связи в Telegram и Instagram."
         aside={<ContactChannels layout="stack" whatsappMessage="Здравствуйте! У меня вопрос." />}
       />
 
       <section id="adresa" aria-labelledby="locations-title" className="scroll-mt-[var(--header-h)] py-16 lg:py-24">
         <Container>
           <Reveal>
-            <SectionHeader
-              eyebrow="Адреса"
-              title={<span id="locations-title">Два филиала в Актобе</span>}
-              lead="Приём специалистов центра подологии."
-            />
+            <SectionHeader eyebrow="Адреса" title={<span id="locations-title">Два филиала в Актобе</span>} />
           </Reveal>
           <ul className="mt-10 grid grid-cols-1 gap-3 md:grid-cols-2 md:gap-6 lg:mt-12">
             {locations.map((l, i) => (
@@ -67,11 +62,7 @@ export default function ContactsPage() {
       <section aria-labelledby="payment-title" className="border-t border-line py-16 lg:py-24">
         <Container>
           <Reveal>
-            <SectionHeader
-              eyebrow="Оплата"
-              title={<span id="payment-title">Способы оплаты</span>}
-              lead="Доступные способы оплаты услуг и обучения."
-            />
+            <SectionHeader eyebrow="Оплата" title={<span id="payment-title">Способы оплаты</span>} />
           </Reveal>
           <Reveal className="mt-10 lg:mt-12" delay={60}>
             <PaymentMethods />
@@ -86,7 +77,7 @@ export default function ContactsPage() {
         id="napisat"
         eyebrow="Обратная связь"
         title="Написать нам"
-        lead="Оставьте вопрос — мы ответим в рабочее время."
+        lead="Оставьте вопрос — мы свяжемся с вами."
         type="contact"
         fields={contactFields}
         submitLabel="Отправить"
