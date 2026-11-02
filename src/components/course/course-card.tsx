@@ -4,7 +4,7 @@ import type { Course } from "@/data/types";
 import { audienceById, nextSession } from "@/data/courses";
 import { cn, formatDateRange, formatKzt } from "@/lib/utils";
 import { PressLink } from "@/components/ui/press-link";
-import { CardSheen } from "@/components/ui/liquid-light";
+import { CardSheen } from "@/components/ui/card-sheen";
 import { CoursePlate } from "./course-plate";
 
 /**
