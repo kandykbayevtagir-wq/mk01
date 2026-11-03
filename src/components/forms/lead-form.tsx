@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useId, useRef, useState } from "react";
 import { AlertCircle, ChevronDown, Loader2 } from "lucide-react";
 import { leadSchemas, type LeadType } from "@/lib/leads/schema";
-import { submitLead } from "@/lib/leads/client";
+import { deliveryMode, submitLead } from "@/lib/leads/client";
 import { channels, whatsappLink } from "@/data/site";
 import { t } from "@/i18n";
 import { cn } from "@/lib/utils";
@@ -25,7 +25,15 @@ export type FieldDef = {
   hint?: string;
 };
 
-type Status = "idle" | "submitting" | "success" | "error";
+type Status = "idle" | "submitting" | "success" | "error" | "handoff";
+
+/** The whole form as a WhatsApp message (used when no form service is configured). */
+function handoffMessage(type: LeadType, data: Record<string, string>, fields: FieldDef[]) {
+  const lines = fields
+    .filter((f) => (data[f.name] ?? "").trim() !== "")
+    .map((f) => `${f.label.replace(/\s*\(необязательно\)/i, "")}: ${data[f.name].trim().replace(/\s+/g, " ")}`);
+  return [fallbackMessage(type, data), "", ...lines].join("\n");
+}
 
 /** Short, polite WhatsApp message built from what the visitor already typed. */
 function fallbackMessage(type: LeadType, data: Record<string, string>) {
@@ -81,6 +89,7 @@ export function LeadForm({
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [attempted, setAttempted] = useState(false);
   const [lastData, setLastData] = useState<Record<string, string>>({});
+  const [handoffUrl, setHandoffUrl] = useState<string | null>(null);
 
   const schema = leadSchemas[type];
 
@@ -138,6 +147,15 @@ export function LeadForm({
     }
 
     setLastData(data);
+    if (deliveryMode === "whatsapp") {
+      // Opened synchronously inside the submit gesture, so browsers allow it.
+      const url = whatsappLink(handoffMessage(type, data, fields));
+      setHandoffUrl(url);
+      window.open(url, "_blank", "noopener,noreferrer");
+      setStatus("handoff");
+      requestAnimationFrame(() => statusRef.current?.focus());
+      return;
+    }
     setStatus("submitting");
     setErrorCode(null);
     try {
@@ -159,6 +177,43 @@ export function LeadForm({
       setStatus("error");
       requestAnimationFrame(() => statusRef.current?.focus());
     }
+  }
+
+  if (status === "handoff" && handoffUrl) {
+    return (
+      <div
+        ref={statusRef}
+        tabIndex={-1}
+        role="status"
+        className={cn(
+          "enter flex flex-col items-start outline-none",
+          tone === "mist" ? "py-2" : "rounded-panel border border-line bg-mist p-6 sm:p-10",
+          className,
+        )}
+      >
+        <ChannelTile kind="whatsapp" className="size-12 rounded-full" />
+        <h3 className="mt-6 text-h3 font-semibold">Осталось отправить сообщение</h3>
+        <p className="mt-3 max-w-md text-muted">
+          Мы подготовили сообщение с вашими данными в WhatsApp. Нажмите «Отправить» в WhatsApp — и заявка у нас.
+        </p>
+        <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+          <a
+            href={handoffUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            data-ripple=""
+            className="press inline-flex h-12 items-center justify-center gap-2.5 rounded-full bg-ink pl-2 pr-5 text-[0.9375rem] font-semibold text-white transition-colors duration-[var(--dur-press)] hover:bg-graphite-2"
+          >
+            <ChannelTile kind="whatsapp" className="size-8 rounded-full" />
+            Открыть WhatsApp ещё раз
+            <span className="sr-only"> (откроется в новой вкладке)</span>
+          </a>
+          <Button variant="outline" size="md" className="h-12" onClick={() => setStatus("idle")}>
+            Изменить данные
+          </Button>
+        </div>
+      </div>
+    );
   }
 
   if (status === "success") {
@@ -344,8 +399,10 @@ export function LeadForm({
         >
           {status === "submitting" && <Loader2 aria-hidden className="size-5 animate-spin" />}
           {status === "submitting" ? t.form.sending : submitLabel}
+          {deliveryMode === "whatsapp" && <span className="sr-only"> через WhatsApp</span>}
         </Button>
         <p className="text-[0.8125rem] leading-relaxed text-muted sm:max-w-xs sm:text-right">
+          {deliveryMode === "whatsapp" && <>Заявка откроется в WhatsApp. </>}
           {t.form.consent}{" "}
           <Link href="/privacy" className="underline decoration-line underline-offset-4 hover:decoration-ink">
             {t.form.consentLink}
