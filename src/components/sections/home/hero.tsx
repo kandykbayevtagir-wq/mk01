@@ -1,5 +1,4 @@
 import { MapPin } from "lucide-react";
-import { founder } from "@/data/founder";
 import { locations, site } from "@/data/site";
 import { plural } from "@/lib/utils";
 import { Container } from "@/components/ui/container";
@@ -73,15 +72,15 @@ export function Hero() {
                 className="hero-reveal grain aspect-[4/3.2] rounded-panel bg-graphite shadow-float sm:aspect-[16/11] lg:aspect-[4/5]"
                 distance={24}
               >
+                {/* the live pressure map stays the hero; Marina's portrait leads her own section */}
                 <Visual
-                  image={founder.portrait}
+                  image={null}
                   tone="dark"
                   art="feet"
                   live
                   seed={7}
                   priority
                   className="h-full w-full"
-                  imgClassName="object-[50%_20%]"
                   sizes="(min-width: 1024px) 40vw, 100vw"
                 >
                   {/* static light: the living pressure map is this viewport's one ambient motion */}

@@ -14,7 +14,7 @@ export const metadata: Metadata = pageMetadata({
   title: "О Марине",
   description: `${founderDisplayName()} — ${founder.role.toLowerCase()}. Подход к обучению.`,
   path: "/about",
-  image: founder.portrait?.src,
+  // share card public/og/about.jpg carries the portrait (scripts/generate-og.mjs)
 });
 
 export default function AboutPage() {
