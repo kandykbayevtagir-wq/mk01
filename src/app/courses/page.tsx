@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { audiences, commonCourseFaq, getCourses } from "@/data/courses";
+import { assertGuideReferences } from "@/data/course-guide";
 import { pageMetadata } from "@/lib/seo";
 import { plural } from "@/lib/utils";
 import { Container } from "@/components/ui/container";
@@ -21,6 +22,7 @@ export const metadata: Metadata = pageMetadata({
 
 export default function CoursesPage() {
   const courses = getCourses();
+  assertGuideReferences(courses); // a guide line that no longer exists in the data fails the build
   return (
     <>
       <PageHero
@@ -30,7 +32,7 @@ export default function CoursesPage() {
         lead={`${courses.length} ${plural(courses.length, ["программа", "программы", "программ"])} для ${audiences.length} аудиторий — от первого знакомства с профессией до преподавательской практики.`}
       />
 
-      <section aria-label="Каталог программ" className="py-14 lg:py-20">
+      <section aria-label="Каталог программ" className="pb-14 pt-6 sm:pt-10 lg:py-20">
         <Container>
           <CourseCatalog courses={courses} headingLevel="h2" />
         </Container>

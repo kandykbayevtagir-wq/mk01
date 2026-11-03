@@ -15,7 +15,7 @@ a crop / tone-to-transparency conversion of those pixels:
   src/app/{favicon.ico,icon.png,apple-icon.png}, public/icons/*  favicons / home-screen icons
 
 Tone → transparency: alpha = (254 − L) / (254 − 15). Over white this reproduces
-the original pixel for pixel; over the site's beige it simply lets the beige through.
+the original pixel for pixel, and any other background simply shows through.
 Symbol sizes above the 140 px source are upsampled 4×, edge-sharpened (a contrast
 curve on the anti-aliasing only — geometry is unchanged) and area-averaged down.
 Requires: Pillow, numpy.
@@ -31,7 +31,7 @@ ICONS = ROOT / "public/icons"
 APP = ROOT / "src/app"
 
 BG, INK, GREY = 254.0, 15.0, 126.0
-PAPER = (251, 247, 241)  # site background #fbf7f1
+PAPER = (255, 255, 255)  # site background (--color-paper)
 
 rgb = np.asarray(Image.open(SRC).convert("RGB"), dtype=np.float32)
 L = rgb.mean(2)
@@ -148,7 +148,7 @@ save(indexed(ink(compact, (255, 255, 255), W)), OUT / "logo-compact-light.png")
 save(symbol(512), OUT / "logo-symbol.png")
 save(Image.open(SRC).convert("L").resize((512, 512), Image.LANCZOS), OUT / "logo-square.png")
 
-# favicons: tab icons fill the canvas; home-screen icons sit on the site paper colour
+# favicons: tab icons fill the canvas; home-screen icons sit on the site's white
 save(with_padding(96, 0.04), APP / "icon.png")
 save(on_paper(180, 0.64), APP / "apple-icon.png")
 save(with_padding(192, 0.1), ICONS / "icon-192.png")
