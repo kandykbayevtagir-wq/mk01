@@ -296,6 +296,22 @@
 /* Filter re-flow names exist only while the filter transition runs, so page
    navigations never capture every course card as a separate layer. */
 html[data-vt="filter"] .vt-filter-item { view-transition-name: var(--vt-name); }
+/* A chip pill that appears (first topic chosen) or leaves scales in place
+   instead of the generic card rise. */
+::view-transition-new(course-goal-pill):only-child,
+::view-transition-new(course-filter-pill):only-child {
+  animation: vt-pill-in 240ms var(--ease-out-soft) both;
+}
+::view-transition-old(course-goal-pill):only-child,
+::view-transition-old(course-filter-pill):only-child {
+  animation: vt-pill-out 160ms ease-in both;
+}
+@keyframes vt-pill-in {
+  from { opacity: 0; transform: scale(0.86); }
+}
+@keyframes vt-pill-out {
+  to { opacity: 0; transform: scale(0.92); }
+}
 ::view-transition-new(site-header) { animation: none; }
 ::view-transition-group(nav-active-dot) {
   animation-duration: 380ms;
@@ -454,5 +470,15 @@ html[data-vt="filter"] .vt-filter-item { view-transition-name: var(--vt-name); }
     from { clip-path: inset(0 100% 0 0); opacity: 0; }
     30% { opacity: 1; }
     to { clip-path: inset(0 0 0 0); opacity: 1; }
+  }
+
+  /* Course guide: the «why» panel settles in after its card has moved. */
+  @media (prefers-reduced-motion: no-preference) {
+    .guide-why {
+      animation: guide-why-in 420ms var(--ease-out-soft) 140ms both;
+    }
+  }
+  @keyframes guide-why-in {
+    from { opacity: 0; transform: translate3d(0, 6px, 0); }
   }
 }
