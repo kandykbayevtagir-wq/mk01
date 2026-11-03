@@ -60,10 +60,15 @@ export function CardMagnet() {
       if (e.pointerType === "mouse" || reduce.matches) return;
       const el = (e.target as Element | null)?.closest<HTMLElement>(".course-card");
       if (!el) return;
-      const r = el.getBoundingClientRect();
-      el.style.setProperty("--lx", `${(e.clientX - r.left).toFixed(1)}px`);
-      el.style.setProperty("--ly", `${(e.clientY - r.top).toFixed(1)}px`);
-      el.dataset.lit = "";
+      // measure in the next frame (shares that frame's layout) — never force
+      // a synchronous layout inside the pointerdown that starts the press
+      const { clientX, clientY } = e;
+      requestAnimationFrame(() => {
+        const r = el.getBoundingClientRect();
+        el.style.setProperty("--lx", `${(clientX - r.left).toFixed(1)}px`);
+        el.style.setProperty("--ly", `${(clientY - r.top).toFixed(1)}px`);
+        el.dataset.lit = "";
+      });
       const off = () => {
         delete el.dataset.lit;
         window.removeEventListener("pointerup", off, true);

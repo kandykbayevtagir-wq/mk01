@@ -444,22 +444,27 @@ export function PressureField({
     const host = (el.closest("[data-pressure-host]") as HTMLElement | null) ?? el;
     const onDown = (e: PointerEvent) => {
       if (!e.isPrimary || !f.ctx) return;
-      if (!f.w) resize(f);
-      const r = el.getBoundingClientRect();
-      const lx = Math.min(r.width, Math.max(0, e.clientX - r.left));
-      const ly = Math.min(r.height, Math.max(0, e.clientY - r.top));
-      const { s, ox, oy } = viewTransform(f);
-      const now = performance.now();
-      const x = (lx - ox) / s;
-      const y = (ly - oy) / s;
-      f.ripples.push({ x, y, t0: now });
-      if (f.ripples.length > 3) f.ripples.shift();
-      // the plate feels the finger from the first frame, and keeps feeling it while held
-      f.touch = { x, y, t: now };
+      // Geometry is read in the next animation frame (it shares that frame's
+      // layout) so the pointerdown that starts the press does no forced layout.
+      const { clientX, clientY } = e;
+      const t0 = performance.now();
       f.held = true;
-      f.boostUntil = now + 4000;
-      pick(now);
-      schedule();
+      requestAnimationFrame(() => {
+        if (!f.w) resize(f);
+        const r = el.getBoundingClientRect();
+        const lx = Math.min(r.width, Math.max(0, clientX - r.left));
+        const ly = Math.min(r.height, Math.max(0, clientY - r.top));
+        const { s, ox, oy } = viewTransform(f);
+        const x = (lx - ox) / s;
+        const y = (ly - oy) / s;
+        f.ripples.push({ x, y, t0 });
+        if (f.ripples.length > 3) f.ripples.shift();
+        // the plate feels the finger from the first frame, and keeps feeling it while held
+        f.touch = { x, y, t: f.held ? performance.now() : t0 };
+        f.boostUntil = t0 + 4000;
+        pick(performance.now());
+        schedule();
+      });
     };
     const onUp = () => {
       if (!f.held) return;
