@@ -48,6 +48,8 @@ type Field = {
   ripples: Ripple[];
   /** Live contact point (cursor / finger) in view space, with its last-moved time. */
   touch: { x: number; y: number; t: number } | null;
+  /** a finger / button is down on the host: contact load holds instead of fading */
+  held: boolean;
   lastDraw: number;
   w: number;
   h: number;
@@ -229,15 +231,24 @@ function draw(f: Field, now: number) {
   }
   // Contact load: the plate "feels" the cursor or finger, fading ~0.9 s after it stops.
   const tc = f.touch;
-  const tA = tc ? 0.95 * Math.max(0, 1 - (now - tc.t) / 900) : 0;
+  const tA = tc ? 0.95 * (f.held ? 1 : Math.pow(Math.max(0, 1 - (now - tc.t) / 900), 1.6)) : 0;
   const invT = 1 / (2 * 30 * 30);
+  const reachT = 3 * 30;
+  // Pressure wave: decelerating front, ring widens as it travels, exponential
+  // decay with geometric spreading, a faint trailing rebound ring and a short
+  // impact bloom; fades smoothly to exactly zero at the end of its life.
   const rip = f.ripples.map((r) => {
     const ra = (now - r.t0) / 1000;
-    return [r.x, r.y, ra * 330, 0.85 * Math.pow(1 - ra / 1.3, 2)];
+    const radius = 430 * (1 - Math.exp(-2.4 * ra));
+    const fade = 1 - smooth(1.0, 1.3, ra);
+    const amp = (0.92 * Math.exp(-ra / 0.42) * fade) / (1 + radius / 260);
+    const sigma = 12 + 22 * ra;
+    const bloom = 0.55 * Math.exp(-ra / 0.11);
+    return [r.x, r.y, radius, amp, 1 / (2 * sigma * sigma), 3 * sigma, bloom];
   });
+  const invB = 1 / (2 * 24 * 24);
   const inv = 1 / (2 * 34 * 34);
   const invW = 1 / (2 * 15 * 15);
-  const invR = 1 / (2 * 18 * 18);
   for (let i = 0; i < L.n; i++) {
     const o = i * STRIDE;
     const fi = D[o + 6] * 6;
@@ -268,7 +279,7 @@ function draw(f: Field, now: number) {
         y += py;
       }
     }
-    if (tA > 0) {
+    if (tA > 0 && Math.abs(x - tc!.x) < reachT && Math.abs(y - tc!.y) < reachT) {
       const qx = x - tc!.x;
       const qy = y - tc!.y;
       const k = tA * Math.exp(-(qx * qx + qy * qy) * invT);
@@ -283,9 +294,17 @@ function draw(f: Field, now: number) {
       const r = rip[j];
       const qx = x - r[0];
       const qy = y - r[1];
-      const len = Math.sqrt(qx * qx + qy * qy) || 1;
+      const d2 = qx * qx + qy * qy;
+      const len = Math.sqrt(d2) || 1;
+      let kk = 0;
+      // impact bloom right under the finger (first ~0.3 s)
+      if (r[6] > 0.01 && d2 < 5184) kk += r[6] * Math.exp(-d2 * invB);
       const rd = len - r[2];
-      const kk = r[3] * Math.exp(-rd * rd * invR);
+      if (rd > -r[5] && rd < r[5]) kk += r[3] * Math.exp(-rd * rd * r[4]);
+      // trailing rebound ring, a third as strong
+      const rd2 = len - r[2] * 0.62;
+      if (rd2 > -r[5] && rd2 < r[5]) kk += 0.32 * r[3] * Math.exp(-rd2 * rd2 * r[4] * 0.7);
+      if (kk === 0) continue;
       v += kk;
       if (kk > 0.02) {
         x += (qx / len) * kk * 3;
@@ -323,7 +342,8 @@ function frame(now: number) {
     // arrive gently (~1 s), hand over quickly (~0.5 s) so two never compete
     f.energy += (goal - f.energy) * Math.min(1, dt * (goal > f.energy ? 2.6 : 6));
     if (Math.abs(goal - f.energy) < 0.005) f.energy = goal;
-    const touching = f.touch !== null && now - f.touch.t < 900;
+    if (f.held && f.touch && now - f.touch.t > 6000) f.held = false; // safety bound
+    const touching = f.touch !== null && (f.held || now - f.touch.t < 900);
     if (f.touch && !touching) f.touch = null;
     const busy = f.energy > 0 || f.ripples.length > 0 || touching;
     if (!busy) {
@@ -409,6 +429,7 @@ export function PressureField({
       boostUntil: 0,
       ripples: [],
       touch: null,
+      held: false,
       lastDraw: 0,
       w: 0,
       h: 0,
@@ -428,13 +449,27 @@ export function PressureField({
       const lx = Math.min(r.width, Math.max(0, e.clientX - r.left));
       const ly = Math.min(r.height, Math.max(0, e.clientY - r.top));
       const { s, ox, oy } = viewTransform(f);
-      f.ripples.push({ x: (lx - ox) / s, y: (ly - oy) / s, t0: performance.now() });
+      const now = performance.now();
+      const x = (lx - ox) / s;
+      const y = (ly - oy) / s;
+      f.ripples.push({ x, y, t0: now });
       if (f.ripples.length > 3) f.ripples.shift();
-      f.boostUntil = performance.now() + 4000;
-      pick(performance.now());
+      // the plate feels the finger from the first frame, and keeps feeling it while held
+      f.touch = { x, y, t: now };
+      f.held = true;
+      f.boostUntil = now + 4000;
+      pick(now);
+      schedule();
+    };
+    const onUp = () => {
+      if (!f.held) return;
+      f.held = false;
+      if (f.touch) f.touch.t = performance.now(); // fade starts at release
       schedule();
     };
     host.addEventListener("pointerdown", onDown, { passive: true });
+    window.addEventListener("pointerup", onUp, { passive: true });
+    window.addEventListener("pointercancel", onUp, { passive: true });
 
     // The plate answers the cursor (and a finger held on it): load follows the point.
     const onMove = (e: PointerEvent) => {
@@ -453,6 +488,8 @@ export function PressureField({
     return () => {
       host.removeEventListener("pointerdown", onDown);
       host.removeEventListener("pointermove", onMove);
+      window.removeEventListener("pointerup", onUp);
+      window.removeEventListener("pointercancel", onUp);
       io?.unobserve(el);
       ro?.unobserve(el);
       fields.delete(f);
