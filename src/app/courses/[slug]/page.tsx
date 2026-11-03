@@ -112,7 +112,7 @@ export default async function CoursePage({ params }: Props) {
       <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(courseLd(course))} />
 
       {/* Hero */}
-      <section id="course-hero" className="relative overflow-hidden bg-mist">
+      <section id="course-hero" data-atmo="hero" className="relative overflow-hidden bg-mist">
         <SectionDecor variant={["dots-corner", "arches-left"]} />
         <Container className="relative pb-12 pt-6 sm:pt-8 lg:pb-20 lg:pt-10">
           <Breadcrumbs
@@ -170,7 +170,8 @@ export default async function CoursePage({ params }: Props) {
         </Container>
       </section>
 
-      {/* Body + sticky enrolment panel */}
+      {/* Body: the educational content (atmosphere «learn», reading progress) */}
+      <div id="course-content" data-atmo="learn">
       <Container className="py-14 lg:py-24">
         <div className="grid grid-cols-1 gap-14 lg:grid-cols-12 lg:gap-6">
           <div className="space-y-16 lg:col-span-8 lg:space-y-24">
@@ -336,6 +337,8 @@ export default async function CoursePage({ params }: Props) {
         </div>
       </Container>
 
+      </div>
+
       {/* Enrolment form */}
       <section id="zapis" aria-labelledby="enroll-title" className="scroll-mt-[var(--header-h)] bg-mist py-20 lg:py-28">
         <Container>
@@ -360,7 +363,7 @@ export default async function CoursePage({ params }: Props) {
       </section>
 
       {related.length > 0 && (
-        <section aria-labelledby="related-title" className="py-20 lg:py-28">
+        <section data-atmo="courses" aria-labelledby="related-title" className="py-20 lg:py-28">
           <Container>
             <div className="flex items-end justify-between gap-6">
               <h2 id="related-title" className="text-h2 font-semibold">

@@ -75,7 +75,7 @@ export default function AboutPage() {
         </section>
       )}
 
-      <section aria-labelledby="philosophy-title" className="py-20 lg:py-28">
+      <section data-atmo="learn" aria-labelledby="philosophy-title" className="py-20 lg:py-28">
         <Container>
           <div className="grid grid-cols-1 gap-10 lg:grid-cols-12 lg:gap-6">
             <Reveal className="lg:col-span-4">
@@ -102,7 +102,7 @@ export default function AboutPage() {
       </section>
 
       {hasCredentials && (
-        <section aria-labelledby="credentials-title" className="bg-mist py-20 lg:py-28">
+        <section data-atmo="deep" aria-labelledby="credentials-title" className="bg-mist py-20 lg:py-28">
           <Container>
             <Reveal>
               <SectionHeader eyebrow="Квалификация" title={<span id="credentials-title">Опыт и квалификация</span>} />

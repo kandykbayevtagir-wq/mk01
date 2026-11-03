@@ -11,7 +11,7 @@ import { CourseCard } from "@/components/course/course-card";
 export function ProgramsSection() {
   const courses = getFeaturedCourses().slice(0, 3);
   return (
-    <section id="programmy" aria-labelledby="programs-title" className="motion-programs surface-mist relative overflow-clip py-14 sm:py-20 lg:py-24">
+    <section data-atmo="courses" id="programmy" aria-labelledby="programs-title" className="motion-programs surface-mist relative overflow-clip py-14 sm:py-20 lg:py-24">
       <SectionDecor variant={["dots-corner", "arches-left"]} />
       <Container className="relative">
         <Reveal>

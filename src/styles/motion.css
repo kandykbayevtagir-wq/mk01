@@ -495,3 +495,86 @@ html[data-vt="filter"] .vt-filter-item { view-transition-name: var(--vt-name); }
     from { opacity: 0; transform: translate3d(0, 6px, 0); }
   }
 }
+
+/* ---------------------------------------------------------------------
+ * Atmosphere (components/ui/atmosphere.tsx): light + grain behind content.
+ * Opacity cross-fades between four states; the drift is scroll-linked and
+ * compositor-only; the grain is a static tile. Text sits on ≥ 94 % white.
+ * ------------------------------------------------------------------- */
+.atmo {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  overflow: hidden;
+  contain: strict;
+}
+.atmo__lights {
+  position: absolute;
+  inset: -8%;
+}
+.atmo__light {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 1600ms var(--ease-out-soft);
+}
+/* Hero: clean white, a whisper of warm light, almost no grain. */
+.atmo__light--hero {
+  background:
+    radial-gradient(58% 42% at 90% 6%, rgb(248 241 232 / 0.95), transparent 72%),
+    radial-gradient(38% 30% at 4% 94%, rgb(179 38 45 / 0.035), transparent 72%);
+}
+/* Course discovery: graphite undertone + restrained red ambient. */
+.atmo__light--courses {
+  background:
+    radial-gradient(78% 56% at -6% 30%, rgb(23 23 23 / 0.055), transparent 74%),
+    radial-gradient(62% 48% at 106% 74%, rgb(179 38 45 / 0.1), transparent 72%),
+    radial-gradient(50% 34% at 62% 0%, rgb(248 243 236 / 0.8), transparent 70%);
+}
+/* Learning: calmer and brighter, one soft directional light. */
+.atmo__light--learn {
+  background:
+    linear-gradient(158deg, rgb(247 242 235 / 0.95) 0%, transparent 44%),
+    radial-gradient(40% 30% at 0% 100%, rgb(179 38 45 / 0.03), transparent 72%);
+}
+/* Lower sections: deeper, cinematic neutral that leads into the footer. */
+.atmo__light--deep {
+  background:
+    radial-gradient(100% 62% at 50% 124%, rgb(23 23 23 / 0.1), transparent 74%),
+    radial-gradient(52% 42% at 104% 100%, rgb(179 38 45 / 0.075), transparent 72%),
+    radial-gradient(56% 44% at -4% -4%, rgb(23 23 23 / 0.035), transparent 72%);
+}
+html:not([data-atmo]) .atmo__light--hero,
+html[data-atmo="hero"] .atmo__light--hero,
+html[data-atmo="courses"] .atmo__light--courses,
+html[data-atmo="learn"] .atmo__light--learn,
+html[data-atmo="deep"] .atmo__light--deep {
+  opacity: 1;
+}
+.atmo__grain {
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .6 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 180px 180px;
+  opacity: 0.06;
+  transition: opacity 1600ms var(--ease-out-soft);
+}
+html[data-atmo="courses"] .atmo__grain { opacity: 0.1; }
+html[data-atmo="learn"] .atmo__grain { opacity: 0.07; }
+html[data-atmo="deep"] .atmo__grain { opacity: 0.11; }
+
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: scroll()) {
+    html:not(.motion-lite) .atmo__lights {
+      animation: atmo-drift linear both;
+      animation-timeline: scroll(root);
+    }
+  }
+}
+@keyframes atmo-drift {
+  from { transform: translate3d(0, 0, 0) scale(1); }
+  50% { transform: translate3d(-2.5%, -3%, 0) scale(1.04); }
+  to { transform: translate3d(1.5%, -5%, 0) scale(1.02); }
+}
+

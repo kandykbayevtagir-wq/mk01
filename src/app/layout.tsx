@@ -3,6 +3,7 @@ import { Manrope } from "next/font/google";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { PressRipple } from "@/components/ui/press-ripple";
+import { Atmosphere } from "@/components/ui/atmosphere";
 import { channels, site, socialProfiles } from "@/data/site";
 import { defaultLocale, localeMeta } from "@/i18n/config";
 import { t } from "@/i18n";
@@ -76,6 +77,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(organizationLd)} />
       </head>
       <body className="flex min-h-dvh flex-col">
+        <Atmosphere />
         <a
           href="#main"
           className="fixed left-4 top-3 z-[100] -translate-y-20 rounded-full bg-ink px-5 py-3 text-sm font-medium text-white transition-transform focus:translate-y-0"

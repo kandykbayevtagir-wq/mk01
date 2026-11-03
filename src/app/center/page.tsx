@@ -64,7 +64,7 @@ export default function CenterPage() {
         }
       />
 
-      <section aria-labelledby="services-title" className="py-14 lg:py-24">
+      <section data-atmo="learn" aria-labelledby="services-title" className="py-14 lg:py-24">
         <Container>
           <Reveal>
             <SectionHeader eyebrow="Направления" title={<span id="services-title">Услуги центра</span>} />
@@ -137,7 +137,7 @@ export default function CenterPage() {
         </section>
       )}
 
-      <section id="adresa" aria-labelledby="locations-title" className="scroll-mt-[var(--header-h)] border-t border-line py-16 lg:py-24">
+      <section data-atmo="deep" id="adresa" aria-labelledby="locations-title" className="scroll-mt-[var(--header-h)] border-t border-line py-16 lg:py-24">
         <Container>
           <Reveal>
             <SectionHeader eyebrow="Адреса" title={<span id="locations-title">Где нас найти</span>} lead="Два филиала в Актобе." />

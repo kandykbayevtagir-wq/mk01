@@ -12,7 +12,7 @@ import { Visual } from "@/components/ui/visual";
 /** Centre overview: what is offered, in one list. Details, addresses and booking live on /center. */
 export function CenterTeaser() {
   return (
-    <section aria-labelledby="center-title" className="relative overflow-hidden py-14 sm:py-20 lg:py-24">
+    <section data-atmo="deep" aria-labelledby="center-title" className="relative overflow-hidden py-14 sm:py-20 lg:py-24">
       <SectionDecor variant={["dots-corner", "footprints"]} />
       <Container className="relative">
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-12 lg:gap-6">
