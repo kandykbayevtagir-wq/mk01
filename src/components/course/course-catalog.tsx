@@ -121,7 +121,7 @@ export function CourseCatalog({
         ))}
       </Question>
 
-      <Question id="guide-goal" label="Что хотите развить" className="mt-4">
+      <Question id="guide-goal" label="Что хотите развить" className="mt-3.5">
         {goals.map((g) => (
           <Chip
             key={g.id}
@@ -136,13 +136,13 @@ export function CourseCatalog({
         ))}
       </Question>
 
-      <div className="mt-5 flex min-h-9 items-center justify-between gap-3 border-t border-line pt-4">
+      <div className="mt-3 flex min-h-9 items-center justify-between gap-3">
         <p
           aria-live="polite"
           className={cn("vt-filter-item text-[0.9375rem] leading-snug", chosen ? "font-medium text-ink" : "text-muted")}
           style={{ "--vt-name": "course-guide-summary" } as React.CSSProperties}
         >
-          {result || "Выберите опыт и тему — подберём программы и объясним выбор."}
+          {result || "Подберём программу и объясним выбор."}
         </p>
         {chosen && (
           <button
@@ -157,7 +157,7 @@ export function CourseCatalog({
       </div>
 
       {visible.length > 0 ? (
-        <ul className="course-stack mt-5 grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-3">
+        <ul className="course-stack mt-3 grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-3">
           {visible.map((m, i) => (
             <li
               key={m.course.slug}
@@ -193,7 +193,7 @@ function Question({ id, label, className, children }: { id: string; label: strin
         aria-labelledby={id}
         data-guide={id}
         className={cn(
-          "-mx-4 mt-2.5 flex snap-x scroll-px-4 gap-2 overflow-x-auto px-4 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden",
+          "-mx-4 mt-2 flex snap-x scroll-px-4 gap-2 overflow-x-auto px-4 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden",
           // fade the trailing edge to signal more chips; off once they wrap
           "[mask-image:linear-gradient(to_right,black_85%,transparent)] sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0 sm:[mask-image:none]",
         )}

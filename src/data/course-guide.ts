@@ -1,13 +1,14 @@
 import type { AudienceId, Course } from "./types";
-import { audienceById, courses as allCourses } from "./courses";
+import { audienceById } from "./courses";
 import { plural } from "@/lib/utils";
 
 /**
  * «Подбор программы» on /courses — two questions, answered from the catalogue
  * itself. A goal never describes a course in its own words: it points at a
  * module, topic or outcome that already exists in `courses.ts`, and the card
- * quotes that text. A reference that does not resolve throws at build time,
- * so renaming a module can never leave a recommendation claiming it.
+ * quotes that text. `assertGuideReferences` runs when /courses is prerendered:
+ * a reference that does not resolve fails the build, so renaming a module can
+ * never leave a recommendation claiming it.
  */
 
 /** Question 1 reuses the catalogue's audiences, phrased as answers. */
@@ -97,14 +98,16 @@ function resolve(ref: Ref, course: Course): Evidence {
   return { kind: "module", title: m.title, detail: m.topics.join(" · ") };
 }
 
-const bySlug = new Map(allCourses.map((c) => [c.slug, c]));
-// Fail the build on any reference that does not resolve.
-for (const g of goals)
-  for (const r of g.refs) {
-    const c = bySlug.get(r.slug);
-    if (!c) throw new Error(`course-guide: unknown course ${r.slug} in goal ${g.id}`);
-    resolve(r, c);
-  }
+/** Server-side (build-time) check; kept out of the client bundle. */
+export function assertGuideReferences(courses: Course[]) {
+  const bySlug = new Map(courses.map((c) => [c.slug, c]));
+  for (const g of goals)
+    for (const r of g.refs) {
+      const c = bySlug.get(r.slug);
+      if (!c) throw new Error(`course-guide: unknown course ${r.slug} in goal ${g.id}`);
+      resolve(r, c);
+    }
+}
 
 export type Match = {
   course: Course;

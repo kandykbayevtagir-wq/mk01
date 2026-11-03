@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { audiences, commonCourseFaq, getCourses } from "@/data/courses";
+import { assertGuideReferences } from "@/data/course-guide";
 import { pageMetadata } from "@/lib/seo";
 import { plural } from "@/lib/utils";
 import { Container } from "@/components/ui/container";
@@ -21,6 +22,7 @@ export const metadata: Metadata = pageMetadata({
 
 export default function CoursesPage() {
   const courses = getCourses();
+  assertGuideReferences(courses); // a guide line that no longer exists in the data fails the build
   return (
     <>
       <PageHero
