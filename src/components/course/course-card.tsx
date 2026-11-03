@@ -58,14 +58,16 @@ export function CourseCard({
         <p className="text-[0.6875rem] font-semibold uppercase tracking-[0.12em] text-muted">
           {course.audiences.map((a) => audienceById[a].short).join(" · ")}
         </p>
-        <H className="mt-1.5 text-[1.3125rem] font-semibold leading-[1.18] tracking-[-0.02em] sm:text-h3">
-          <PressLink
-            href={`/courses/${course.slug}`}
-            className="outline-none after:absolute after:inset-0 after:z-[3] after:rounded-card focus-visible:after:outline-2 focus-visible:after:outline-offset-2 focus-visible:after:outline-accent"
-          >
-            {course.title}
-          </PressLink>
-        </H>
+        <ViewTransition name={`course-title-${course.slug}`} default="none" share="course-morph course-title">
+          <H className="mt-1.5 text-[1.3125rem] font-semibold leading-[1.18] tracking-[-0.02em] sm:text-h3">
+            <PressLink
+              href={`/courses/${course.slug}`}
+              className="outline-none after:absolute after:inset-0 after:z-[3] after:rounded-card focus-visible:after:outline-2 focus-visible:after:outline-offset-2 focus-visible:after:outline-accent"
+            >
+              {course.title}
+            </PressLink>
+          </H>
+        </ViewTransition>
         <p className="mt-2 line-clamp-2 text-[0.9375rem] leading-snug text-muted">{course.summary}</p>
         {match?.strength && <WhyPanel match={match} />}
 

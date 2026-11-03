@@ -77,6 +77,13 @@
   animation-duration: 420ms;
   animation-timing-function: var(--ease-out-soft);
 }
+/* Title → heading: scale both snapshots by height (keeps letter shapes, no
+   stretching), anchored at the start of the line; cross-fade between them. */
+::view-transition-old(.course-title),
+::view-transition-new(.course-title) {
+  width: auto;
+  height: 100%;
+}
 @media (prefers-reduced-motion: reduce) {
   ::view-transition-group(*),
   ::view-transition-old(*),

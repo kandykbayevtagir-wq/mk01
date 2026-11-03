@@ -134,9 +134,11 @@ export default async function CoursePage({ params }: Props) {
                   </span>
                 ))}
               </div>
-              <h1 className="enter-rise mt-6 text-h1 font-semibold" style={{ "--enter-delay": "90ms" } as React.CSSProperties}>
-                {course.title}
-              </h1>
+              <ViewTransition name={`course-title-${course.slug}`} default="none" share="course-morph course-title">
+                <h1 className="enter-rise mt-6 text-h1 font-semibold" style={{ "--enter-delay": "90ms" } as React.CSSProperties}>
+                  {course.title}
+                </h1>
+              </ViewTransition>
               <p className="enter mt-6 max-w-2xl text-lead text-muted" style={{ "--enter-delay": "150ms" } as React.CSSProperties}>
                 {course.summary}
               </p>
