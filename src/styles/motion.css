@@ -11,18 +11,24 @@
   [data-motion-active="true"] { --ambient-play-state: running; }
 
   .kinetic-line { display: block; transform-origin: left center; }
+  /* Release: a short spring back (240 ms). Press: 90 ms, starting on the
+     pointerdown frame. `translate` is the desktop hover lift. */
   .course-card {
-    transition-timing-function: var(--ease-settle);
-    transition-duration: var(--dur-settle);
+    transition:
+      transform 240ms var(--ease-settle),
+      translate 280ms var(--ease-settle),
+      box-shadow 280ms var(--ease-out-soft),
+      border-color 200ms ease;
   }
-  .course-card:has([data-pressed="true"]),
+  .course-card:has([data-pressed]),
   .course-card:active {
     transform: scale(0.972);
-    transition-duration: 110ms;
+    transition-duration: 90ms;
+    transition-timing-function: cubic-bezier(0.3, 0.7, 0.4, 1);
   }
   /* No perpetual motion while someone is reading or pressing a course. */
   .course-card:focus-within,
-  .course-card:has([data-pressed="true"]),
+  .course-card:has([data-pressed]),
   .course-card:active { --ambient-play-state: paused; }
 
   @media (prefers-reduced-motion: no-preference) {
@@ -74,7 +80,7 @@
  * version. Navigation still works normally when the browser cannot animate it.
  */
 ::view-transition-group(.course-morph) {
-  animation-duration: 420ms;
+  animation-duration: 380ms;
   animation-timing-function: var(--ease-out-soft);
 }
 /* Title → heading: scale both snapshots by height (keeps letter shapes, no
@@ -254,7 +260,7 @@
 
   @media (prefers-reduced-motion: no-preference) {
     .course-card:focus-within .card-sheen > span,
-    .course-card:has([data-pressed="true"]) .card-sheen > span,
+    .course-card:has([data-pressed]) .card-sheen > span,
     .course-card:active .card-sheen > span {
       opacity: 1;
       transform: translate3d(100%, 0, 0);
@@ -293,10 +299,10 @@
 /* `:only-child` matches the specificity of the generic enter/exit rules in
    globals.css; these load first, so the page rules must be at least as specific. */
 ::view-transition-old(.page-exit):only-child {
-  animation: page-leave 150ms ease-in both;
+  animation: page-leave 120ms ease-in both;
 }
 ::view-transition-new(.page-enter):only-child {
-  animation: page-arrive 340ms var(--ease-out-soft) 90ms both;
+  animation: page-arrive 300ms var(--ease-out-soft) 40ms both;
 }
 ::view-transition-group(site-header) { animation: none; }
 ::view-transition-old(site-header) { display: none; }
@@ -414,9 +420,9 @@ html[data-vt="filter"] .vt-filter-item { view-transition-name: var(--vt-name); }
     transition: background-color 180ms ease, color 180ms ease;
   }
   .course-cta__arrow { transition: transform 520ms var(--ease-settle), background-color 180ms ease; }
-  .course-card:has([data-pressed="true"]) .course-cta,
+  .course-card:has([data-pressed]) .course-cta,
   .course-card:active .course-cta { background-color: var(--color-accent); transition-duration: 90ms; }
-  .course-card:has([data-pressed="true"]) .course-cta__arrow,
+  .course-card:has([data-pressed]) .course-cta__arrow,
   .course-card:active .course-cta__arrow { transform: translate3d(2px, -2px, 0); transition-duration: 140ms; }
   @media (hover: hover) and (pointer: fine) {
     .course-card:hover .course-cta { background-color: var(--color-accent); }
@@ -425,7 +431,7 @@ html[data-vt="filter"] .vt-filter-item { view-transition-name: var(--vt-name); }
 
   @media (prefers-reduced-motion: no-preference) {
     /* On press the plate's readouts lift a hair while the canvas ripples. */
-    .course-card:has([data-pressed="true"]) .course-plate__readout,
+    .course-card:has([data-pressed]) .course-plate__readout,
     .course-card:active .course-plate__readout { transform: translate3d(0, -2px, 0); transition-duration: 160ms; }
 
     @supports (animation-timeline: view()) {

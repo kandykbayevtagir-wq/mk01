@@ -173,11 +173,17 @@
   /* ---------------------------------------------------------------- */
   /*  Touch feedback                                                  */
   /* ---------------------------------------------------------------- */
+  /* Press 90 ms from the pointerdown frame (data-pressed is set by the
+     delegated listener in press-ripple.tsx — touch :active can lag behind
+     scroll detection), release with a short spring. */
   .press {
-    transition: transform var(--dur-press) var(--ease-out-soft);
+    transition: transform 240ms var(--ease-settle);
   }
-  .press:active {
+  .press:active,
+  .press[data-pressed] {
     transform: scale(0.985);
+    transition-duration: 90ms;
+    transition-timing-function: var(--ease-out-soft);
   }
 
   /* ---------------------------------------------------------------- */
@@ -303,7 +309,7 @@
 /* ------------------------------------------------------------------ */
 
 ::view-transition-group(*) {
-  animation-duration: 380ms;
+  animation-duration: 340ms;
   animation-timing-function: var(--ease-out-soft);
 }
 

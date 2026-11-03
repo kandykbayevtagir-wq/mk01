@@ -8,7 +8,7 @@ type Size = "md" | "lg" | "sm";
 const base =
   "group/btn relative inline-flex select-none items-center justify-center gap-2 rounded-full font-medium whitespace-nowrap " +
   "transition-[background-color,color,border-color,box-shadow,transform] duration-[var(--dur-press)] ease-out-soft " +
-  "active:scale-[0.97] disabled:pointer-events-none disabled:opacity-50";
+  "active:scale-[0.97] data-[pressed]:scale-[0.97] disabled:pointer-events-none disabled:opacity-50";
 
 const variants: Record<Variant, string> = {
   accent: "bg-accent text-white hover:bg-accent-strong active:bg-accent-strong shadow-[0_8px_22px_-12px_rgb(179_38_45/0.6)]",
@@ -33,7 +33,7 @@ function Arrow() {
   return (
     <span
       aria-hidden
-      className="-mr-1 inline-flex size-5 items-center justify-center overflow-hidden transition-transform duration-300 ease-out-soft group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 group-active/btn:translate-x-0.5 group-active/btn:-translate-y-0.5"
+      className="-mr-1 inline-flex size-5 items-center justify-center overflow-hidden transition-transform duration-300 ease-out-soft group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 group-active/btn:translate-x-0.5 group-active/btn:-translate-y-0.5 group-data-[pressed]/btn:translate-x-0.5 group-data-[pressed]/btn:-translate-y-0.5"
     >
       <ArrowUpRight className="size-[18px]" strokeWidth={1.75} />
     </span>
