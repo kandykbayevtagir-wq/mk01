@@ -69,7 +69,7 @@ ${css.map((h) => `<link rel="stylesheet" href="${origin}${h}">`).join("")}
   #c .art{position:absolute;right:48px;top:80px;width:420px;height:470px;object-fit:contain}
   #c .photo{position:absolute;right:56px;top:56px;width:400px;height:518px;border-radius:36px;object-fit:cover;object-position:50% 30%;box-shadow:0 30px 60px -20px rgb(0 0 0/.6)}
   #c .copy{position:absolute;left:72px;top:64px;bottom:64px;width:660px;display:flex;flex-direction:column}
-  #c .brand{display:flex;align-items:center;gap:16px;font-size:30px;font-weight:600;letter-spacing:-.01em}
+  #c .brand{display:block;width:392px;height:auto}
   #c .eyebrow{margin-top:auto;display:flex;align-items:center;gap:12px;font-size:22px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:rgb(255 255 255/.62)}
   #c .eyebrow i{width:10px;height:10px;border-radius:9px;background:#d2343b;display:block}
   #c h1{margin:22px 0 0;font-size:${fit(title)}px;line-height:1.06;font-weight:600;letter-spacing:-.025em;text-wrap:balance;overflow-wrap:normal;word-break:normal;hyphens:manual}
@@ -77,10 +77,7 @@ ${css.map((h) => `<link rel="stylesheet" href="${origin}${h}">`).join("")}
   <div class="dots"></div><div class="glow"></div>
   ${photo ? `<img class="photo" src="${site}${photo}" alt="">` : `<img class="art" src="${site}/art/pressure-${view}-dark.svg" alt="">`}
   <div class="copy">
-    <div class="brand">
-      <svg viewBox="0 0 32 32" width="52" height="52"><rect width="32" height="32" rx="9" fill="#fff"/><g fill="none" stroke="#171717" stroke-width="1.4" opacity=".9"><ellipse cx="16" cy="12.5" rx="6.5" ry="4.6"/><ellipse cx="16" cy="12.5" rx="3.6" ry="2.4" opacity=".6"/><ellipse cx="16" cy="22.5" rx="4.4" ry="3.6"/></g><circle cx="16" cy="22.5" r="1.7" fill="#b3262d"/></svg>
-      Podology MK
-    </div>
+    <img class="brand" src="${site}/brand/logo-full-light.png" alt="Podology by Marina Kandykbayeva">
     <div class="eyebrow"><i></i>${eyebrow}</div>
     <h1>${title}</h1>
   </div>
