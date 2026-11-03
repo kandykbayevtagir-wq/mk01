@@ -1,37 +1,61 @@
 import Link from "next/link";
 import { site } from "@/data/site";
+import { assetPath } from "@/lib/seo";
 import { cn } from "@/lib/utils";
 
-export function LogoMark({ className, tone = "light" }: { className?: string; tone?: "light" | "dark" }) {
-  return (
-    <svg viewBox="0 0 32 32" className={cn("size-8 shrink-0", className)} aria-hidden focusable="false">
-      <rect width="32" height="32" rx="9" fill={tone === "light" ? "#171717" : "#ffffff"} />
-      <g fill="none" stroke={tone === "light" ? "#ffffff" : "#171717"} strokeWidth="1.4" opacity="0.9">
-        <ellipse cx="16" cy="12.5" rx="6.5" ry="4.6" />
-        <ellipse cx="16" cy="12.5" rx="3.6" ry="2.4" opacity="0.6" />
-        <ellipse cx="16" cy="22.5" rx="4.4" ry="3.6" />
-      </g>
-      <circle cx="16" cy="22.5" r="1.7" style={{ fill: "var(--color-accent)" }} />
-    </svg>
-  );
-}
+/**
+ * The owner's official logo (brand/podology-logo-original.png, derived files in
+ * public/brand — see brand/README.md). The mark is never redrawn, recoloured or
+ * rotated; the wordmark already contains the name, so no text is added beside it.
+ *
+ * tone     — the background it sits on: "light" → dark ink, "dark" → white ink.
+ * variant  — "responsive": the PODOLOGY wordmark on phones, the full lockup
+ *            ("… by Marina Kandykbayeva") from 640 px; "full": always the lockup.
+ * reveal   — header only: one gentle left-to-right reveal on first load.
+ *
+ * Sizes are fixed in CSS per breakpoint (no layout shift whichever file loads);
+ * <picture> means a phone downloads only the compact file.
+ */
+export function Logo({
+  tone = "light",
+  variant = "responsive",
+  reveal = false,
+  lazy = false,
+  className,
+}: {
+  tone?: "light" | "dark";
+  variant?: "responsive" | "full";
+  reveal?: boolean;
+  /** Below the fold (footer): defer the download. */
+  lazy?: boolean;
+  className?: string;
+}) {
+  const file = (name: "full" | "compact") => assetPath(`/brand/logo-${name}${tone === "dark" ? "-light" : ""}.png`);
+  const lockupOnly = variant === "full";
 
-export function Logo({ tone = "light", className }: { tone?: "light" | "dark"; className?: string }) {
   return (
     <Link
       href="/"
-      className={cn("group inline-flex min-h-11 items-center gap-2.5 rounded-lg", className)}
+      className={cn("inline-flex min-h-11 items-center rounded-lg", className)}
       aria-label={`${site.name} — на главную`}
     >
-      <LogoMark tone={tone} className="transition-transform duration-300 ease-out-soft group-hover:rotate-[-6deg]" />
-      <span
-        className={cn(
-          "text-[0.9375rem] font-semibold tracking-[-0.01em]",
-          tone === "light" ? "text-ink" : "text-white",
-        )}
-      >
-        {site.name}
-      </span>
+      <picture className={cn("block", reveal && "logo-reveal")}>
+        {!lockupOnly && <source media="(min-width: 640px)" srcSet={file("full")} />}
+        {/* fixed brand asset with an explicit CSS size; <picture> picks the file per breakpoint */}
+        <img
+          src={file(lockupOnly ? "full" : "compact")}
+          alt={site.name}
+          width={720}
+          height={lockupOnly ? 168 : 99}
+          draggable={false}
+          decoding="async"
+          loading={lazy ? "lazy" : "eager"}
+          className={cn(
+            "block select-none object-contain",
+            lockupOnly ? "h-11 w-[189px]" : "h-[22px] w-[160px] sm:h-9 sm:w-[154px] lg:h-10 lg:w-[171px]",
+          )}
+        />
+      </picture>
     </Link>
   );
 }

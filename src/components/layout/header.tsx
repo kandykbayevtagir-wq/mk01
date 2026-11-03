@@ -43,7 +43,7 @@ export function Header() {
       )}
     >
       <Container className="flex h-full items-center justify-between gap-6">
-        <Logo />
+        <Logo reveal />
 
         <nav aria-label="Основная навигация" className="hidden lg:block">
           <ul className="flex items-center gap-1 xl:gap-3">
