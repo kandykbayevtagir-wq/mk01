@@ -578,3 +578,28 @@ html[data-atmo="deep"] .atmo__grain { opacity: 0.11; }
   to { transform: translate3d(1.5%, -5%, 0) scale(1.02); }
 }
 
+/* ---------------------------------------------------------------------
+ * Cinematic photo reveal (Visual `reveal` + MediaReveal). The panel keeps
+ * its size and radius throughout (clip-path never affects layout).
+ * ------------------------------------------------------------------- */
+@media (prefers-reduced-motion: no-preference) {
+  /* The photo opens inside its panel (the panel keeps its radius, tone and
+     shadow); nothing stays clipped afterwards (fill: backwards). */
+  .js:not(.reveal-fallback) [data-media-reveal]:not([data-revealed]) > img {
+    clip-path: inset(9% 11% 9% 11% round 38%);
+    scale: 1.12;
+  }
+  [data-media-reveal][data-revealed="true"] > img {
+    animation:
+      mask-open 1150ms cubic-bezier(0.65, 0, 0.25, 1) backwards,
+      mask-settle 1600ms cubic-bezier(0.33, 0, 0.2, 1) backwards;
+  }
+}
+@keyframes mask-open {
+  from { clip-path: inset(9% 11% 9% 11% round 38%); }
+  to { clip-path: inset(0 0 0 0 round 0); }
+}
+@keyframes mask-settle {
+  from { scale: 1.12; }
+  to { scale: 1; }
+}

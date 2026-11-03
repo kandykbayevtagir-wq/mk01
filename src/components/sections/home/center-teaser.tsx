@@ -23,6 +23,7 @@ export function CenterTeaser() {
                 seed={21}
                 tone="sand"
                 art="pressure"
+                reveal
                 className="h-full w-full"
                 imgClassName="object-[50%_25%]"
                 sizes="(min-width: 1024px) 50vw, 100vw"

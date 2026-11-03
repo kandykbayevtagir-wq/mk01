@@ -34,6 +34,7 @@ export function Visual({
   priority = false,
   marker,
   live = false,
+  reveal = false,
   children,
 }: {
   image: ImageAsset | null | undefined;
@@ -47,6 +48,8 @@ export function Visual({
   marker?: boolean;
   /** Animated pressure peak (hero only; paused offscreen by MotionRegion). */
   live?: boolean;
+  /** Below-the-fold photography: rounded mask opens + slight zoom settles, once (MediaReveal). */
+  reveal?: boolean;
   children?: React.ReactNode;
 }) {
   const kind = art ?? artCycle[seed % artCycle.length];
@@ -54,7 +57,10 @@ export function Visual({
   const artTone = dark ? "dark" : "light";
 
   return (
-    <div data-pressure-host={live ? "" : undefined} className={cn("relative isolate overflow-hidden", tones[tone], className)}>
+    <div
+      data-pressure-host={live ? "" : undefined}
+      data-media-reveal={reveal && image ? "" : undefined}
+      className={cn("relative isolate overflow-hidden", tones[tone], className)}>
       {image ? (
         <Image
           src={assetPath(image.src)}
