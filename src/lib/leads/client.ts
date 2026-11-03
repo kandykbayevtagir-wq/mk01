@@ -17,6 +17,16 @@ const isStatic = process.env.NEXT_PUBLIC_STATIC_EXPORT === "true";
 const endpoint = process.env.NEXT_PUBLIC_LEADS_ENDPOINT;
 const accessKey = process.env.NEXT_PUBLIC_LEADS_ACCESS_KEY;
 
+/**
+ * How a form reaches the business on this build:
+ *  • "service"  — a form service is configured (static or server);
+ *  • "server"   — this site's own /api/leads (server hosting);
+ *  • "whatsapp" — static hosting without a service: the validated form is
+ *                 handed to WhatsApp as a ready message. Nothing is reported
+ *                 as "sent" — the visitor presses Send in WhatsApp.
+ */
+export const deliveryMode: "service" | "server" | "whatsapp" = endpoint ? "service" : isStatic ? "whatsapp" : "server";
+
 export async function submitLead(data: Record<string, string>): Promise<{ ok: boolean; body: LeadResponse | null }> {
   if (!endpoint) {
     if (isStatic) return { ok: false, body: { ok: false, code: "not_configured" } };

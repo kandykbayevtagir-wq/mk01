@@ -61,7 +61,7 @@ export const channels = {
 /** WhatsApp chat link with an optional, safely encoded pre-filled message. */
 export function whatsappLink(message?: string) {
   const text = message?.trim();
-  return text ? `${channels.whatsapp.url}?text=${encodeURIComponent(text.slice(0, 500))}` : channels.whatsapp.url;
+  return text ? `${channels.whatsapp.url}?text=${encodeURIComponent(text.slice(0, 1200))}` : channels.whatsapp.url;
 }
 
 /** Social profiles for structured data (`sameAs`). */
