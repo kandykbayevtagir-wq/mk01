@@ -26,7 +26,8 @@ import { cn } from "@/lib/utils";
  *    red peak travelling with the centre of pressure; feet alternate;
  *  • a heel-strike wave propagating through the sensor grid;
  *  • dots swell and shift slightly away from the load (coordinated motion);
- *  • a touch anywhere on the host card sends a ripple from the finger.
+ *  • a touch anywhere on the host card sends a ripple from the finger;
+ *  • the plate feels the cursor (or a finger held on it): load builds under it.
  * Canvas only (no per-dot DOM; cached dot sprites), 25 fps (60 during a
  * ripple), paused offscreen and in background
  * tabs, off with prefers-reduced-motion and on low-capability devices.
@@ -45,6 +46,8 @@ type Field = {
   energy: number;
   boostUntil: number;
   ripples: Ripple[];
+  /** Live contact point (cursor / finger) in view space, with its last-moved time. */
+  touch: { x: number; y: number; t: number } | null;
   lastDraw: number;
   w: number;
   h: number;
@@ -224,6 +227,10 @@ function draw(f: Field, now: number) {
     const age = phase * PERIOD; // seconds since heel strike
     st.push(load, cx, cy, age * 190, stance ? 0.5 * Math.pow(Math.max(0, 1 - age / 1.5), 2) : 0, foot.mirror ? 1 : 0);
   }
+  // Contact load: the plate "feels" the cursor or finger, fading ~0.9 s after it stops.
+  const tc = f.touch;
+  const tA = tc ? 0.95 * Math.max(0, 1 - (now - tc.t) / 900) : 0;
+  const invT = 1 / (2 * 30 * 30);
   const rip = f.ripples.map((r) => {
     const ra = (now - r.t0) / 1000;
     return [r.x, r.y, ra * 330, 0.85 * Math.pow(1 - ra / 1.3, 2)];
@@ -259,6 +266,17 @@ function draw(f: Field, now: number) {
       } else {
         x += px;
         y += py;
+      }
+    }
+    if (tA > 0) {
+      const qx = x - tc!.x;
+      const qy = y - tc!.y;
+      const k = tA * Math.exp(-(qx * qx + qy * qy) * invT);
+      v += k;
+      if (k > 0.02) {
+        const len = Math.sqrt(qx * qx + qy * qy) || 1;
+        x += (qx / len) * k * 2.4;
+        y += (qy / len) * k * 2.4;
       }
     }
     for (let j = 0; j < rip.length; j++) {
@@ -305,14 +323,16 @@ function frame(now: number) {
     // arrive gently (~1 s), hand over quickly (~0.5 s) so two never compete
     f.energy += (goal - f.energy) * Math.min(1, dt * (goal > f.energy ? 2.6 : 6));
     if (Math.abs(goal - f.energy) < 0.005) f.energy = goal;
-    const busy = f.energy > 0 || f.ripples.length > 0;
+    const touching = f.touch !== null && now - f.touch.t < 900;
+    if (f.touch && !touching) f.touch = null;
+    const busy = f.energy > 0 || f.ripples.length > 0 || touching;
     if (!busy) {
       // settle on the exact resting frame (identical to the static file)
       if (before > 0 && f.shown) draw(f, now);
       continue;
     }
     again = true;
-    if (now - f.lastDraw >= (f.ripples.length ? RIPPLE_FRAME_MS : FRAME_MS) - 2) draw(f, now);
+    if (now - f.lastDraw >= (f.ripples.length || touching ? RIPPLE_FRAME_MS : FRAME_MS) - 2) draw(f, now);
   }
   if (again) raf = requestAnimationFrame(frame);
   else prev = 0;
@@ -388,6 +408,7 @@ export function PressureField({
       energy: 0,
       boostUntil: 0,
       ripples: [],
+      touch: null,
       lastDraw: 0,
       w: 0,
       h: 0,
@@ -415,8 +436,23 @@ export function PressureField({
     };
     host.addEventListener("pointerdown", onDown, { passive: true });
 
+    // The plate answers the cursor (and a finger held on it): load follows the point.
+    const onMove = (e: PointerEvent) => {
+      if (!e.isPrimary || !f.ctx || (e.pointerType !== "mouse" && e.buttons === 0)) return;
+      const r = el.getBoundingClientRect();
+      if (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom) return;
+      if (!f.w) resize(f);
+      const { s, ox, oy } = viewTransform(f);
+      f.touch = { x: (e.clientX - r.left - ox) / s, y: (e.clientY - r.top - oy) / s, t: performance.now() };
+      f.boostUntil = performance.now() + 2500;
+      if (f.target === 0) pick(performance.now());
+      schedule();
+    };
+    host.addEventListener("pointermove", onMove, { passive: true });
+
     return () => {
       host.removeEventListener("pointerdown", onDown);
+      host.removeEventListener("pointermove", onMove);
       io?.unobserve(el);
       ro?.unobserve(el);
       fields.delete(f);
