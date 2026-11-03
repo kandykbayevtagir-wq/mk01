@@ -15,7 +15,8 @@ import { usePathname } from "next/navigation";
  *    scroll timeline): the light moves while you scroll, costs nothing at rest;
  *  - a static film-grain tile that never moves, so it cannot flicker.
  *
- * Without JS or IntersectionObserver the hero state stays — still a finished page.
+ * It fades in once the page is interactive (kept out of the first paint, so it
+ * never delays LCP). Without JS the page is simply white — still finished.
  * Reduced motion / .motion-lite: no drift (see motion.css).
  */
 export function Atmosphere() {

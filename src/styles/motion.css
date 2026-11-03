@@ -508,7 +508,13 @@ html[data-vt="filter"] .vt-filter-item { view-transition-name: var(--vt-name); }
   pointer-events: none;
   overflow: hidden;
   contain: strict;
+  /* Not part of the first paint (opacity 0 is never painted): the grain's
+     SVG noise and the light would otherwise delay LCP. The light comes up
+     once the page is interactive (Atmosphere sets html[data-atmo]). */
+  opacity: 0;
+  transition: opacity 1200ms var(--ease-out-soft);
 }
+html[data-atmo] .atmo { opacity: 1; }
 .atmo__lights {
   position: absolute;
   inset: -8%;
