@@ -744,3 +744,37 @@ html { timeline-scope: --course-read; }
   from { transform: scaleX(0); }
   to { transform: scaleX(1); }
 }
+
+/* ---------------------------------------------------------------------
+ * Reactive card light (components/ui/card-magnet.tsx). Unlayered so the
+ * magnetic drift can extend the desktop hover lift.
+ * ------------------------------------------------------------------- */
+.card-light {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 2;
+  width: 360px;
+  height: 360px;
+  margin: -180px 0 0 -180px;
+  border-radius: 50%;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(closest-side, rgb(255 255 255 / 0.2), rgb(179 38 45 / 0.06) 58%, transparent);
+  transform: translate3d(var(--lx, 50%), var(--ly, 30%), 0);
+  transition: opacity 380ms var(--ease-out-soft);
+}
+.course-card[data-magnet] .card-light { opacity: 1; }
+.course-card[data-lit] .card-light { opacity: 1; transition-duration: 60ms; }
+.course-plate .pressure-field { transition: translate 320ms var(--ease-out-soft); }
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .course-card[data-magnet] {
+    translate: calc(var(--mx, 0) * 3px) calc(-4px + var(--my, 0) * 2px);
+  }
+  .course-card[data-magnet] .course-plate .pressure-field {
+    translate: calc(var(--mx, 0) * -6px) calc(var(--my, 0) * -4px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .card-light { display: none; }
+}

@@ -5,6 +5,7 @@ import { Footer } from "@/components/layout/footer";
 import { PressRipple } from "@/components/ui/press-ripple";
 import { Atmosphere } from "@/components/ui/atmosphere";
 import { MediaReveal } from "@/components/ui/media-reveal";
+import { CardMagnet } from "@/components/ui/card-magnet";
 import { channels, site, socialProfiles } from "@/data/site";
 import { defaultLocale, localeMeta } from "@/i18n/config";
 import { t } from "@/i18n";
@@ -92,6 +93,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Footer />
         <PressRipple />
         <MediaReveal />
+        <CardMagnet />
       </body>
     </html>
   );
