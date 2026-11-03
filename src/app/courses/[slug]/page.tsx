@@ -30,6 +30,7 @@ import { WhatsAppAlt } from "@/components/sections/form-section";
 import { CourseCard } from "@/components/course/course-card";
 import { CoursePlate } from "@/components/course/course-plate";
 import { CourseJourney } from "@/components/course/course-journey";
+import { ReadingProgress } from "@/components/course/reading-progress";
 import { LeadForm } from "@/components/forms/lead-form";
 import { courseEnrollFields } from "@/components/forms/presets";
 
@@ -171,6 +172,7 @@ export default async function CoursePage({ params }: Props) {
         </Container>
       </section>
 
+      <ReadingProgress target="course-content" />
       {/* Body: the educational content (atmosphere «learn», reading progress) */}
       <div id="course-content" data-atmo="learn">
       <Container className="py-14 lg:py-24">
