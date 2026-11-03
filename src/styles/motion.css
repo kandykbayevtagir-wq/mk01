@@ -442,4 +442,17 @@ html[data-vt="filter"] .vt-filter-item { view-transition-name: var(--vt-name); }
       box-shadow: 0 -14px 34px -22px rgb(23 23 23 / 0.45);
     }
   }
+
+  /* Header logo: one soft left-to-right reveal on first load, then still.
+     Clip + opacity only (the official mark is never moved, rotated or distorted). */
+  @media (prefers-reduced-motion: no-preference) {
+    .logo-reveal {
+      animation: logo-reveal 820ms var(--ease-out-soft) 60ms both;
+    }
+  }
+  @keyframes logo-reveal {
+    from { clip-path: inset(0 100% 0 0); opacity: 0; }
+    30% { opacity: 1; }
+    to { clip-path: inset(0 0 0 0); opacity: 1; }
+  }
 }

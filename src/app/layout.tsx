@@ -6,7 +6,7 @@ import { PressRipple } from "@/components/ui/press-ripple";
 import { channels, site, socialProfiles } from "@/data/site";
 import { defaultLocale, localeMeta } from "@/i18n/config";
 import { t } from "@/i18n";
-import { jsonLd } from "@/lib/seo";
+import { absoluteUrl, jsonLd } from "@/lib/seo";
 import "./globals.css";
 
 const manrope = Manrope({
@@ -43,6 +43,7 @@ const organizationLd = {
   "@type": "EducationalOrganization",
   name: site.name,
   url: site.url,
+  logo: absoluteUrl("/brand/logo-square.png"),
   description: site.description,
   telephone: channels.phone.value,
   areaServed: { "@type": "City", name: "Актобе" },

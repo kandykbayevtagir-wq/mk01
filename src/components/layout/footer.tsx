@@ -23,7 +23,7 @@ export function Footer() {
       <Container className="relative pb-6 pt-12 lg:pt-16">
         <div className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-12">
           <div className="lg:col-span-4">
-            <Logo tone="dark" />
+            <Logo tone="dark" variant="full" lazy />
             <nav aria-label="Навигация в подвале" className="mt-5">
               <ul className="grid grid-cols-2 gap-x-6">
                 {links.map((item) => (
