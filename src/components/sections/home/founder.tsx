@@ -23,8 +23,12 @@ export function FounderSection() {
               tone="light"
               art="insole"
               seed={11}
-              className="media-settle relative aspect-[16/10] rounded-panel shadow-card sm:aspect-[16/9] lg:aspect-[4/5]"
-              imgClassName="object-[50%_20%]"
+              className={
+                founder.portrait
+                  ? "media-settle relative aspect-square rounded-panel shadow-card sm:aspect-[4/3] lg:aspect-[4/5]"
+                  : "media-settle relative aspect-[16/10] rounded-panel shadow-card sm:aspect-[16/9] lg:aspect-[4/5]"
+              }
+              imgClassName="object-[50%_30%]"
               sizes="(min-width: 1024px) 40vw, 100vw"
             />
           </Reveal>

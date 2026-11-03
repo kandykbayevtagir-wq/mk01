@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { ShieldCheck } from "lucide-react";
 import { center, services, specialists } from "@/data/center";
+import { founder } from "@/data/founder";
 import { channels, locations, site, socialProfiles } from "@/data/site";
 import { absoluteUrl, jsonLd, pageMetadata } from "@/lib/seo";
 import { formatKzt } from "@/lib/utils";
@@ -53,10 +54,11 @@ export default function CenterPage() {
         lead={center.intro}
         aside={
           <Visual
-            image={center.gallery[0]}
+            image={center.gallery[0] ?? founder.practicePhoto}
             seed={21}
             priority
             className="aspect-[4/3] rounded-panel lg:aspect-[4/4.4]"
+            imgClassName="object-[50%_25%]"
             sizes="(min-width: 1024px) 40vw, 100vw"
           />
         }

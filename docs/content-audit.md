@@ -87,7 +87,8 @@ Republic of Kazakhstan «О персональных данных и их защ
 
 Also required
 - **Lead delivery**: no provider is configured (Telegram / webhook / Resend, or `NEXT_PUBLIC_LEADS_ENDPOINT` for GitHub Pages). Forms honestly show the "not configured" fallback. Delivery was only tested against a local mock webhook; real delivery is **untested**.
-- **Marina**: full name, portrait, years of experience, qualifications, teaching experience; confirm the `summary`, `intro` and the three philosophy lines are her own words and approved (they are drafts marked «проверить»).
+- **Marina**: ~~full name, portrait~~ (added: «Марина Кандыкбаева», confirmed by the centre signage and Telegram; portrait and a work photo in `public/images/founder/`). Still needed: years of experience, qualifications, teaching experience; confirm the `summary`, `intro` and the three philosophy lines are her own words and approved (they are drafts marked «проверить»).
+- **Training photos**: group photos with graduates and certificates exist, but show other people — publish (`trainingPhotos` in `src/data/testimonials.ts`) only with the participants' consent.
 - **Courses**: all six are structural drafts — real titles, summaries, audiences, outcomes, curricula; confirmed format, duration, price, intakes, certificate; images. Cards/pages show a value only when it exists.
 - **Centre**: confirmed service list, prices, licences/legal status of services, working hours, branch phones, photographs, specialists.
 - **Branches**: which of the two 2GIS records belongs to which address is still unverified (both stay as neutral links on `/contacts`); the Акация branch has no map link.

@@ -294,7 +294,7 @@ export default async function CoursePage({ params }: Props) {
                   href="/about"
                   className="group mt-8 flex items-center gap-5 rounded-card border border-line p-4 transition-[border-color,box-shadow] duration-300 hover:border-transparent hover:shadow-lift sm:p-5"
                 >
-                  <Visual image={founder.portrait} tone="dark" seed={7} marker={false} className="size-20 shrink-0 rounded-2xl sm:size-24" sizes="96px" />
+                  <Visual image={founder.portrait} tone="dark" seed={7} marker={false} className="size-20 shrink-0 rounded-2xl sm:size-24" imgClassName="object-[50%_30%]" sizes="96px" />
                   <div className="min-w-0 flex-1">
                     <p className="text-lg font-semibold">{founderDisplayName()}</p>
                     <p className="mt-1 text-[0.9375rem] text-muted">{founder.role}</p>

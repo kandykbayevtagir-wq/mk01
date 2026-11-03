@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { center, services } from "@/data/center";
+import { founder } from "@/data/founder";
 import { Container } from "@/components/ui/container";
 import { Eyebrow } from "@/components/ui/typography";
 import { Parallax } from "@/components/ui/parallax";
@@ -18,11 +19,12 @@ export function CenterTeaser() {
           <Reveal className="order-2 lg:order-1 lg:col-span-6">
             <Parallax className="aspect-[16/10] rounded-panel bg-sand shadow-card lg:aspect-[5/6]" distance={30}>
               <Visual
-                image={center.gallery[0]}
+                image={center.gallery[0] ?? founder.practicePhoto}
                 seed={21}
                 tone="sand"
                 art="pressure"
                 className="h-full w-full"
+                imgClassName="object-[50%_25%]"
                 sizes="(min-width: 1024px) 50vw, 100vw"
               />
             </Parallax>
