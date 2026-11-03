@@ -9,7 +9,9 @@ export function CardSheen() {
       <span aria-hidden="true" className="card-sheen">
         <span />
       </span>
-      <span aria-hidden="true" className="card-light" />
+      <span aria-hidden="true" className="card-light">
+        <span />
+      </span>
     </>
   );
 }
