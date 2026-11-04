@@ -41,8 +41,10 @@ export function PressRipple() {
       release();
       pressed = control;
       control.dataset.pressed = "true";
-      // pressure-bloom origin for an internal navigation (BloomOrigin)
-      const link = control.closest<HTMLAnchorElement>("a[href]");
+      // pressure-bloom origin for an internal navigation (BloomOrigin) — a
+      // touch gesture: mouse clicks keep the regular arrival (on big desktop
+      // pages a full-page clip costs more per frame than it gives)
+      const link = event.pointerType !== "mouse" ? control.closest<HTMLAnchorElement>("a[href]") : null;
       if (link && link.origin === location.origin && !link.target && link.pathname !== location.pathname) {
         (window as Window & { __bloom?: { x: number; y: number; t: number } }).__bloom = { x: event.clientX, y: event.clientY, t: performance.now() };
       }
