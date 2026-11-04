@@ -44,7 +44,6 @@ export function CourseCard({
       data-pressure-host=""
       className={cn(
         "course-card group relative flex h-full flex-col overflow-hidden rounded-card border border-line bg-card",
-        "transition-[transform,box-shadow,border-color] duration-[var(--dur-card)] ease-out-soft",
         "hover:-translate-y-1 hover:border-ink/10 hover:shadow-lift",
         "focus-within:border-ink/20 focus-within:shadow-lift",
       )}

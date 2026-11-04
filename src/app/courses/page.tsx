@@ -32,13 +32,13 @@ export default function CoursesPage() {
         lead={`${courses.length} ${plural(courses.length, ["программа", "программы", "программ"])} для ${audiences.length} аудиторий — от первого знакомства с профессией до преподавательской практики.`}
       />
 
-      <section aria-label="Каталог программ" className="pb-14 pt-6 sm:pt-10 lg:py-20">
+      <section data-atmo="courses" aria-label="Каталог программ" className="pb-14 pt-6 sm:pt-10 lg:py-20">
         <Container>
           <CourseCatalog courses={courses} headingLevel="h2" />
         </Container>
       </section>
 
-      <section aria-labelledby="consult-title" className="border-t border-line bg-mist py-16 lg:py-24">
+      <section data-atmo="learn" aria-labelledby="consult-title" className="border-t border-line bg-mist py-16 lg:py-24">
         <Container>
           <div className="grid grid-cols-1 gap-10 lg:grid-cols-12 lg:gap-6">
             <Reveal className="lg:col-span-5">
@@ -58,7 +58,7 @@ export default function CoursesPage() {
         </Container>
       </section>
 
-      <section aria-labelledby="catalog-faq-title" className="py-14 lg:py-20">
+      <section data-atmo="deep" aria-labelledby="catalog-faq-title" className="py-14 lg:py-20">
         <Container>
           <h2 id="catalog-faq-title" className="text-h3 font-semibold">
             Вопросы и ответы

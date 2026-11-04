@@ -2,7 +2,7 @@ import { ViewTransition } from "react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowUpRight, CalendarDays, Check, Plus } from "lucide-react";
+import { ArrowUpRight, CalendarDays, Check } from "lucide-react";
 import {
   audienceById,
   courseCity,
@@ -17,7 +17,7 @@ import { site } from "@/data/site";
 import type { Course } from "@/data/types";
 import { t } from "@/i18n";
 import { absoluteUrl, jsonLd, pageMetadata } from "@/lib/seo";
-import { formatDateRange, plural } from "@/lib/utils";
+import { formatDateRange } from "@/lib/utils";
 import { ButtonLink } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { Eyebrow } from "@/components/ui/typography";
@@ -29,6 +29,8 @@ import { Faq } from "@/components/sections/faq";
 import { WhatsAppAlt } from "@/components/sections/form-section";
 import { CourseCard } from "@/components/course/course-card";
 import { CoursePlate } from "@/components/course/course-plate";
+import { CourseJourney } from "@/components/course/course-journey";
+import { ReadingProgress } from "@/components/course/reading-progress";
 import { LeadForm } from "@/components/forms/lead-form";
 import { courseEnrollFields } from "@/components/forms/presets";
 
@@ -112,7 +114,7 @@ export default async function CoursePage({ params }: Props) {
       <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(courseLd(course))} />
 
       {/* Hero */}
-      <section id="course-hero" className="relative overflow-hidden bg-mist">
+      <section id="course-hero" data-atmo="hero" className="relative overflow-hidden bg-mist">
         <SectionDecor variant={["dots-corner", "arches-left"]} />
         <Container className="relative pb-12 pt-6 sm:pt-8 lg:pb-20 lg:pt-10">
           <Breadcrumbs
@@ -170,7 +172,9 @@ export default async function CoursePage({ params }: Props) {
         </Container>
       </section>
 
-      {/* Body + sticky enrolment panel */}
+      <ReadingProgress target="course-content" />
+      {/* Body: the educational content (atmosphere «learn», reading progress) */}
+      <div id="course-content" data-atmo="learn">
       <Container className="py-14 lg:py-24">
         <div className="grid grid-cols-1 gap-14 lg:grid-cols-12 lg:gap-6">
           <div className="space-y-16 lg:col-span-8 lg:space-y-24">
@@ -212,31 +216,7 @@ export default async function CoursePage({ params }: Props) {
             <Reveal>
               <section aria-labelledby="curriculum-title">
                 <SectionTitle id="curriculum-title">Программа курса</SectionTitle>
-                <ol className="mt-8 border-t border-line">
-                  {course.curriculum.map((m, i) => (
-                    <li key={m.title} className="border-b border-line">
-                      <details className="group" open={i === 0}>
-                        <summary className="flex min-h-16 cursor-pointer items-center gap-5 py-5">
-                          <span className="text-sm font-semibold tabular-nums text-accent">
-                            {String(i + 1).padStart(2, "0")}
-                          </span>
-                          <span className="flex-1 text-[1.0625rem] font-semibold">{m.title}</span>
-                          <span className="text-xs text-muted max-sm:hidden">{m.topics.length} {plural(m.topics.length, ["тема", "темы", "тем"])}</span>
-                          <span className="inline-flex size-9 shrink-0 items-center justify-center rounded-full border border-line transition-[transform,background-color,color,border-color] duration-300 ease-out-soft group-open:rotate-45 group-open:border-ink group-open:bg-ink group-open:text-white">
-                            <Plus aria-hidden className="size-4" strokeWidth={1.75} />
-                          </span>
-                        </summary>
-                        <ul className="space-y-2.5 pb-6 pl-10">
-                          {m.topics.map((topic) => (
-                            <li key={topic} className="text-[0.9375rem] text-muted">
-                              {topic}
-                            </li>
-                          ))}
-                        </ul>
-                      </details>
-                    </li>
-                  ))}
-                </ol>
+                <CourseJourney id={course.slug} modules={course.curriculum} />
               </section>
             </Reveal>
 
@@ -336,6 +316,8 @@ export default async function CoursePage({ params }: Props) {
         </div>
       </Container>
 
+      </div>
+
       {/* Enrolment form */}
       <section id="zapis" aria-labelledby="enroll-title" className="scroll-mt-[var(--header-h)] bg-mist py-20 lg:py-28">
         <Container>
@@ -360,7 +342,7 @@ export default async function CoursePage({ params }: Props) {
       </section>
 
       {related.length > 0 && (
-        <section aria-labelledby="related-title" className="py-20 lg:py-28">
+        <section data-atmo="courses" aria-labelledby="related-title" className="py-20 lg:py-28">
           <Container>
             <div className="flex items-end justify-between gap-6">
               <h2 id="related-title" className="text-h2 font-semibold">

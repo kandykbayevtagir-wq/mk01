@@ -12,7 +12,7 @@ import { Reveal } from "@/components/ui/reveal";
  */
 export function HomeContacts() {
   return (
-    <section aria-labelledby="home-contacts-title" className="pb-14 pt-4 sm:pb-20 lg:pb-24">
+    <section data-atmo="deep" aria-labelledby="home-contacts-title" className="pb-14 pt-4 sm:pb-20 lg:pb-24">
       <Container>
         <Reveal className="rounded-panel bg-mist px-6 py-9 sm:px-10 sm:py-12 lg:px-14">
           <div className="grid grid-cols-1 items-center gap-8 lg:grid-cols-12 lg:gap-6">
