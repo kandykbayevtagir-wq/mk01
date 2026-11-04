@@ -11,6 +11,9 @@
   --color-paper: #ffffff; /* primary background */
   --color-card: #ffffff; /* raised card surface */
   --color-mist: #f6f6f6; /* secondary background */
+  /* the same mist on white, but half-translucent so the atmosphere (light +
+     grain, components/ui/atmosphere.tsx) reaches large section surfaces */
+  --color-veil: rgb(237 237 237 / 0.5);
   --color-sand: #efefef; /* tertiary surface (image slots, chips) */
   --color-clay: #9a9a9a; /* decorative mid-gray */
   --color-clay-soft: #ececec; /* decorative tint */

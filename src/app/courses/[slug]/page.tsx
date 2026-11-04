@@ -114,7 +114,7 @@ export default async function CoursePage({ params }: Props) {
       <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(courseLd(course))} />
 
       {/* Hero */}
-      <section id="course-hero" data-atmo="hero" className="relative overflow-hidden bg-mist">
+      <section id="course-hero" data-atmo="hero" className="relative overflow-clip bg-veil">
         <SectionDecor variant={["dots-corner", "arches-left"]} />
         <Container className="relative pb-12 pt-6 sm:pt-8 lg:pb-20 lg:pt-10">
           <Breadcrumbs
@@ -276,7 +276,7 @@ export default async function CoursePage({ params }: Props) {
                   href="/about"
                   className="group mt-8 flex items-center gap-5 rounded-card border border-line p-4 transition-[border-color,box-shadow] duration-300 hover:border-transparent hover:shadow-lift sm:p-5"
                 >
-                  <Visual image={founder.portrait} tone="dark" seed={7} marker={false} className="size-20 shrink-0 rounded-2xl sm:size-24" imgClassName="object-[50%_30%]" sizes="96px" />
+                  <Visual image={founder.portrait} tone="dark" seed={7} marker={false} reveal className="size-20 shrink-0 rounded-2xl sm:size-24" imgClassName="object-[50%_30%]" sizes="96px" />
                   <div className="min-w-0 flex-1">
                     <p className="text-lg font-semibold">{founderDisplayName()}</p>
                     <p className="mt-1 text-[0.9375rem] text-muted">{founder.role}</p>
@@ -319,7 +319,7 @@ export default async function CoursePage({ params }: Props) {
       </div>
 
       {/* Enrolment form */}
-      <section id="zapis" aria-labelledby="enroll-title" className="scroll-mt-[var(--header-h)] bg-mist py-20 lg:py-28">
+      <section id="zapis" aria-labelledby="enroll-title" className="scroll-mt-[var(--header-h)] bg-veil py-20 lg:py-28">
         <Container>
           <div className="grid grid-cols-1 gap-10 lg:grid-cols-12 lg:gap-6">
             <Reveal className="lg:col-span-5">

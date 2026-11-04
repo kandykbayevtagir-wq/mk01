@@ -23,10 +23,10 @@ function delay(ms: number) {
  */
 export function Hero() {
   return (
-    <MotionRegion as="section" data-atmo="hero" aria-labelledby="hero-title" className="motion-hero relative isolate overflow-hidden">
+    <MotionRegion as="section" data-atmo="hero" aria-labelledby="hero-title" className="motion-hero relative isolate overflow-clip">
       {/* Backdrop: soft-gray panel (mobile: behind the visual; desktop: right third) */}
       <div aria-hidden className="pointer-events-none absolute inset-0">
-        <div className="hero-mist absolute inset-x-0 bottom-0 top-[52%] bg-mist sm:top-[46%] lg:inset-y-0 lg:left-auto lg:w-[38%]">
+        <div className="hero-mist absolute inset-x-0 bottom-0 top-[52%] bg-veil sm:top-[46%] lg:inset-y-0 lg:left-auto lg:w-[38%]">
           <div className="hero-mist-light" />
           <div className="pattern-dots absolute inset-0 [mask-image:linear-gradient(to_bottom,black,transparent_85%)] lg:[mask-image:linear-gradient(to_left,black,transparent)]" />
         </div>

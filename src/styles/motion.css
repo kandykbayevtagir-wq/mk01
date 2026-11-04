@@ -178,14 +178,14 @@
   .surface-mist {
     background: linear-gradient(
       to bottom,
-      var(--color-paper),
-      var(--color-mist) 80px,
-      var(--color-mist) calc(100% - 80px),
-      var(--color-paper)
+      transparent,
+      var(--color-veil) 80px,
+      var(--color-veil) calc(100% - 80px),
+      transparent
     );
   }
   .surface-mist-end {
-    background: linear-gradient(to bottom, var(--color-mist) calc(100% - 120px), var(--color-paper));
+    background: linear-gradient(to bottom, var(--color-veil) calc(100% - 120px), transparent);
   }
 
   @media (prefers-reduced-motion: no-preference) {
@@ -304,7 +304,9 @@
 ::view-transition-new(.page-enter):only-child {
   animation: page-arrive 300ms var(--ease-out-soft) 40ms both;
 }
-::view-transition-group(site-header) { animation: none; }
+/* The header comes first in the DOM, so its group would paint under the page
+   groups; keep it on top so it never disappears behind an arriving page. */
+::view-transition-group(site-header) { animation: none; z-index: 50; }
 ::view-transition-old(site-header) { display: none; }
 /* Filter re-flow names exist only while the filter transition runs, so page
    navigations never capture every course card as a separate layer. */
@@ -332,6 +334,24 @@ html[data-vt="filter"] .vt-filter-item { view-transition-name: var(--vt-name); }
 }
 ::view-transition-old(mobile-menu) { display: none; }
 ::view-transition-new(mobile-menu) { animation: none; }
+/* Pressure bloom (components/ui/bloom-origin.tsx): after a tap, the new page
+   opens as a circle from the finger. The page snapshot is transparent, so it
+   carries its own paper + grain (the atmosphere's, baked at 0.1) inside the
+   circle and covers the outgoing page; outside, the old page settles back. */
+html[data-bloom]::view-transition-new(.page-enter):only-child {
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.09 0 0 0 0 0.09 0 0 0 0 0.09 0 0 0 .4 -.17'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E") 0 0 / 180px 180px, var(--color-paper);
+  animation: page-bloom-in 620ms cubic-bezier(0.3, 0.7, 0.15, 1) both;
+}
+html[data-bloom]::view-transition-old(.page-exit):only-child {
+  animation: page-under 620ms cubic-bezier(0.3, 0, 0.2, 1) both;
+}
+@keyframes page-bloom-in {
+  from { clip-path: circle(0px at var(--bloom-x) var(--bloom-y)); }
+  to { clip-path: circle(var(--bloom-r) at var(--bloom-x) var(--bloom-y)); }
+}
+@keyframes page-under {
+  to { opacity: 0.55; transform: scale(0.985); }
+}
 @keyframes page-leave {
   to { opacity: 0; transform: translate3d(0, -6px, 0); }
 }
@@ -558,17 +578,19 @@ html[data-atmo="learn"] .atmo__light--learn,
 html[data-atmo="deep"] .atmo__light--deep {
   opacity: 1;
 }
+/* Film grain: sparse graphite specks (alpha = 4·noise − 1.7), so the texture
+   reads clearly while white stays white (≈ 249/255 mean on paper). */
 .atmo__grain {
   position: absolute;
   inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .6 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.09 0 0 0 0 0.09 0 0 0 0 0.09 0 0 0 4 -1.7'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   background-size: 180px 180px;
-  opacity: 0.06;
+  opacity: 0.07;
   transition: opacity 1600ms var(--ease-out-soft);
 }
-html[data-atmo="courses"] .atmo__grain { opacity: 0.1; }
-html[data-atmo="learn"] .atmo__grain { opacity: 0.07; }
-html[data-atmo="deep"] .atmo__grain { opacity: 0.11; }
+html[data-atmo="courses"] .atmo__grain { opacity: 0.12; }
+html[data-atmo="learn"] .atmo__grain { opacity: 0.085; }
+html[data-atmo="deep"] .atmo__grain { opacity: 0.13; }
 
 @media (prefers-reduced-motion: no-preference) {
   @supports (animation-timeline: scroll()) {
@@ -592,21 +614,21 @@ html[data-atmo="deep"] .atmo__grain { opacity: 0.11; }
   /* The photo opens inside its panel (the panel keeps its radius, tone and
      shadow); nothing stays clipped afterwards (fill: backwards). */
   .js:not(.reveal-fallback) [data-media-reveal]:not([data-revealed]) > img {
-    clip-path: inset(9% 11% 9% 11% round 38%);
-    scale: 1.12;
+    clip-path: inset(13% 15% 13% 15% round 42%);
+    scale: 1.16;
   }
   [data-media-reveal][data-revealed="true"] > img {
     animation:
-      mask-open 1150ms cubic-bezier(0.65, 0, 0.25, 1) backwards,
-      mask-settle 1600ms cubic-bezier(0.33, 0, 0.2, 1) backwards;
+      mask-open 1300ms cubic-bezier(0.65, 0, 0.25, 1) backwards,
+      mask-settle 1800ms cubic-bezier(0.33, 0, 0.2, 1) backwards;
   }
 }
 @keyframes mask-open {
-  from { clip-path: inset(9% 11% 9% 11% round 38%); }
+  from { clip-path: inset(13% 15% 13% 15% round 42%); }
   to { clip-path: inset(0 0 0 0 round 0); }
 }
 @keyframes mask-settle {
-  from { scale: 1.12; }
+  from { scale: 1.16; }
   to { scale: 1; }
 }
 
@@ -790,4 +812,34 @@ html { timeline-scope: --course-read; }
 }
 @media (prefers-reduced-motion: reduce) {
   .card-light { display: none; }
+}
+
+/* ---------------------------------------------------------------------
+ * Sensor sweep: the first time a course plate scrolls into view, one thin
+ * red scan line passes across it, like a pressure plate calibrating
+ * (MediaReveal sets data-sweep). Time-based, once, transform + opacity;
+ * plates already on screen at load show none.
+ * ------------------------------------------------------------------- */
+.course-plate::after {
+  content: "";
+  position: absolute;
+  inset-block: 0;
+  left: 0;
+  width: 26%;
+  z-index: 2;
+  pointer-events: none;
+  background: linear-gradient(90deg, transparent, rgb(210 52 59 / 0.1) 38%, rgb(226 70 76 / 0.42) 49%, rgb(255 255 255 / 0.22) 51%, rgb(210 52 59 / 0.08) 62%, transparent);
+  opacity: 0;
+  transform: translate3d(-110%, 0, 0);
+}
+@media (prefers-reduced-motion: no-preference) {
+  html:not(.motion-lite) .course-plate[data-sweep="run"]::after {
+    animation: plate-sweep 1150ms cubic-bezier(0.45, 0, 0.2, 1) 120ms both;
+  }
+}
+@keyframes plate-sweep {
+  0% { opacity: 0; transform: translate3d(-110%, 0, 0); }
+  18% { opacity: 1; }
+  80% { opacity: 1; }
+  100% { opacity: 0; transform: translate3d(400%, 0, 0); }
 }

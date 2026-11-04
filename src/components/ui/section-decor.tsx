@@ -5,7 +5,9 @@ type Variant = "arches-right" | "arches-left" | "dots-corner" | "insole" | "foot
 
 /**
  * Decorative podology motifs placed behind section content.
- * The parent section must be `relative overflow-hidden`; content should sit
+ * The parent section must be `relative overflow-clip` (not `overflow-hidden`:
+ * that makes it a scroll container and freezes the scroll-driven line drawing,
+ * which follows the nearest scroll container); content should sit
  * in a `relative` container so it layers above.
  */
 export function SectionDecor({

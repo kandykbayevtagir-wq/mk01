@@ -60,7 +60,7 @@ export function Visual({
     <div
       data-pressure-host={live ? "" : undefined}
       data-media-reveal={reveal && image ? "" : undefined}
-      className={cn("relative isolate overflow-hidden", tones[tone], className)}>
+      className={cn("relative isolate overflow-clip", tones[tone], className)}>
       {image ? (
         <Image
           src={assetPath(image.src)}
