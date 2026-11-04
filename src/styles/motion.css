@@ -334,6 +334,24 @@ html[data-vt="filter"] .vt-filter-item { view-transition-name: var(--vt-name); }
 }
 ::view-transition-old(mobile-menu) { display: none; }
 ::view-transition-new(mobile-menu) { animation: none; }
+/* Pressure bloom (components/ui/bloom-origin.tsx): after a tap, the new page
+   opens as a circle from the finger. The page snapshot is transparent, so it
+   carries its own paper + grain (the atmosphere's, baked at 0.1) inside the
+   circle and covers the outgoing page; outside, the old page settles back. */
+html[data-bloom]::view-transition-new(.page-enter):only-child {
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.09 0 0 0 0 0.09 0 0 0 0 0.09 0 0 0 .4 -.17'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E") 0 0 / 180px 180px, var(--color-paper);
+  animation: page-bloom-in 620ms cubic-bezier(0.3, 0.7, 0.15, 1) both;
+}
+html[data-bloom]::view-transition-old(.page-exit):only-child {
+  animation: page-under 620ms cubic-bezier(0.3, 0, 0.2, 1) both;
+}
+@keyframes page-bloom-in {
+  from { clip-path: circle(0px at var(--bloom-x) var(--bloom-y)); }
+  to { clip-path: circle(var(--bloom-r) at var(--bloom-x) var(--bloom-y)); }
+}
+@keyframes page-under {
+  to { opacity: 0.55; transform: scale(0.985); }
+}
 @keyframes page-leave {
   to { opacity: 0; transform: translate3d(0, -6px, 0); }
 }
