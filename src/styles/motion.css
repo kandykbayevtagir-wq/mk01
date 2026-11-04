@@ -304,7 +304,9 @@
 ::view-transition-new(.page-enter):only-child {
   animation: page-arrive 300ms var(--ease-out-soft) 40ms both;
 }
-::view-transition-group(site-header) { animation: none; }
+/* The header comes first in the DOM, so its group would paint under the page
+   groups; keep it on top so it never disappears behind an arriving page. */
+::view-transition-group(site-header) { animation: none; z-index: 50; }
 ::view-transition-old(site-header) { display: none; }
 /* Filter re-flow names exist only while the filter transition runs, so page
    navigations never capture every course card as a separate layer. */
