@@ -35,7 +35,8 @@ export function MediaReveal() {
           io.unobserve(e.target);
         }
       },
-      { rootMargin: "0px 0px -12% 0px", threshold: 0.2 },
+      // well inside the screen, so the whole unveil is seen
+      { rootMargin: "0px 0px -20% 0px", threshold: 0.35 },
     );
     for (const el of items) if (!el.dataset.revealed) io.observe(el);
     return () => io.disconnect();
