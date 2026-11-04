@@ -34,7 +34,7 @@ export function Breadcrumbs({ items, className }: { items: Crumb[]; className?: 
                 </span>
               ) : (
                 <>
-                  <Link href={c.href} className="transition-colors hover:text-ink">
+                  <Link href={c.href} className="-my-1 inline-flex min-h-6 items-center py-1 transition-colors hover:text-ink">
                     {c.label}
                   </Link>
                   <ChevronRight aria-hidden className="size-3.5" strokeWidth={1.5} />
