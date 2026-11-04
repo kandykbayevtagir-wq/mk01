@@ -815,28 +815,26 @@ html { timeline-scope: --course-read; }
 }
 
 /* ---------------------------------------------------------------------
- * Sensor sweep: as a course plate scrolls in, one thin red scan line
- * passes across it, like a pressure plate calibrating. Scroll-linked,
- * transform + opacity only; plates already on screen at load show none.
+ * Sensor sweep: the first time a course plate scrolls into view, one thin
+ * red scan line passes across it, like a pressure plate calibrating
+ * (MediaReveal sets data-sweep). Time-based, once, transform + opacity;
+ * plates already on screen at load show none.
  * ------------------------------------------------------------------- */
+.course-plate::after {
+  content: "";
+  position: absolute;
+  inset-block: 0;
+  left: 0;
+  width: 26%;
+  z-index: 2;
+  pointer-events: none;
+  background: linear-gradient(90deg, transparent, rgb(210 52 59 / 0.1) 38%, rgb(226 70 76 / 0.42) 49%, rgb(255 255 255 / 0.22) 51%, rgb(210 52 59 / 0.08) 62%, transparent);
+  opacity: 0;
+  transform: translate3d(-110%, 0, 0);
+}
 @media (prefers-reduced-motion: no-preference) {
-  @supports (animation-timeline: view()) {
-    .course-plate::after {
-      content: "";
-      position: absolute;
-      inset-block: 0;
-      left: 0;
-      width: 26%;
-      z-index: 2;
-      pointer-events: none;
-      background: linear-gradient(90deg, transparent, rgb(210 52 59 / 0.1) 38%, rgb(226 70 76 / 0.42) 49%, rgb(255 255 255 / 0.22) 51%, rgb(210 52 59 / 0.08) 62%, transparent);
-      opacity: 0;
-      transform: translate3d(-110%, 0, 0);
-      animation: plate-sweep linear both;
-      animation-timeline: view();
-      animation-range: entry 55% cover 50%;
-    }
-    html.motion-lite .course-plate::after { display: none; }
+  html:not(.motion-lite) .course-plate[data-sweep="run"]::after {
+    animation: plate-sweep 1150ms cubic-bezier(0.45, 0, 0.2, 1) 120ms both;
   }
 }
 @keyframes plate-sweep {
@@ -845,4 +843,3 @@ html { timeline-scope: --course-read; }
   80% { opacity: 1; }
   100% { opacity: 0; transform: translate3d(400%, 0, 0); }
 }
-
