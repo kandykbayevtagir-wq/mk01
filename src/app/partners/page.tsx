@@ -28,7 +28,7 @@ export default function PartnersPage() {
       <section aria-label="Роли сторон" className="py-14 lg:py-20">
         <Container>
           <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-6">
-            <Reveal className="rounded-panel bg-mist p-6 sm:p-10 lg:p-12">
+            <Reveal className="rounded-panel bg-veil p-6 sm:p-10 lg:p-12">
               <Eyebrow>Организатор</Eyebrow>
               <h2 className="mt-4 text-h3 font-semibold lg:text-[2rem]">За что отвечает организатор</h2>
               <ul className="mt-8 border-t border-line">

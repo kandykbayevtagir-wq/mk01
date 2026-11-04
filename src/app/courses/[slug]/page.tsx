@@ -114,7 +114,7 @@ export default async function CoursePage({ params }: Props) {
       <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(courseLd(course))} />
 
       {/* Hero */}
-      <section id="course-hero" data-atmo="hero" className="relative overflow-hidden bg-mist">
+      <section id="course-hero" data-atmo="hero" className="relative overflow-hidden bg-veil">
         <SectionDecor variant={["dots-corner", "arches-left"]} />
         <Container className="relative pb-12 pt-6 sm:pt-8 lg:pb-20 lg:pt-10">
           <Breadcrumbs
@@ -319,7 +319,7 @@ export default async function CoursePage({ params }: Props) {
       </div>
 
       {/* Enrolment form */}
-      <section id="zapis" aria-labelledby="enroll-title" className="scroll-mt-[var(--header-h)] bg-mist py-20 lg:py-28">
+      <section id="zapis" aria-labelledby="enroll-title" className="scroll-mt-[var(--header-h)] bg-veil py-20 lg:py-28">
         <Container>
           <div className="grid grid-cols-1 gap-10 lg:grid-cols-12 lg:gap-6">
             <Reveal className="lg:col-span-5">

@@ -102,7 +102,7 @@ export default function AboutPage() {
       </section>
 
       {hasCredentials && (
-        <section data-atmo="deep" aria-labelledby="credentials-title" className="bg-mist py-20 lg:py-28">
+        <section data-atmo="deep" aria-labelledby="credentials-title" className="bg-veil py-20 lg:py-28">
           <Container>
             <Reveal>
               <SectionHeader eyebrow="Квалификация" title={<span id="credentials-title">Опыт и квалификация</span>} />

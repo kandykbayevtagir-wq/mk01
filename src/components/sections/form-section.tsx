@@ -53,7 +53,7 @@ export function FormSection({
   showDirectContacts?: boolean;
 }) {
   return (
-    <section id={id} aria-labelledby={`${id}-title`} className="scroll-mt-[var(--header-h)] bg-mist py-20 lg:py-28">
+    <section id={id} aria-labelledby={`${id}-title`} className="scroll-mt-[var(--header-h)] bg-veil py-20 lg:py-28">
       <Container>
         <div className="grid grid-cols-1 gap-10 lg:grid-cols-12 lg:gap-6">
           <Reveal className="lg:col-span-5">

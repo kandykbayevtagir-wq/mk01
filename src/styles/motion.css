@@ -178,14 +178,14 @@
   .surface-mist {
     background: linear-gradient(
       to bottom,
-      var(--color-paper),
-      var(--color-mist) 80px,
-      var(--color-mist) calc(100% - 80px),
-      var(--color-paper)
+      transparent,
+      var(--color-veil) 80px,
+      var(--color-veil) calc(100% - 80px),
+      transparent
     );
   }
   .surface-mist-end {
-    background: linear-gradient(to bottom, var(--color-mist) calc(100% - 120px), var(--color-paper));
+    background: linear-gradient(to bottom, var(--color-veil) calc(100% - 120px), transparent);
   }
 
   @media (prefers-reduced-motion: no-preference) {
@@ -558,17 +558,19 @@ html[data-atmo="learn"] .atmo__light--learn,
 html[data-atmo="deep"] .atmo__light--deep {
   opacity: 1;
 }
+/* Film grain: sparse graphite specks (alpha = 4·noise − 1.7), so the texture
+   reads clearly while white stays white (≈ 249/255 mean on paper). */
 .atmo__grain {
   position: absolute;
   inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .6 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.09 0 0 0 0 0.09 0 0 0 0 0.09 0 0 0 4 -1.7'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   background-size: 180px 180px;
-  opacity: 0.06;
+  opacity: 0.07;
   transition: opacity 1600ms var(--ease-out-soft);
 }
-html[data-atmo="courses"] .atmo__grain { opacity: 0.1; }
-html[data-atmo="learn"] .atmo__grain { opacity: 0.07; }
-html[data-atmo="deep"] .atmo__grain { opacity: 0.11; }
+html[data-atmo="courses"] .atmo__grain { opacity: 0.12; }
+html[data-atmo="learn"] .atmo__grain { opacity: 0.085; }
+html[data-atmo="deep"] .atmo__grain { opacity: 0.13; }
 
 @media (prefers-reduced-motion: no-preference) {
   @supports (animation-timeline: scroll()) {

@@ -38,7 +38,7 @@ export default function CoursesPage() {
         </Container>
       </section>
 
-      <section data-atmo="learn" aria-labelledby="consult-title" className="border-t border-line bg-mist py-16 lg:py-24">
+      <section data-atmo="learn" aria-labelledby="consult-title" className="border-t border-line bg-veil py-16 lg:py-24">
         <Container>
           <div className="grid grid-cols-1 gap-10 lg:grid-cols-12 lg:gap-6">
             <Reveal className="lg:col-span-5">
