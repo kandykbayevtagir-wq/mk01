@@ -72,7 +72,7 @@ export function PageHero({
   className?: string;
 }) {
   return (
-    <section data-atmo="hero" className={cn("surface-mist-end relative overflow-hidden", className)}>
+    <section data-atmo="hero" className={cn("surface-mist-end relative overflow-clip", className)}>
       <div aria-hidden className="pointer-events-none absolute inset-0">
         <div className="pattern-dots absolute inset-y-0 right-0 w-2/3 [mask-image:linear-gradient(to_left,black,transparent)]" />
         <ArchLines count={9} className="absolute -bottom-1 -right-24 h-64 w-[600px] max-md:h-40 max-md:-right-40" />

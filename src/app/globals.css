@@ -252,6 +252,9 @@
   /* Elsewhere they draw as the section scrolls in (CSS scroll-driven,
      no JS). Unsupported browsers show the finished drawing. */
   @supports (animation-timeline: view()) {
+    /* an <svg> is overflow: hidden by default, which would make it the
+       paths' scroll container and freeze the drawing */
+    .draw-lines.draw-scroll { overflow: visible; }
     .draw-lines.draw-scroll path {
       stroke-dasharray: 1;
       animation: draw-line linear both;

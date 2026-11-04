@@ -17,7 +17,7 @@ export function Footer() {
   const links = [...navigation, ...secondaryNavigation];
 
   return (
-    <footer data-atmo="deep" data-tone="dark" className="footer-sheet grain relative z-10 -mt-6 overflow-hidden rounded-t-[28px] bg-graphite text-white sm:-mt-8 sm:rounded-t-[40px]">
+    <footer data-atmo="deep" data-tone="dark" className="footer-sheet grain relative z-10 -mt-6 overflow-clip rounded-t-[28px] bg-graphite text-white sm:-mt-8 sm:rounded-t-[40px]">
       <div aria-hidden className="pattern-dots-dark pointer-events-none absolute inset-0 [mask-image:linear-gradient(to_bottom,transparent,black)]" />
       <ArchLines tone="dark" count={9} className="pointer-events-none absolute -bottom-1 -right-32 h-64 w-[620px] max-md:hidden" />
       <Container className="relative pb-6 pt-12 lg:pt-16">

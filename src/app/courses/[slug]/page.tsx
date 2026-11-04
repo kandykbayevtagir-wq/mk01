@@ -114,7 +114,7 @@ export default async function CoursePage({ params }: Props) {
       <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(courseLd(course))} />
 
       {/* Hero */}
-      <section id="course-hero" data-atmo="hero" className="relative overflow-hidden bg-veil">
+      <section id="course-hero" data-atmo="hero" className="relative overflow-clip bg-veil">
         <SectionDecor variant={["dots-corner", "arches-left"]} />
         <Container className="relative pb-12 pt-6 sm:pt-8 lg:pb-20 lg:pt-10">
           <Breadcrumbs

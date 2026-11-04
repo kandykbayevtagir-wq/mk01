@@ -43,7 +43,7 @@ export function CoursePlate({
   const page = size === "page";
 
   return (
-    <div className={cn("course-plate relative isolate overflow-hidden bg-graphite text-white", className)}>
+    <div className={cn("course-plate relative isolate overflow-clip bg-graphite text-white", className)}>
       {/* sensor grid + a single warm light */}
       <div aria-hidden className="pattern-dots-dark absolute inset-0 opacity-70" />
       <div aria-hidden className="course-plate__glow absolute inset-0" />
