@@ -26,14 +26,6 @@ export function PressRipple() {
   useEffect(() => {
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
     let pressed: HTMLElement | null = null;
-    // document offset of <main> (the outgoing page's box), measured outside input handlers
-    let mainTop = 0;
-    const measure = () => {
-      const main = document.getElementById("main");
-      if (main) mainTop = main.getBoundingClientRect().top + window.scrollY;
-    };
-    requestAnimationFrame(measure);
-    const onResize = () => requestAnimationFrame(measure);
     const release = () => {
       if (pressed && pressed.dataset.pressed !== "nav") delete pressed.dataset.pressed;
       pressed = null;
@@ -52,13 +44,7 @@ export function PressRipple() {
       // pressure-bloom origin for an internal navigation (BloomOrigin)
       const link = control.closest<HTMLAnchorElement>("a[href]");
       if (link && link.origin === location.origin && !link.target && link.pathname !== location.pathname) {
-        (window as Window & { __bloom?: { x: number; y: number; oy: number; t: number } }).__bloom = {
-          x: event.clientX,
-          y: event.clientY,
-          // the same point in the outgoing page's own box (scrollY needs no layout)
-          oy: event.clientY + window.scrollY - mainTop,
-          t: performance.now(),
-        };
+        (window as Window & { __bloom?: { x: number; y: number; t: number } }).__bloom = { x: event.clientX, y: event.clientY, t: performance.now() };
       }
       if (!ripple || !box) return;
       ripple.style.setProperty("--ripple-x", `${event.clientX - box.left}px`);
@@ -75,9 +61,7 @@ export function PressRipple() {
     document.addEventListener("pointerup", release, opts);
     document.addEventListener("pointercancel", release, opts);
     window.addEventListener("blur", release);
-    window.addEventListener("resize", onResize, { passive: true });
     return () => {
-      window.removeEventListener("resize", onResize);
       document.removeEventListener("pointerdown", onDown, opts);
       document.removeEventListener("pointerup", release, opts);
       document.removeEventListener("pointercancel", release, opts);

@@ -2,7 +2,7 @@
 
 import { useLayoutEffect, useRef } from "react";
 
-type Bloom = { x: number; y: number; oy: number; t: number };
+type Bloom = { x: number; y: number; t: number };
 
 /**
  * Pressure-bloom navigation: the incoming page opens as a circle from the
@@ -12,8 +12,7 @@ type Bloom = { x: number; y: number; oy: number; t: number };
  * PressRipple records the pointerdown point on internal links. This runs in
  * the new page's layout phase — after React commits, before the browser
  * captures the new view-transition snapshot — and converts that point into
- * the coordinates of this page's own box (the outgoing page's box is known
- * from the tap: same x, y offset by its scroll). Keyboard, Back/Forward and
+ * the coordinates of this page's own box. Keyboard, Back/Forward and
  * reduced-motion navigations have no fresh point and keep the default arrival.
  */
 export function BloomOrigin() {
@@ -35,7 +34,6 @@ export function BloomOrigin() {
     root.style.setProperty("--bloom-x", `${Math.round(p.x - r.left)}px`);
     root.style.setProperty("--bloom-y", `${Math.round(p.y - r.top)}px`);
     root.style.setProperty("--bloom-r", `${reach}px`);
-    root.style.setProperty("--bloom-oy", `${Math.round(p.oy)}px`);
     root.dataset.bloom = "";
     const done = window.setTimeout(() => delete root.dataset.bloom, 1200);
     return () => window.clearTimeout(done);
