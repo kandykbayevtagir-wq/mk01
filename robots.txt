@@ -1,0 +1,6 @@
+User-Agent: *
+Allow: /
+Disallow: /api/
+
+Host: https://kandykbayevtagir-wq.github.io/mk01
+Sitemap: https://kandykbayevtagir-wq.github.io/mk01/sitemap.xml
